@@ -20,4 +20,16 @@ ActiveRecord::Schema.define do
     t.string :contents
     t.timestamps null: true
   end
+
+  create_table :accounts, force: true do |t|
+    t.integer :post_id
+    t.string :title
+    t.timestamps null: true
+  end
+
+  create_table :histories, force: true do |t|
+    t.integer :account_id
+    t.string :some_stuff
+    t.timestamps null: true
+  end
 end

@@ -8,8 +8,11 @@ module Clowne
         reflection = reflections[declaration.association.to_s]
         if reflection.is_a?(::ActiveRecord::Reflection::ThroughReflection)
           record
-        else#if reflection.is_a?(::ActiveRecord::Reflection::HasOneReflection)
+        elsif reflection.is_a?(::ActiveRecord::Reflection::HasOneReflection)
           CloneHasOneAssociation.call(source, record, declaration)
+        else
+          warn("Reflection #{reflection.class.name} does not support")
+          record
         end
       end
     end
@@ -22,7 +25,7 @@ module Clowne
         child = source.__send__(association)
         return record unless child
         child_clone = child.dup # TODO: use cloner!
-        # child_clone[:"#{reflection.foreign_key}"] = nil # TODO: use nullify ?
+        child_clone[:"#{reflection.foreign_key}"] = nil # TODO: use nullify ?
         record.__send__(:"#{association}=", child_clone)
 
         record
