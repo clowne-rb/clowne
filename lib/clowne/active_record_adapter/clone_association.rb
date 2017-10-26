@@ -10,6 +10,8 @@ module Clowne
           record
         elsif reflection.is_a?(::ActiveRecord::Reflection::HasOneReflection)
           CloneHasOneAssociation.call(source, record, declaration)
+        elsif reflection.is_a?(::ActiveRecord::Reflection::HasManyReflection)
+          CloneHasManyAssociation.call(source, record, declaration)
         else
           warn("Reflection #{reflection.class.name} does not support")
           record
@@ -27,6 +29,22 @@ module Clowne
         child_clone = child.dup # TODO: use cloner!
         child_clone[:"#{reflection.foreign_key}"] = nil # TODO: use nullify ?
         record.__send__(:"#{association}=", child_clone)
+
+        record
+      end
+    end
+
+    class CloneHasManyAssociation
+      def self.call(source, record, declaration)
+        reflections = record.class.reflections
+        association = declaration.association
+        reflection = reflections[declaration.association.to_s]
+
+        source.__send__(association).each do |child|
+          child_clone = child.dup # TODO: use cloner!
+          child_clone[:"#{reflection.foreign_key}"] = nil # TODO: use nullify ?
+          record.__send__(association) << child_clone
+        end
 
         record
       end

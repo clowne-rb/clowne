@@ -3,7 +3,7 @@ class Topic < ActiveRecord::Base
 end
 
 class User < ActiveRecord::Base
-  has_many :posts
+  has_many :posts, foreign_key: :owner_id
 end
 
 class Post < ActiveRecord::Base

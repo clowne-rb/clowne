@@ -1,4 +1,3 @@
-require 'pry'
 module Clowne
   class Cloner
     extend Clowne::DSL

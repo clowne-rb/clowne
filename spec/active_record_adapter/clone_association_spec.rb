@@ -28,20 +28,32 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
     end
   end
 
-  # describe 'has_one through' do
-  #   let(:history) { History.create(some_stuff: 'Some stuff') }
-  #   let(:account) { Account.create(title: 'Some title') }
-  #   let(:source) { Post.create(history: history) }
-  #   let(:record) { Post.new }
-  #   let(:declaration) { double(association: :history) }
-  #
-  #   subject { described_class.call(source, record, declaration) }
-  #
-  #   it "clone source's hisotry" do
-  #     expect(subject.hisotry).to be_a(History)
-  #     expect(subject.hisotry.some_stuff).to eq('Some stuff')
-  #   end
-  # end
+  describe 'has_many' do
+    let(:source) { User.create }
+    let(:record) { User.new }
+
+    before { 2.times.collect { Post.create(owner: source, title: 'Some post') } }
+
+    context 'when simple relation' do
+      let(:declaration) { double(association: :posts) }
+
+      it "clone source's posts" do
+        expect(subject.posts.map(&:title)).to eq(['Some post', 'Some post'])
+      end
+    end
+
+    # context 'when through relation' do
+    #   let(:history) { History.create(some_stuff: 'Some stuff', account: account) }
+    #   let(:declaration) { double(association: :account) }
+    #
+    #   it "clone source's account -> history" do
+    #     pending 'Waiting nested cloners'
+    #     cloned_history = subject.account.history
+    #     expect(cloned_history).to be_a(History)
+    #     expect(cloned_history.some_stuff).to eq('Some stuff')
+    #   end
+    # end
+  end
 
   describe 'belongs_to (not supported)' do
     let(:topic) { Topic.create(title: 'Some post', description: 'Some description' ) }
