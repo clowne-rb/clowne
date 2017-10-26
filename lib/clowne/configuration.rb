@@ -1,5 +1,5 @@
 module Clowne
-  module Configuration
+  class Configuration
     attr_reader :config
 
     def initialize
@@ -12,7 +12,8 @@ module Clowne
     def plan
     end
 
-    def add_association()
+    def add_association(name, scope)
+      config << [name, scope]
     end
 
     def remove_association()
@@ -21,13 +22,16 @@ module Clowne
     def add_nullify()
     end
 
-    def add_finalize()
+    def add_finalize(block)
+      config << block
     end
 
     def add_context()
     end
 
     private
+
+    attr_accessor :config
 
     def merge
     end

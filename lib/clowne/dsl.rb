@@ -8,8 +8,12 @@ module Clowne
       config.remove_association(name)
     end
 
+    def finalize(&block)
+      config.add_finalize(block)
+    end
+
     def config
-      @config ||= []
+      @config ||= Clowne::Configuration.new
     end
   end
 end

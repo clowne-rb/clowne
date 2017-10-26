@@ -4,7 +4,7 @@ module Clowne
     extend Clowne::DSL
 
     class << self
-      def adapter(adapter || nil)
+      def adapter(adapter = nil)
         @adapter = adapter
       end
 
