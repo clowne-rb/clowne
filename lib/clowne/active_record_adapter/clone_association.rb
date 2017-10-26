@@ -1,11 +1,20 @@
 module Clowne
   module ActiveRecordAdapter
     # o.public_send(:order_items).instance_exec({id: 1}, &Proc.new { |params| where(id: params[:id]) })
+    module ReflectionHelper
+      def find_reflection(source, record, declaration)
+        reflections = record.class.reflections
+        association = declaration.association
+        reflection = reflections[declaration.association.to_s]
+        [association, reflection]
+      end
+    end
 
     class CloneAssociation
+      extend ReflectionHelper
+
       def self.call(source, record, declaration)
-        reflections = record.class.reflections
-        reflection = reflections[declaration.association.to_s]
+        _, reflection = find_reflection(source, record, declaration)
         if reflection.is_a?(::ActiveRecord::Reflection::ThroughReflection)
           record
         elsif reflection.is_a?(::ActiveRecord::Reflection::HasOneReflection)
@@ -22,10 +31,11 @@ module Clowne
     end
 
     class CloneHasOneAssociation
+      extend ReflectionHelper
+
       def self.call(source, record, declaration)
-        reflections = record.class.reflections
-        association = declaration.association
-        reflection = reflections[declaration.association.to_s]
+        association, reflection = find_reflection(source, record, declaration)
+
         child = source.__send__(association)
         return record unless child
         child_clone = child.dup # TODO: use cloner!
@@ -37,10 +47,10 @@ module Clowne
     end
 
     class CloneHasManyAssociation
+      extend ReflectionHelper
+
       def self.call(source, record, declaration)
-        reflections = record.class.reflections
-        association = declaration.association
-        reflection = reflections[declaration.association.to_s]
+        association, reflection = find_reflection(source, record, declaration)
 
         source.__send__(association).each do |child|
           child_clone = child.dup # TODO: use cloner!
@@ -53,10 +63,10 @@ module Clowne
     end
 
     class CloneHasAndBelongsToManyAssociation
+      extend ReflectionHelper
+
       def self.call(source, record, declaration)
-        reflections = record.class.reflections
-        association = declaration.association
-        reflection = reflections[declaration.association.to_s]
+        association, _ = find_reflection(source, record, declaration)
 
         source.__send__(association).each do |child|
           child_clone = child.dup # TODO: use cloner!
