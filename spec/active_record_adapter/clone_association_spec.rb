@@ -41,18 +41,18 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
         expect(subject.posts.map(&:title)).to eq(['Some post', 'Some post'])
       end
     end
+  end
 
-    # context 'when through relation' do
-    #   let(:history) { History.create(some_stuff: 'Some stuff', account: account) }
-    #   let(:declaration) { double(association: :account) }
-    #
-    #   it "clone source's account -> history" do
-    #     pending 'Waiting nested cloners'
-    #     cloned_history = subject.account.history
-    #     expect(cloned_history).to be_a(History)
-    #     expect(cloned_history.some_stuff).to eq('Some stuff')
-    #   end
-    # end
+  describe 'has_and_belongs_to_many' do
+    let(:tags) { 2.times.collect { |i| Tag.create(value: "tag-#{i}") } }
+    let(:source) { Post.create(tags: tags) }
+    let(:record) { Post.new }
+
+    let(:declaration) { double(association: :tags) }
+
+    it "clone source's tags" do
+      expect(subject.tags.map(&:value)).to eq(['tag-0', 'tag-1'])
+    end
   end
 
   describe 'belongs_to (not supported)' do

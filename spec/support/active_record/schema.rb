@@ -21,6 +21,16 @@ ActiveRecord::Schema.define do
     t.timestamps null: true
   end
 
+  create_table :tags, force: true do |t|
+    t.string :value
+    t.timestamps null: true
+  end
+
+  create_table :posts_tags, force: true do |t|
+    t.integer :post_id
+    t.integer :tag_id
+  end
+
   create_table :accounts, force: true do |t|
     t.integer :post_id
     t.string :title
