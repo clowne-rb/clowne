@@ -4,16 +4,12 @@ module Clowne
 
     class << self
       def adapter(adapter = nil)
-        @adapter = adapter
+        @adapter ||= adapter
       end
 
-      def call(object)
+      def call(object, params = {})
         puts object
         puts config
-      end
-
-      def lint!
-        # Check all version of cloner
       end
     end
   end

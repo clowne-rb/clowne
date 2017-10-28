@@ -3,9 +3,15 @@ require 'clowne/dsl'
 require 'clowne/configuration'
 require 'clowne/cloner'
 
-require 'clowne/iadapter'
+require 'clowne/declarations/exclude_association'
+require 'clowne/declarations/finalize'
+require 'clowne/declarations/include_all'
+require 'clowne/declarations/include_association'
+require 'clowne/declarations/nullify'
+
 require 'clowne/base_adapter/finalize'
 require 'clowne/base_adapter/nullify'
+require 'clowne/base_adapter/adapter'
 
 require 'clowne/active_record_adapter/clone_association'
 require 'clowne/active_record_adapter/adapter'
