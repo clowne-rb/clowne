@@ -115,5 +115,32 @@ RSpec.describe Clowne::Planner do
         [ Clowne::Declarations::IncludeAssociation, {name: :brands} ]
       ]) }
     end
+
+    context 'when cloner with inactive context' do
+      subject { described_class.compile(cloner, object, for: [:undefined_context]).values }
+
+      let(:cloner) do
+        Class.new(Clowne::Cloner) do
+          adapter FakeAdapter
+          include_association :users
+          include_association :posts
+
+          finalize &Proc.new { 1 + 1 }
+
+          context :with_brands do
+            include_association :brands
+            exclude_association :posts
+
+            finalize &Proc.new { 1 + 2 }
+          end
+        end
+      end
+
+      it { is_expected.to be_a_declarations([
+        [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
+        [ Clowne::Declarations::IncludeAssociation, {name: :posts} ],
+        [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1 }} ]
+      ]) }
+    end
   end
 end

@@ -1,8 +1,8 @@
 module Clowne
   module Declarations
     class IncludeAll
-      def compile(plan, options)
-        object, adapter = options[:object], options[:adapter]
+      def compile(plan, settings)
+        object, adapter = settings[:object], settings[:adapter]
         reflections = adapter.reflections_for(object)
         reflections.each do |name, _ref|
           name = name.to_sym
