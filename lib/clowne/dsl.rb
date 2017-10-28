@@ -4,12 +4,7 @@ module Clowne
       config.add_include_all
     end
 
-    def include_association(name, scope = nil, options = {})
-      if scope.is_a?(Hash)
-        options = scope
-        scope = nil
-      end
-
+    def include_association(name, scope = nil, **options)
       config.add_included_association(name, scope, options)
     end
 
