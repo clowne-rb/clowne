@@ -20,6 +20,10 @@ module Clowne
       config.add_finalize(block)
     end
 
+    def context(name, &block)
+      config.add_context(name, block)
+    end
+
     def config
       @config ||= Clowne::Configuration.new
     end

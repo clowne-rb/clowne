@@ -25,5 +25,9 @@ module Clowne
     def add_finalize(block)
       @config.push(Clowne::Declarations::Finalize.new(block))
     end
+
+    def add_context(name, block)
+      @config.push(Clowne::Declarations::Context.new(name, block))
+    end
   end
 end

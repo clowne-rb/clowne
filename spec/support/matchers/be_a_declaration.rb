@@ -14,7 +14,9 @@ RSpec::Matchers.define :be_a_declaration do |declaration_class, values|
     expect(actual).to be_a(declaration_class)
     values.each do |field, value|
       actual_value = actual.public_send(field)
-      if value.is_a?(Proc)
+      if declaration_class == Clowne::Declarations::Context && field == :block
+        expect(actual_value).to be_a(Proc)
+      elsif value.is_a?(Proc)
         expect(actual_value.call).to eq(value.call)
       else
         expect(actual_value).to eq(value)

@@ -15,6 +15,10 @@ RSpec.describe Clowne::Cloner do
     finalize do |_source, _record, _params|
       1 + 1
     end
+
+    context :with_brands do
+      include_association :brands
+    end
   end
 
   describe 'DSL and Configuration' do
@@ -31,7 +35,8 @@ RSpec.describe Clowne::Cloner do
         [Clowne::Declarations::IncludeAssociation, {name: :tags, scope: nil, options: {clone_with: 'AnotherCloner2Class'}}],
         [Clowne::Declarations::ExcludeAssociation, {name: :users}],
         [Clowne::Declarations::Nullify, {attributes: [:title, :description]}],
-        [Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1} }]
+        [Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1 } }],
+        [Clowne::Declarations::Context, {name: :with_brands, block: Proc.new {} }]
       ])
     end
   end

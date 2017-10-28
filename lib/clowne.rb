@@ -9,6 +9,7 @@ require 'clowne/declarations/finalize'
 require 'clowne/declarations/include_all'
 require 'clowne/declarations/include_association'
 require 'clowne/declarations/nullify'
+require 'clowne/declarations/context'
 
 require 'clowne/base_adapter/finalize'
 require 'clowne/base_adapter/nullify'

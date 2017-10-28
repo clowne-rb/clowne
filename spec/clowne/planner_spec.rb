@@ -2,7 +2,7 @@ RSpec.describe Clowne::Planner do
   describe 'compile' do
     let(:object) { double(reflections: {"users" => nil, "posts" => nil}) }
 
-    subject { described_class.compile(cloner, object) }
+    subject { described_class.compile(cloner, object).values }
 
     context 'when cloner with one included association' do
       let(:cloner) do
@@ -88,6 +88,31 @@ RSpec.describe Clowne::Planner do
 
       it { is_expected.to be_a_declarations([
         [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 3 }} ]
+      ]) }
+    end
+
+    context 'when cloner with context' do
+      let(:cloner) do
+        Class.new(Clowne::Cloner) do
+          adapter FakeAdapter
+          include_association :users
+          include_association :posts
+
+          finalize &Proc.new { 1 + 1 }
+
+          context :with_brands do
+            include_association :brands
+            exclude_association :posts
+
+            finalize &Proc.new { 1 + 2 }
+          end
+        end
+      end
+
+      it { is_expected.to be_a_declarations([
+        [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
+        [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 2 }} ],
+        [ Clowne::Declarations::IncludeAssociation, {name: :brands} ]
       ]) }
     end
   end
