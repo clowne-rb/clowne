@@ -3,8 +3,8 @@ module Clowne
     class Adapter
       class << self
         # Using a plan make full duplicate of record
-        def dup(plan, source)
-          plan.inject(plain_dup(source)) do |record, declaration|
+        def clone(plan, source)
+          plan.inject(plain_clone(source)) do |record, declaration|
             resolver(declaration.class).call(source, record, declaration)
           end
         end
@@ -16,7 +16,7 @@ module Clowne
         end
 
         # Return plain duplicate of source
-        def plain_dup(source)
+        def plain_clone(source)
           raise NotImplementedError
         end
 

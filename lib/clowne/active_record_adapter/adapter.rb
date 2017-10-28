@@ -6,7 +6,7 @@ module Clowne
           source.class.reflections
         end
 
-        def plain_dup(source)
+        def plain_clone(source)
           source.dup
         end
 
