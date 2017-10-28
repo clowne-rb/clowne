@@ -2,11 +2,11 @@ module Clowne
   module Declarations
     class IncludeAll
       def compile(plan, options)
-        object, adater = options[:object], options[:adapter]
+        object, adapter = options[:object], options[:adapter]
         reflections = adapter.reflections_for(object)
         reflections.each do |name, _ref|
           name = name.to_sym
-          plan[name.to_sym] = Clowne::Declarations.IncludeAssociation.new(name)
+          plan[name.to_sym] = Clowne::Declarations::IncludeAssociation.new(name)
         end
         plan
       end

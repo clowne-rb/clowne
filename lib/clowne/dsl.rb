@@ -5,6 +5,11 @@ module Clowne
     end
 
     def include_association(name, scope = nil, options = {})
+      if scope.is_a?(Hash)
+        options = scope
+        scope = nil
+      end
+
       config.add_included_association(name, scope, options)
     end
 

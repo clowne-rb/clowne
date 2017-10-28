@@ -6,6 +6,7 @@ RSpec.describe Clowne::Cloner do
 
     include_association :comments
     include_association :posts, :some_scope, clone_with: 'AnotherClonerClass'
+    include_association :tags, clone_with: 'AnotherCloner2Class'
 
     exclude_association :users
 
@@ -27,6 +28,7 @@ RSpec.describe Clowne::Cloner do
         [Clowne::Declarations::IncludeAll, {}],
         [Clowne::Declarations::IncludeAssociation, {name: :comments, scope: nil, options: {}}],
         [Clowne::Declarations::IncludeAssociation, {name: :posts, scope: :some_scope, options: {clone_with: 'AnotherClonerClass'}}],
+        [Clowne::Declarations::IncludeAssociation, {name: :tags, scope: nil, options: {clone_with: 'AnotherCloner2Class'}}],
         [Clowne::Declarations::ExcludeAssociation, {name: :users}],
         [Clowne::Declarations::Nullify, {attributes: [:title, :description]}],
         [Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1} }]

@@ -2,7 +2,7 @@ class FakeAdapter < Clowne::BaseAdapter::Adapter
   class << self
     def reflections_for(record)
       if record.respond_to?(:reflections)
-        reflections
+        record.reflections
       else
         fake_reflections
       end
