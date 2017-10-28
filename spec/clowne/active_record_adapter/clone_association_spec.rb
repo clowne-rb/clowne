@@ -15,12 +15,17 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
       end
     end
 
-    context 'when through relation' do
-      let(:history) { History.create(some_stuff: 'Some stuff', account: account) }
-      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:account) }
+    context 'when defined custom cloner on relation' do
+      let(:account_custom_cloner) do
+        Class.new(Clowne::Cloner) do
+          include_association :history
+        end
+      end
+
+      let!(:history) { History.create(some_stuff: 'Some stuff', account: account) }
+      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:account, nil, clone_with: account_custom_cloner) }
 
       it "clone source's account -> history" do
-        pending 'Waiting nested cloners'
         cloned_history = subject.account.history
         expect(cloned_history).to be_a(History)
         expect(cloned_history.some_stuff).to eq('Some stuff')

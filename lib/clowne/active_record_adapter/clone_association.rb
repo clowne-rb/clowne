@@ -8,6 +8,15 @@ module Clowne
         reflection = reflections[association.to_s]
         [association, reflection]
       end
+
+      def clone_with(source, declaration)
+        if declaration.custom_cloner
+          plan = Clowne::Planner.compile(declaration.custom_cloner, source, **declaration.options).values
+          Clowne::ActiveRecordAdapter::Adapter.clone(plan, source)
+        else
+          Clowne::ActiveRecordAdapter::Adapter.plain_clone(source)
+        end
+      end
     end
 
     class CloneAssociation
@@ -38,8 +47,8 @@ module Clowne
 
         child = source.__send__(association)
         return record unless child
-        child_clone = child.dup # TODO: use cloner!
-        child_clone[:"#{reflection.foreign_key}"] = nil # TODO: use nullify ?
+        child_clone = clone_with(child, declaration)
+        child_clone[:"#{reflection.foreign_key}"] = nil
         record.__send__(:"#{association}=", child_clone)
 
         record
@@ -53,8 +62,8 @@ module Clowne
         association, reflection = find_reflection(source, record, declaration)
 
         source.__send__(association).each do |child|
-          child_clone = child.dup # TODO: use cloner!
-          child_clone[:"#{reflection.foreign_key}"] = nil # TODO: use nullify ?
+          child_clone = clone_with(child, declaration)
+          child_clone[:"#{reflection.foreign_key}"] = nil
           record.__send__(association) << child_clone
         end
 
@@ -69,7 +78,7 @@ module Clowne
         association, _ = find_reflection(source, record, declaration)
 
         source.__send__(association).each do |child|
-          child_clone = child.dup # TODO: use cloner!
+          child_clone = clone_with(child, declaration)
           record.__send__(association) << child_clone
         end
 
