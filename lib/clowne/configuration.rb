@@ -6,34 +6,24 @@ module Clowne
       @config ||= []
     end
 
-    def raw
+    def add_include_all
+      @config.push(Clowne::Declarations::IncludeAll.new)
     end
 
-    def plan
+    def add_included_association(name, scope, options)
+      @config.push(Clowne::Declarations::IncludeAssociation.new(name, scope, options))
     end
 
-    def add_association(name, scope)
-      config << [name, scope]
+    def add_excluded_association(name)
+      @config.push(Clowne::Declarations::ExcludeAssociation.new(name))
     end
 
-    def remove_association()
-    end
-
-    def add_nullify()
+    def add_nullify(attrs)
+      @config.push(Clowne::Declarations::Nullify.new(attrs))
     end
 
     def add_finalize(block)
-      config << block
-    end
-
-    def add_context()
-    end
-
-    private
-
-    attr_accessor :config
-
-    def merge
+      @config.push(Clowne::Declarations::Finalize.new(block))
     end
   end
 end
