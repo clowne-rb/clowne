@@ -7,7 +7,7 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
     let(:record) { Post.new }
 
     context 'when simple relation' do
-      let(:declaration) { double(association: :account) }
+      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:account) }
 
       it "clone source's account" do
         expect(subject.account).to be_a(Account)
@@ -17,7 +17,7 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
 
     context 'when through relation' do
       let(:history) { History.create(some_stuff: 'Some stuff', account: account) }
-      let(:declaration) { double(association: :account) }
+      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:account) }
 
       it "clone source's account -> history" do
         pending 'Waiting nested cloners'
@@ -35,7 +35,7 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
     before { 2.times.collect { Post.create(owner: source, title: 'Some post') } }
 
     context 'when simple relation' do
-      let(:declaration) { double(association: :posts) }
+      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts) }
 
       it "clone source's posts" do
         expect(subject.posts.map(&:title)).to eq(['Some post', 'Some post'])
@@ -48,7 +48,7 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
     let(:source) { Post.create(tags: tags) }
     let(:record) { Post.new }
 
-    let(:declaration) { double(association: :tags) }
+    let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:tags) }
 
     it "clone source's tags" do
       expect(subject.tags.map(&:value)).to eq(['tag-0', 'tag-1'])
@@ -59,7 +59,7 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
     let(:topic) { Topic.create(title: 'Some post', description: 'Some description' ) }
     let(:source) { Post.create(topic: topic) }
     let(:record) { Post.new }
-    let(:declaration) { double(association: :topic) }
+    let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:topic) }
 
     subject { described_class.call(source, record, declaration) }
 

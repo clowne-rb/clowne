@@ -1,12 +1,24 @@
 module Clowne
   module ActiveRecordAdapter
     class Adapter < Clowne::BaseAdapter::Adapter
-      def reflections_for(record)
-        record.class.reflections
-      end
+      class << self
+        def reflections_for(source)
+          source.class.reflections
+        end
 
-      def close_association(record, association)
-        CloneAssociation.call(record, association)
+        def plain_dup(source)
+          source.dup
+        end
+
+        private
+
+        def resolver(declaration_class)
+          {
+            Clowne::Declarations::IncludeAssociation => Clowne::ActiveRecordAdapter::CloneAssociation,
+            Clowne::Declarations::Nullify => Clowne::BaseAdapter::Nullify,
+            Clowne::Declarations::Finalize => Clowne::BaseAdapter::Finalize,
+          }
+        end
       end
     end
   end

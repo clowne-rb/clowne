@@ -4,8 +4,8 @@ module Clowne
     module ReflectionHelper
       def find_reflection(source, record, declaration)
         reflections = record.class.reflections
-        association = declaration.association
-        reflection = reflections[declaration.association.to_s]
+        association = declaration.name
+        reflection = reflections[association.to_s]
         [association, reflection]
       end
     end
