@@ -20,8 +20,8 @@ module Clowne
       config.add_finalize(block)
     end
 
-    def context(name, &block)
-      config.add_context(name, block)
+    def trait(name, &block)
+      config.add_trait(name, block)
     end
 
     def config

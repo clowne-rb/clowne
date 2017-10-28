@@ -1,12 +1,12 @@
 module Clowne
   module Declarations
-    class Context < Struct.new(:name, :block)
+    class Trait < Struct.new(:name, :block)
       def compile(plan, settings)
         options = settings[:options]
-        active_contexts = options && options[:for]
+        active_traits = options && options[:for]
 
-        if active_contexts.nil? || active_contexts.include?(name)
-          compile_context(plan, settings)
+        if !active_traits.nil? && active_traits.include?(name)
+          compile_trait(plan, settings)
         else
           plan
         end
@@ -14,7 +14,7 @@ module Clowne
 
       private
 
-      def compile_context(plan, settings)
+      def compile_trait(plan, settings)
         object, adapter, options = settings[:object], settings[:adapter], settings[:options]
         anonymous_cloner = Class.new(Clowne::Cloner)
         anonymous_cloner.adapter(adapter)

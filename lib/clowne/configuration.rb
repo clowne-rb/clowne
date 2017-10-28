@@ -26,8 +26,8 @@ module Clowne
       @config.push(Clowne::Declarations::Finalize.new(block))
     end
 
-    def add_context(name, block)
-      @config.push(Clowne::Declarations::Context.new(name, block))
+    def add_trait(name, block)
+      @config.push(Clowne::Declarations::Trait.new(name, block))
     end
   end
 end

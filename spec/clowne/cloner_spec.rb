@@ -16,7 +16,7 @@ RSpec.describe Clowne::Cloner do
       1 + 1
     end
 
-    context :with_brands do
+    trait :with_brands do
       include_association :brands
     end
   end
@@ -36,7 +36,7 @@ RSpec.describe Clowne::Cloner do
         [Clowne::Declarations::ExcludeAssociation, {name: :users}],
         [Clowne::Declarations::Nullify, {attributes: [:title, :description]}],
         [Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1 } }],
-        [Clowne::Declarations::Context, {name: :with_brands, block: Proc.new {} }]
+        [Clowne::Declarations::Trait, {name: :with_brands, block: Proc.new {} }]
       ])
     end
   end

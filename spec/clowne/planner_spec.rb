@@ -91,7 +91,7 @@ RSpec.describe Clowne::Planner do
       ]) }
     end
 
-    context 'when cloner with context' do
+    describe 'traits' do
       let(:cloner) do
         Class.new(Clowne::Cloner) do
           adapter FakeAdapter
@@ -100,7 +100,7 @@ RSpec.describe Clowne::Planner do
 
           finalize &Proc.new { 1 + 1 }
 
-          context :with_brands do
+          trait :with_brands do
             include_association :brands
             exclude_association :posts
 
@@ -109,38 +109,27 @@ RSpec.describe Clowne::Planner do
         end
       end
 
-      it { is_expected.to be_a_declarations([
-        [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
-        [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 2 }} ],
-        [ Clowne::Declarations::IncludeAssociation, {name: :brands} ]
-      ]) }
-    end
+      subject { described_class.compile(cloner, object, **options).values }
 
-    context 'when cloner with inactive context' do
-      subject { described_class.compile(cloner, object, for: [:undefined_context]).values }
+      context 'when planing without traits' do
+        let(:options) { {} }
 
-      let(:cloner) do
-        Class.new(Clowne::Cloner) do
-          adapter FakeAdapter
-          include_association :users
-          include_association :posts
-
-          finalize &Proc.new { 1 + 1 }
-
-          context :with_brands do
-            include_association :brands
-            exclude_association :posts
-
-            finalize &Proc.new { 1 + 2 }
-          end
-        end
+        it { is_expected.to be_a_declarations([
+          [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
+          [ Clowne::Declarations::IncludeAssociation, {name: :posts} ],
+          [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1 }} ]
+        ]) }
       end
 
-      it { is_expected.to be_a_declarations([
-        [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
-        [ Clowne::Declarations::IncludeAssociation, {name: :posts} ],
-        [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1 }} ]
-      ]) }
+      context 'when one trait is active' do
+        let(:options) { { for: [:with_brands] } }
+
+        it { is_expected.to be_a_declarations([
+          [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
+          [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 2 }} ],
+          [ Clowne::Declarations::IncludeAssociation, {name: :brands} ]
+        ]) }
+      end
     end
   end
 end
