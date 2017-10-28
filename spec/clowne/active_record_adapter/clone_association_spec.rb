@@ -46,6 +46,16 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
         expect(subject.posts.map(&:title)).to eq(['Some post', 'Some post'])
       end
     end
+
+    context 'when defined scope on relation' do
+      let!(:selected_post) { Post.create(owner: source, title: 'Selected post') }
+
+      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts, Proc.new { where.not(title: 'Some post') }) }
+
+      it "clone only selected post" do
+        expect(subject.posts.map(&:title)).to eq(['Selected post'])
+      end
+    end
   end
 
   describe 'has_and_belongs_to_many' do
