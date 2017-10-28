@@ -1,5 +1,14 @@
 require 'rspec/expectations'
 
+RSpec::Matchers.define :be_a_declarations do |expected_declarations|
+  match do |actual| # TODO: write humanable error message
+    expect(actual.count).to eq(expected_declarations.count)
+    actual.each_with_index do |actual_declaration, index|
+      expect(actual_declaration).to be_a_declaration(expected_declarations[index])
+    end
+  end
+end
+
 RSpec::Matchers.define :be_a_declaration do |declaration_class, values|
   match do |actual|
     expect(actual).to be_a(declaration_class)

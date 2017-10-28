@@ -22,29 +22,15 @@ RSpec.describe Clowne::Cloner do
       expect(SomeCloner.config).to be_a(Clowne::Configuration)
 
       config = SomeCloner.config.config
-      expect(config[0]).to be_a(Clowne::Declarations::IncludeAll)
 
-      expect(config[1]).to be_a_declaration(
-        Clowne::Declarations::IncludeAssociation,
-        {name: :comments, scope: nil, options: {}}
-      )
-
-      expect(config[2]).to be_a_declaration(
-        Clowne::Declarations::IncludeAssociation,
-        {name: :posts, scope: :some_scope, options: {clone_with: 'AnotherClonerClass'}}
-      )
-
-      expect(config[3]).to be_a_declaration(
-        Clowne::Declarations::ExcludeAssociation, {name: :users}
-      )
-
-      expect(config[4]).to be_a_declaration(
-        Clowne::Declarations::Nullify, {attributes: [:title, :description]}
-      )
-
-      expect(config[5]).to be_a_declaration(
-        Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1} }
-      )
+      expect(config).to be_a_declarations([
+        [Clowne::Declarations::IncludeAll, {}],
+        [Clowne::Declarations::IncludeAssociation, {name: :comments, scope: nil, options: {}}],
+        [Clowne::Declarations::IncludeAssociation, {name: :posts, scope: :some_scope, options: {clone_with: 'AnotherClonerClass'}}],
+        [Clowne::Declarations::ExcludeAssociation, {name: :users}],
+        [Clowne::Declarations::Nullify, {attributes: [:title, :description]}],
+        [Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1} }]
+      ])
     end
   end
 end

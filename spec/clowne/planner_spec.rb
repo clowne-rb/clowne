@@ -12,7 +12,9 @@ RSpec.describe Clowne::Planner do
         end
       end
 
-      it { expect(subject[0]).to be_a_declaration(Clowne::Declarations::IncludeAssociation, {name: :users}) }
+      it { is_expected.to be_a_declarations([
+        [ Clowne::Declarations::IncludeAssociation, {name: :users} ]
+      ]) }
     end
   end
 end
