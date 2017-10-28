@@ -1,9 +1,19 @@
 class FakeAdapter < Clowne::BaseAdapter::Adapter
   class << self
     def reflections_for(record)
+      if record.respond_to?(:reflections)
+        reflections
+      else
+        fake_reflections
+      end
+    end
+
+    private
+
+    def fake_reflections
       {
-        "posts" => nil,
-        "users" => nil
+        "users" => nil,
+        "posts" => nil
       }
     end
   end
