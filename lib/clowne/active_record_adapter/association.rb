@@ -47,7 +47,7 @@ module Clowne
 
       def clone_with(child)
         if declaration.custom_cloner
-          @_plan ||= Clowne::Planner.compile(declaration.custom_cloner, child, **declaration.options).values
+          @_plan ||= Clowne::Planner.compile(declaration.custom_cloner, child, **declaration.options)
           Clowne::ActiveRecordAdapter::Adapter.clone(child, @_plan)
         else
           Clowne::ActiveRecordAdapter::Adapter.plain_clone(child)

@@ -17,13 +17,3 @@ require 'clowne/base_adapter/adapter'
 
 require 'clowne/active_record_adapter/association'
 require 'clowne/active_record_adapter/adapter'
-
-
-class PostCloner < Clowne::Cloner
-  include_association :comments
-  include_association :posts, -> (params) { where.not(user_id: params[:user_id]) }
-
-  finalize do |source, record, params|
-    record.user_id = params[:user_id]
-  end
-end

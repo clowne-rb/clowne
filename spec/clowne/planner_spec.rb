@@ -2,7 +2,7 @@ RSpec.describe Clowne::Planner do
   describe 'compile' do
     let(:object) { double(reflections: {"users" => nil, "posts" => nil}) }
 
-    subject { described_class.compile(cloner, object).values }
+    subject { described_class.compile(cloner, object) }
 
     context 'when cloner with one included association' do
       let(:cloner) do
@@ -109,7 +109,7 @@ RSpec.describe Clowne::Planner do
         end
       end
 
-      subject { described_class.compile(cloner, object, **options).values }
+      subject { described_class.compile(cloner, object, **options) }
 
       context 'when planing without traits' do
         let(:options) { {} }

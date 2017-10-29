@@ -20,7 +20,7 @@ module Clowne
         anonymous_cloner.adapter(adapter)
         anonymous_cloner.instance_eval(&block)
 
-        Clowne::Planner.compile(anonymous_cloner, object, plan, options)
+        Clowne::Planner.compile_with_tags(anonymous_cloner, object, plan, options)
       end
     end
   end
