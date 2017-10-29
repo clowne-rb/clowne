@@ -15,7 +15,7 @@ require 'clowne/base_adapter/finalize'
 require 'clowne/base_adapter/nullify'
 require 'clowne/base_adapter/adapter'
 
-require 'clowne/active_record_adapter/clone_association'
+require 'clowne/active_record_adapter/association'
 require 'clowne/active_record_adapter/adapter'
 
 
