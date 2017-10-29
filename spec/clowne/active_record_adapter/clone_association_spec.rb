@@ -39,7 +39,10 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
         end
       end
 
-      xit { is_expected.to eq(Post.new(title: 'Another post').as_json) }
+      it 'change title' do
+        post.title = 'Another post'
+        expect(subject).to eq(post.dup.as_json)
+      end
     end
   end
 
