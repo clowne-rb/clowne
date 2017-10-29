@@ -17,7 +17,7 @@ RSpec.describe Clowne::ActiveRecordAdapter::Adapter do
     let!(:account) { Account.create(title: 'Some title') }
     let!(:history) { History.create(some_stuff: 'Some stuff', account: account) }
 
-    subject { described_class.clone(plan, account) }
+    subject { described_class.clone(account, plan) }
 
     context 'when plan is empty' do
       let(:plan) { [] }

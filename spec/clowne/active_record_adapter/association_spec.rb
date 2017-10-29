@@ -1,4 +1,4 @@
-RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
+RSpec.describe Clowne::ActiveRecordAdapter::Association do
   subject { described_class.call(source, record, declaration) }
 
   describe 'has_one' do
