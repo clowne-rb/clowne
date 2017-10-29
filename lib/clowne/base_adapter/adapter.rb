@@ -3,9 +3,12 @@ module Clowne
     class Adapter
       class << self
         # Using a plan make full duplicate of record
-        def clone(source, plan)
+        # +source+:: Instance of cloned object (ex: User.new(posts: posts))
+        # +plan+:: Array of Declarations
+        # +params+:: Instance of Clowne::Params (ex: Clowne::Parms.new({foo: :bar}))
+        def clone(source, plan, params)
           plan.inject(plain_clone(source)) do |record, declaration|
-            resolver(declaration.class).call(source, record, declaration)
+            resolver(declaration.class).call(source, record, declaration, params)
           end
         end
 

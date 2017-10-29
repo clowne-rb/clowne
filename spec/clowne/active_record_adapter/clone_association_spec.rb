@@ -1,5 +1,6 @@
 RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
-  let(:object) { described_class.new(source, declaration) }
+  let(:object) { described_class.new(source, declaration, params) }
+  let(:params) { {} }
   let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts) }
 
   describe '#association' do
@@ -53,13 +54,31 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
 
     subject { object.with_scope.map(&:title) }
 
-    context 'when scope as Proc' do
+    context 'when scope is a Proc' do
       let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts, Proc.new { where(title: 'Foo') }) }
 
       it { is_expected.to eq(['Foo']) }
     end
 
-    context 'when scope as Symbol' do
+    context 'when scope is a Proc with params' do
+      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts,
+        Proc.new { |params| where(title: params[:title]) })
+      }
+
+      context 'title of not exists post' do
+        let(:params) { {title: 'I am not exists post'} }
+
+        it { is_expected.to be_empty }
+      end
+
+      context 'title of Foo post' do
+        let(:params) { {title: 'Foo'} }
+
+        it { is_expected.to eq(['Foo']) }
+      end
+    end
+
+    context 'when scope is a Symbol' do
       let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts, :default_posts) }
 
       before do

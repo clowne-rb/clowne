@@ -1,19 +1,17 @@
 module Clowne
   module ActiveRecordAdapter
-    # o.public_send(:order_items).instance_exec({id: 1}, &Proc.new { |params| where(id: params[:id]) })
-
     class Association
-      def self.call(source, record, declaration)
-        reflection = CloneAssociation.new(source, declaration).reflection
+      def self.call(source, record, declaration, params)
+        reflection = CloneAssociation.new(source, declaration, params).reflection
 
         if reflection.is_a?(::ActiveRecord::Reflection::ThroughReflection)
           record
         elsif reflection.is_a?(::ActiveRecord::Reflection::HasOneReflection)
-          CloneHasOneAssociation.new(source, declaration).call(record)
+          CloneHasOneAssociation.new(source, declaration, params).call(record)
         elsif reflection.is_a?(::ActiveRecord::Reflection::HasManyReflection)
-          CloneHasManyAssociation.new(source, declaration).call(record)
+          CloneHasManyAssociation.new(source, declaration, params).call(record)
         elsif reflection.is_a?(::ActiveRecord::Reflection::HasAndBelongsToManyReflection)
-          CloneHasAndBelongsToManyAssociation.new(source, declaration).call(record)
+          CloneHasAndBelongsToManyAssociation.new(source, declaration, params).call(record)
         else
           warn("Reflection #{reflection.class.name} does not support")
           record
@@ -25,8 +23,9 @@ module Clowne
       # Params:
       # +source+:: Instance of cloned object (ex: User.new(posts: posts))
       # +declaration+:: = Relation description (ex: Clowne::Declarations::IncludeAssociation.new(:posts))
-      def initialize(source, declaration)
-        @source, @declaration = source, declaration
+      # +params+:: = Instance of Clowne::Params
+      def initialize(source, declaration, params)
+        @source, @declaration, @params = source, declaration, params
         @association_name = declaration.name.to_s
       end
 
@@ -48,7 +47,7 @@ module Clowne
       def clone_with(child)
         if declaration.custom_cloner
           @_plan ||= Clowne::Planner.compile(declaration.custom_cloner, child, **declaration.options)
-          Clowne::ActiveRecordAdapter::Adapter.clone(child, @_plan)
+          Clowne::ActiveRecordAdapter::Adapter.clone(child, @_plan, params)
         else
           Clowne::ActiveRecordAdapter::Adapter.plain_clone(child)
         end
@@ -59,7 +58,7 @@ module Clowne
         if declaration.scope.is_a?(Symbol)
           base_scope.__send__(declaration.scope)
         elsif declaration.scope.is_a?(Proc)
-          base_scope.instance_exec(&declaration.scope)
+          base_scope.instance_exec(params, &declaration.scope)
         else
           base_scope
         end
@@ -67,7 +66,7 @@ module Clowne
 
       private
 
-      attr_reader :source, :declaration, :association_name
+      attr_reader :source, :declaration, :params, :association_name
     end
 
     class CloneHasOneAssociation < CloneAssociation

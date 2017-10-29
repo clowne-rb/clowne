@@ -1,5 +1,6 @@
 RSpec.describe Clowne::ActiveRecordAdapter::Association do
-  subject { described_class.call(source, record, declaration) }
+  subject { described_class.call(source, record, declaration, params) }
+  let(:params) { Clowne::Params.new({}) }
 
   describe 'has_one' do
     let(:account) { Account.create(title: 'Some account') }
@@ -76,7 +77,7 @@ RSpec.describe Clowne::ActiveRecordAdapter::Association do
     let(:record) { Post.new }
     let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:topic) }
 
-    subject { described_class.call(source, record, declaration) }
+    subject { described_class.call(source, record, declaration, params) }
 
     it 'return unchanged record' do
       expect(subject.topic).to be_nil
