@@ -4,16 +4,16 @@ module Clowne
 
     class Association
       def self.call(source, record, declaration)
-        reflection = CloneAssociation.get_reflection(source, declaration)
+        reflection = CloneAssociation.new(source, declaration).reflection
 
         if reflection.is_a?(::ActiveRecord::Reflection::ThroughReflection)
           record
         elsif reflection.is_a?(::ActiveRecord::Reflection::HasOneReflection)
-          CloneHasOneAssociation.call(source, record, declaration)
+          CloneHasOneAssociation.new(source, declaration).call(record)
         elsif reflection.is_a?(::ActiveRecord::Reflection::HasManyReflection)
-          CloneHasManyAssociation.call(source, record, declaration)
+          CloneHasManyAssociation.new(source, declaration).call(record)
         elsif reflection.is_a?(::ActiveRecord::Reflection::HasAndBelongsToManyReflection)
-          CloneHasAndBelongsToManyAssociation.call(source, record, declaration)
+          CloneHasAndBelongsToManyAssociation.new(source, declaration).call(record)
         else
           warn("Reflection #{reflection.class.name} does not support")
           record
@@ -22,62 +22,74 @@ module Clowne
     end
 
     class CloneAssociation
-      class << self
-        def clone_with(source, declaration)
-          if declaration.custom_cloner
-            plan = Clowne::Planner.compile(declaration.custom_cloner, source, **declaration.options).values
-            Clowne::ActiveRecordAdapter::Adapter.clone(source, plan)
-          else
-            Clowne::ActiveRecordAdapter::Adapter.plain_clone(source)
-          end
-        end
+      # Params:
+      # +source+:: Instance of cloned object (ex: User.new(posts: posts))
+      # +declaration+:: = Relation description (ex: Clowne::Declarations::IncludeAssociation.new(:posts))
+      def initialize(source, declaration)
+        @source, @declaration = source, declaration
+        @association_name = declaration.name.to_s
+      end
 
-        def with_scope(source, declaration)
-          base_scope = get_association(source, declaration)
-          if declaration.scope.is_a?(Symbol)
-            base_scope.__send__(declaration.scope)
-          elsif declaration.scope.is_a?(Proc)
-            base_scope.instance_exec(&declaration.scope)
-          else
-            base_scope
-          end
-        end
+      def call(record)
+        raise NotImplementedError
+      end
 
-        def get_association(source, declaration)
-          source.__send__(declaration.name.to_s)
-        end
+      def association
+        @_association ||= source.__send__(association_name)
+      end
 
-        def get_reflection(source, declaration)
+      def reflection
+        @_reflection ||= begin
           reflections = Clowne::ActiveRecordAdapter::Adapter.reflections_for(source)
-          reflection = reflections[declaration.name.to_s]
+          reflections[association_name]
         end
       end
+
+      def clone_with(child)
+        if declaration.custom_cloner
+          @_plan ||= Clowne::Planner.compile(declaration.custom_cloner, child, **declaration.options).values
+          Clowne::ActiveRecordAdapter::Adapter.clone(child, @_plan)
+        else
+          Clowne::ActiveRecordAdapter::Adapter.plain_clone(child)
+        end
+      end
+
+      def with_scope
+        base_scope = association
+        if declaration.scope.is_a?(Symbol)
+          base_scope.__send__(declaration.scope)
+        elsif declaration.scope.is_a?(Proc)
+          base_scope.instance_exec(&declaration.scope)
+        else
+          base_scope
+        end
+      end
+
+      private
+
+      attr_reader :source, :declaration, :association_name
     end
 
     class CloneHasOneAssociation < CloneAssociation
-      def self.call(source, record, declaration)
-        reflection = get_reflection(source, declaration)
-
-        child = get_association(source, declaration)
+      def call(record)
+        child = association
         return record unless child
         warn "Has one association should not has scope" unless declaration.scope.nil?
 
-        child_clone = clone_with(child, declaration)
+        child_clone = clone_with(child)
         child_clone[:"#{reflection.foreign_key}"] = nil
-        record.__send__(:"#{declaration.name}=", child_clone)
+        record.__send__(:"#{association_name}=", child_clone)
 
         record
       end
     end
 
     class CloneHasManyAssociation < CloneAssociation
-      def self.call(source, record, declaration)
-        reflection = get_reflection(source, declaration)
-
-        with_scope(source, declaration).each do |child|
-          child_clone = clone_with(child, declaration)
+      def call(record)
+        with_scope.each do |child|
+          child_clone = clone_with(child)
           child_clone[:"#{reflection.foreign_key}"] = nil
-          record.__send__(declaration.name) << child_clone
+          record.__send__(association_name) << child_clone
         end
 
         record
@@ -85,12 +97,10 @@ module Clowne
     end
 
     class CloneHasAndBelongsToManyAssociation < CloneAssociation
-      def self.call(source, record, declaration)
-        reflection = get_reflection(source, declaration)
-
-        with_scope(source, declaration).each do |child|
-          child_clone = clone_with(child, declaration)
-          record.__send__(declaration.name) << child_clone
+      def call(record)
+        with_scope.each do |child|
+          child_clone = clone_with(child)
+          record.__send__(association_name) << child_clone
         end
 
         record
