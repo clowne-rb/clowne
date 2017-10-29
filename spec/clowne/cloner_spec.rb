@@ -40,4 +40,20 @@ RSpec.describe Clowne::Cloner do
       ])
     end
   end
+
+  describe 'call wrong cloner' do
+    context 'when adapter not defined' do
+      let(:cloner) { Class.new(Clowne::Cloner) }
+
+      it { expect{ cloner.call(double) }.to raise_error(Clowne::Cloner::ConfigurationError, 'Adapter is not defined') }
+    end
+
+    context 'when object is nil' do
+      let(:cloner) { Class.new(Clowne::Cloner) do
+        adapter FakeAdapter
+      end }
+
+      it { expect{ cloner.call(nil) }.to raise_error(Clowne::Cloner::ConfigurationError, 'Nil is not cloneable object') }
+    end
+  end
 end
