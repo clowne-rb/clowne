@@ -3,9 +3,9 @@ module Clowne
     class Trait < Struct.new(:name, :block)
       def compile(plan, settings)
         options = settings[:options]
-        active_traits = options && options[:for]
+        active_traits = Array(options && options[:for])
 
-        if !active_traits.nil? && active_traits.include?(name)
+        if active_traits.include?(name)
           compile_trait(plan, settings)
         else
           plan

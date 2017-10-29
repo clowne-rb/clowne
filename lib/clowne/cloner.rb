@@ -7,9 +7,9 @@ module Clowne
         @adapter ||= adapter
       end
 
-      def call(object, params = {})
-        puts object
-        puts config
+      def call(object, **options)
+        plan = Clowne::Planner.compile(self, object, {}, **options)
+        @adapter.clone(object, plan, Clowne::Params.new(options.except(:for)))
       end
     end
   end
