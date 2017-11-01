@@ -57,7 +57,7 @@ RSpec.describe Clowne::Cloner do
         adapter FakeAdapter
       end }
 
-      it { expect{ cloner.call(nil) }.to raise_error(Clowne::Cloner::ConfigurationError, 'Nil is not cloneable object') }
+      it { expect{ cloner.call(nil) }.to raise_error(Clowne::Cloner::UnprocessableSourceError, 'Nil is not cloneable object') }
     end
   end
 
