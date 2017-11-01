@@ -89,7 +89,7 @@ RSpec.describe Clowne::Cloner do
         ])
       end
 
-      it "parent declarations does not change" do
+      it 'parent declarations does not change' do
         declarations = SomeCloner.config.declarations
         expect(declarations).to be_a_declarations(expected_declarations)
       end
