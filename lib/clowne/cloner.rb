@@ -4,16 +4,12 @@ module Clowne
     extend Clowne::DSL
 
     class << self
-      def adapter(adapter = nil)
-        @adapter ||= adapter
-      end
-
       def call(object, **options)
-        raise(ConfigurationError, 'Adapter is not defined') unless @adapter
+        raise(ConfigurationError, 'Adapter is not defined') unless adapter
         raise(ConfigurationError, 'Nil is not cloneable object') if object.nil?
 
         plan = Clowne::Planner.compile(self, object, {}, **options)
-        @adapter.clone(object, plan, Clowne::Params.new(options.except(:for)))
+        adapter.clone(object, plan, Clowne::Params.new(options.except(:for)))
       end
     end
   end

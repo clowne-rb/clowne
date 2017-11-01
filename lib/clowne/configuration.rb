@@ -2,8 +2,8 @@ module Clowne
   class Configuration
     attr_reader :config
 
-    def initialize
-      @config ||= []
+    def initialize(init_conf = [])
+      @config = init_conf
     end
 
     def add_include_all

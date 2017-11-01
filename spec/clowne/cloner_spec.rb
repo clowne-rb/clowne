@@ -21,6 +21,19 @@ RSpec.describe Clowne::Cloner do
     end
   end
 
+  let(:expected_declarations) do
+    [
+      [Clowne::Declarations::IncludeAll, {}],
+      [Clowne::Declarations::IncludeAssociation, {name: :comments, scope: nil, options: {}}],
+      [Clowne::Declarations::IncludeAssociation, {name: :posts, scope: :some_scope, options: {clone_with: 'AnotherClonerClass'}}],
+      [Clowne::Declarations::IncludeAssociation, {name: :tags, scope: nil, options: {clone_with: 'AnotherCloner2Class'}}],
+      [Clowne::Declarations::ExcludeAssociation, {name: :users}],
+      [Clowne::Declarations::Nullify, {attributes: [:title, :description]}],
+      [Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1 } }],
+      [Clowne::Declarations::Trait, {name: :with_brands, block: Proc.new {} }]
+    ]
+  end
+
   describe 'DSL and Configuration' do
     it 'configure cloner' do
       expect(SomeCloner.adapter).to eq(FakeAdapter)
@@ -28,16 +41,7 @@ RSpec.describe Clowne::Cloner do
 
       config = SomeCloner.config.config
 
-      expect(config).to be_a_declarations([
-        [Clowne::Declarations::IncludeAll, {}],
-        [Clowne::Declarations::IncludeAssociation, {name: :comments, scope: nil, options: {}}],
-        [Clowne::Declarations::IncludeAssociation, {name: :posts, scope: :some_scope, options: {clone_with: 'AnotherClonerClass'}}],
-        [Clowne::Declarations::IncludeAssociation, {name: :tags, scope: nil, options: {clone_with: 'AnotherCloner2Class'}}],
-        [Clowne::Declarations::ExcludeAssociation, {name: :users}],
-        [Clowne::Declarations::Nullify, {attributes: [:title, :description]}],
-        [Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1 } }],
-        [Clowne::Declarations::Trait, {name: :with_brands, block: Proc.new {} }]
-      ])
+      expect(config).to be_a_declarations(expected_declarations)
     end
   end
 
@@ -54,6 +58,36 @@ RSpec.describe Clowne::Cloner do
       end }
 
       it { expect{ cloner.call(nil) }.to raise_error(Clowne::Cloner::ConfigurationError, 'Nil is not cloneable object') }
+    end
+  end
+
+  describe 'inheritance' do
+    context 'when cloner child of another cloner' do
+      class Some2Cloner < SomeCloner; end
+
+      it 'child cloner settings' do
+        expect(Some2Cloner.adapter).to eq(FakeAdapter)
+        expect(Some2Cloner.config).to be_a(Clowne::Configuration)
+
+        config = Some2Cloner.config.config
+
+        expect(config).to be_a_declarations(expected_declarations)
+      end
+    end
+
+    context 'when child cloner has own declaration' do
+      class Some3Cloner < SomeCloner
+        trait :child_cloner_trait do
+        end
+      end
+
+      it 'child cloner declarations' do
+        config = Some3Cloner.config.config
+
+        expect(config).to be_a_declarations(expected_declarations + [
+          [Clowne::Declarations::Trait, {name: :child_cloner_trait, block: Proc.new {} }]
+        ])
+      end
     end
   end
 end

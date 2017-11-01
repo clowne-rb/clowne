@@ -1,5 +1,11 @@
 module Clowne
   module DSL
+    def adapter(adapter = nil)
+      @_adapter ||= begin
+        adapter || (parent_is_cloner? ? superclass.adapter : nil)
+      end
+    end
+
     def include_all
       config.add_include_all
     end
@@ -25,7 +31,19 @@ module Clowne
     end
 
     def config
-      @config ||= Clowne::Configuration.new
+      @_config ||= begin
+        if parent_is_cloner?
+          Clowne::Configuration.new(superclass.config.config.dup)
+        else
+          Clowne::Configuration.new
+        end
+      end
+    end
+
+    private
+
+    def parent_is_cloner?
+      superclass.ancestors.include?(Clowne::Cloner)
     end
   end
 end
