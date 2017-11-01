@@ -39,9 +39,9 @@ RSpec.describe Clowne::Cloner do
       expect(SomeCloner.adapter).to eq(FakeAdapter)
       expect(SomeCloner.config).to be_a(Clowne::Configuration)
 
-      config = SomeCloner.config.config
+      declarations = SomeCloner.config.declarations
 
-      expect(config).to be_a_declarations(expected_declarations)
+      expect(declarations).to be_a_declarations(expected_declarations)
     end
   end
 
@@ -69,9 +69,9 @@ RSpec.describe Clowne::Cloner do
         expect(Some2Cloner.adapter).to eq(FakeAdapter)
         expect(Some2Cloner.config).to be_a(Clowne::Configuration)
 
-        config = Some2Cloner.config.config
+        declarations = Some2Cloner.config.declarations
 
-        expect(config).to be_a_declarations(expected_declarations)
+        expect(declarations).to be_a_declarations(expected_declarations)
       end
     end
 
@@ -81,12 +81,17 @@ RSpec.describe Clowne::Cloner do
         end
       end
 
-      it 'child cloner declarations' do
-        config = Some3Cloner.config.config
+      it 'child declarations' do
+        declarations = Some3Cloner.config.declarations
 
-        expect(config).to be_a_declarations(expected_declarations + [
+        expect(declarations).to be_a_declarations(expected_declarations + [
           [Clowne::Declarations::Trait, {name: :child_cloner_trait, block: Proc.new {} }]
         ])
+      end
+
+      it "parent declarations does not change" do
+        declarations = SomeCloner.config.declarations
+        expect(declarations).to be_a_declarations(expected_declarations)
       end
     end
   end

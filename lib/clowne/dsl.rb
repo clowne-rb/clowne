@@ -39,7 +39,7 @@ module Clowne
     end
 
     def init_declarations
-      parent_is_cloner? ? superclass.config.config.dup : []
+      parent_is_cloner? ? superclass.config.declarations.dup : []
     end
 
     def parent_is_cloner?
