@@ -73,7 +73,7 @@ RSpec.describe Clowne::Planner do
       end
 
       it { is_expected.to be_a_declarations([
-        [ Clowne::Declarations::Nullify, {attributes: [:foo, :baz, :baz]} ]
+        [ Clowne::Declarations::Nullify, {attributes: [:foo, :bar, :baz]} ]
       ]) }
 
       context 'when cloner with main nullify declaration and traits' do
@@ -91,7 +91,7 @@ RSpec.describe Clowne::Planner do
         let(:options) { { for: [:with_nullify] } }
 
         it { is_expected.to be_a_declarations([
-          [ Clowne::Declarations::Nullify, {attributes: [:foo, :baz]} ]
+          [ Clowne::Declarations::Nullify, {attributes: [:foo, :bar]} ]
         ]) }
       end
     end
