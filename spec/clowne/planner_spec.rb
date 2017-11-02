@@ -1,8 +1,9 @@
 RSpec.describe Clowne::Planner do
   describe 'compile' do
     let(:object) { double(reflections: {"users" => nil, "posts" => nil}) }
+    let(:options) { {} }
 
-    subject { described_class.compile(cloner, object) }
+    subject { described_class.compile(cloner, object, **options) }
 
     context 'when cloner with one included association' do
       let(:cloner) do
@@ -72,8 +73,27 @@ RSpec.describe Clowne::Planner do
       end
 
       it { is_expected.to be_a_declarations([
-        [ Clowne::Declarations::Nullify, {attributes: [:baz]} ]
+        [ Clowne::Declarations::Nullify, {attributes: [:foo, :baz, :baz]} ]
       ]) }
+
+      context 'when cloner with main nullify declaration and traits' do
+        let(:cloner) do
+          Class.new(Clowne::Cloner) do
+            adapter FakeAdapter
+            nullify :foo
+
+            trait :with_nullify do
+              nullify :bar
+            end
+          end
+        end
+
+        let(:options) { { for: [:with_nullify] } }
+
+        it { is_expected.to be_a_declarations([
+          [ Clowne::Declarations::Nullify, {attributes: [:foo, :baz]} ]
+        ]) }
+      end
     end
 
     context 'when cloner with finalize declaration' do
@@ -109,11 +129,7 @@ RSpec.describe Clowne::Planner do
         end
       end
 
-      subject { described_class.compile(cloner, object, **options) }
-
       context 'when planing without traits' do
-        let(:options) { {} }
-
         it { is_expected.to be_a_declarations([
           [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
           [ Clowne::Declarations::IncludeAssociation, {name: :posts} ],
