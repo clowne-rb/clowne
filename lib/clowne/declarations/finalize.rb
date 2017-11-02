@@ -4,8 +4,14 @@ module Clowne
       PLAN_NAME = :finalize
 
       def compile(plan, _settings)
-        plan[PLAN_NAME] = self
+        plan[name] = self
         plan
+      end
+
+      private
+
+      def name
+        [PLAN_NAME, __id__].join('-')
       end
     end
   end
