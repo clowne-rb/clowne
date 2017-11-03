@@ -11,7 +11,7 @@ module Clowne
       end
 
       def compile_with_tags(cloner, object, init_plan = {}, **options)
-        cloner.config.config.inject(init_plan) do |plan, declaration|
+        cloner.config.declarations.inject(init_plan) do |plan, declaration|
           declaration.compile(plan, {object: object, adapter: cloner.adapter, options: options})
         end
       end

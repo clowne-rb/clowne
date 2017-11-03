@@ -1,5 +1,13 @@
 module Clowne
   module DSL
+    def adapter(adapter = nil)
+      @_adapter ||= adapter
+    end
+
+    def config(init_config = Clowne::Configuration.new)
+      @_config ||= init_config
+    end
+
     def include_all
       config.add_include_all
     end
@@ -22,10 +30,6 @@ module Clowne
 
     def trait(name, &block)
       config.add_trait(name, block)
-    end
-
-    def config
-      @config ||= Clowne::Configuration.new
     end
   end
 end
