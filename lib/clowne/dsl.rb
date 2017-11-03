@@ -1,7 +1,11 @@
 module Clowne
   module DSL
     def adapter(adapter = nil)
-      @_adapter ||= (adapter || init_adapter)
+      @_adapter ||= adapter
+    end
+
+    def config(init_config = Clowne::Configuration.new)
+      @_config ||= init_config
     end
 
     def include_all
@@ -26,24 +30,6 @@ module Clowne
 
     def trait(name, &block)
       config.add_trait(name, block)
-    end
-
-    def config
-      @_config ||= Clowne::Configuration.new(init_declarations)
-    end
-
-    private
-
-    def init_adapter
-      superclass.adapter if parent_is_cloner?
-    end
-
-    def init_declarations
-      parent_is_cloner? ? superclass.config.declarations.dup : []
-    end
-
-    def parent_is_cloner?
-      superclass.ancestors.include?(Clowne::Cloner)
     end
   end
 end

@@ -6,6 +6,11 @@ module Clowne
     extend Clowne::DSL
 
     class << self
+      def inherited(subclass)
+        subclass.adapter(adapter)
+        subclass.config(Clowne::Configuration.new(config.declarations.dup))
+      end
+
       def call(object, **options)
         raise(ConfigurationError, 'Adapter is not defined') unless adapter
         raise(UnprocessableSourceError, 'Nil is not cloneable object') if object.nil?
