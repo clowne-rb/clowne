@@ -3,7 +3,7 @@ RSpec.describe Clowne::Planner do
     let(:object) { double(reflections: {"users" => nil, "posts" => nil}) }
     let(:options) { {} }
 
-    subject { described_class.compile(cloner, object, **options) }
+    subject { described_class.compile(cloner, object, **options).declarations }
 
     context 'when cloner with one included association' do
       let(:cloner) do
@@ -28,8 +28,9 @@ RSpec.describe Clowne::Planner do
       end
 
       it { is_expected.to be_a_declarations([
-        [ Clowne::Declarations::IncludeAssociation, {name: :users, options: {}} ],
-        [ Clowne::Declarations::IncludeAssociation, {name: :posts} ]
+        [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
+        [ Clowne::Declarations::IncludeAssociation, {name: :posts} ],
+        [ Clowne::Declarations::IncludeAssociation, {name: :users, options: {}} ]
       ]) }
     end
 
@@ -43,8 +44,9 @@ RSpec.describe Clowne::Planner do
       end
 
       it { is_expected.to be_a_declarations([
-        [ Clowne::Declarations::IncludeAssociation, {name: :users, options: {clone_with: 'AnotherCloner'}} ],
-        [ Clowne::Declarations::IncludeAssociation, {name: :posts} ]
+        [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
+        [ Clowne::Declarations::IncludeAssociation, {name: :posts} ],
+        [ Clowne::Declarations::IncludeAssociation, {name: :users, options: {clone_with: 'AnotherCloner'}} ]
       ]) }
     end
 

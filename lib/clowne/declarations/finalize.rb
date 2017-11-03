@@ -4,8 +4,7 @@ module Clowne
       PLAN_NAME = :finalize
 
       def compile(plan, _settings)
-        plan[name] = self
-        plan
+        plan.add(name, self)
       end
 
       private

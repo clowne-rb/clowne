@@ -3,7 +3,6 @@ module Clowne
     class ExcludeAssociation < Struct.new(:name)
       def compile(plan, _settings)
         plan.delete(name)
-        plan || {}
       end
     end
   end
