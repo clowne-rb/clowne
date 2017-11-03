@@ -7,7 +7,6 @@ module Clowne
 
     class << self
       def call(object, **options)
-        raise(ConfigurationError, 'Adapter is not defined') unless adapter
         raise(UnprocessableSourceError, 'Nil is not cloneable object') if object.nil?
 
         plan = Clowne::Planner.compile(self, object, Clowne::Plan.new, **options)

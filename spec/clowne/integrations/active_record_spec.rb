@@ -1,8 +1,11 @@
 RSpec.describe 'oGod spec for AR adapter' do
   class AccountCloner < Clowne::Cloner
-    exclude_association :history
+    adapter Clowne::ActiveRecordAdapter::Adapter
+
+    include_all
 
     trait :with_history do
+      exclude_association :history
       include_association :history
     end
 
@@ -13,8 +16,6 @@ RSpec.describe 'oGod spec for AR adapter' do
 
   class PostCloner < Clowne::Cloner
     adapter Clowne::ActiveRecordAdapter::Adapter
-
-    include_all
 
     include_association :account, clone_with: AccountCloner, for: [:with_history, :nullify_title]
     include_association :tags, -> (params) { where(value: params[:tags]) }

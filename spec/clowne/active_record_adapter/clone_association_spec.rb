@@ -34,6 +34,8 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
       let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts, nil, clone_with: post_cloner) }
       let(:post_cloner) do
         Class.new(Clowne::Cloner) do
+          adapter Clowne::ActiveRecordAdapter::Adapter
+
           finalize do |source, record, params|
             record.title = 'Another post'
           end

@@ -5,8 +5,7 @@ module Clowne
         object, adapter = settings[:object], settings[:adapter]
         reflections = adapter.reflections_for(object)
         reflections.each do |name, _ref|
-          name = name.to_sym
-          plan.add(name, Clowne::Declarations::IncludeAssociation.new(name))
+          plan.add(name, Clowne::Declarations::IncludeAssociation.new(name.to_sym))
         end
 
         plan
