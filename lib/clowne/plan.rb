@@ -9,7 +9,7 @@ module Clowne
     def validate!
       dups = @steps.group_by(&:key).select { |_step, count| count.size > 1 }.map(&:first)
       if dups.any?
-        raise Clowne::ConfigurationError.new("You have duplicate configurations with keys: #{dups.join(', ')}")
+        raise Clowne::ConfigurationError.new("You have duplicate keys in configuration: #{dups.join(', ')}")
       else
         true
       end

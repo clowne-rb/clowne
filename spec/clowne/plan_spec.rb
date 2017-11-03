@@ -19,7 +19,7 @@ RSpec.describe Clowne::Plan do
         end
       end
 
-      it { expect { subject }.to raise_error(Clowne::ConfigurationError, 'You have duplicate configurations with keys: items, comments') }
+      it { expect { subject }.to raise_error(Clowne::ConfigurationError, 'You have duplicate keys in configuration: items, comments') }
     end
   end
 end

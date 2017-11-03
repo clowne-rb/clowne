@@ -67,7 +67,7 @@ RSpec.describe Clowne::Cloner do
         include_association :comments
       end }
 
-      it { expect{ cloner.call(double) }.to raise_error(Clowne::ConfigurationError, 'You have duplicate configurations with keys: comments') }
+      it { expect{ cloner.call(double) }.to raise_error(Clowne::ConfigurationError, 'You have duplicate keys in configuration: comments') }
     end
   end
 
