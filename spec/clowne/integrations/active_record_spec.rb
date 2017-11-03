@@ -14,16 +14,21 @@ RSpec.describe 'oGod spec for AR adapter' do
     end
   end
 
-  class PostCloner < Clowne::Cloner
+  class BasePostCloner < Clowne::Cloner
     adapter Clowne::ActiveRecordAdapter::Adapter
 
+    finalize do |_source, record, params|
+      record.contents = params[:post_contents]
+    end
+  end
+
+  class PostCloner < BasePostCloner
     include_association :account, clone_with: AccountCloner, for: [:with_history, :nullify_title]
     include_association :tags, -> (params) { where(value: params[:tags]) }
 
     trait :mark_as_clone do
-      finalize do |source, record, params|
+      finalize do |source, record|
         record.title = source.title + ' Super!'
-        record.contents = params[:post_contents]
       end
     end
   end
