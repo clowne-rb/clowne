@@ -23,7 +23,7 @@ RSpec.describe 'oGod spec for AR adapter' do
   end
 
   class PostCloner < BasePostCloner
-    include_association :account, clone_with: AccountCloner, for: [:with_history, :nullify_title]
+    include_association :account, clone_with: AccountCloner, traits: [:with_history, :nullify_title]
     include_association :tags, -> (params) { where(value: params[:tags]) }
 
     trait :mark_as_clone do
@@ -60,7 +60,7 @@ RSpec.describe 'oGod spec for AR adapter' do
     expect(History.count).to eq(1)
 
     clone = PostCloner.call(source,
-      for: :mark_as_clone,
+      traits: :mark_as_clone,
       tags: %w(CI CD),
       post_contents: 'THIS IS CLONE! (☉_☉)'
     )

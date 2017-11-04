@@ -16,7 +16,7 @@ module Clowne
 
         plan = Clowne::Planner.compile(self, object, Clowne::Plan.new, **options)
         plan.validate!
-        adapter.clone(object, plan, options.except(:for)) # TODO: #except is AS!
+        adapter.clone(object, plan, options.except(Clowne::Declarations::Trait::MARKER)) # TODO: #except is AS!
       end
     end
   end
