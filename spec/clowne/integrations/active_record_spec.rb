@@ -23,13 +23,21 @@ RSpec.describe 'oGod spec for AR adapter' do
   end
 
   class PostCloner < BasePostCloner
-    include_association :account, clone_with: AccountCloner, for: [:with_history, :nullify_title]
+    include_association :account, clone_with: AccountCloner, traits: [:with_history, :nullify_title]
     include_association :tags, -> (params) { where(value: params[:tags]) }
 
     trait :mark_as_clone do
       finalize do |source, record|
         record.title = source.title + ' Super!'
       end
+    end
+  end
+
+  class HistoryCloner < Clowne::Cloner
+    adapter Clowne::ActiveRecordAdapter::Adapter
+
+    finalize do |_source, record, params|
+      record.some_stuff = record.some_stuff + ' - 2'
     end
   end
 
@@ -52,7 +60,7 @@ RSpec.describe 'oGod spec for AR adapter' do
     expect(History.count).to eq(1)
 
     clone = PostCloner.call(source,
-      for: :mark_as_clone,
+      traits: :mark_as_clone,
       tags: %w(CI CD),
       post_contents: 'THIS IS CLONE! (☉_☉)'
     )
@@ -77,7 +85,7 @@ RSpec.describe 'oGod spec for AR adapter' do
 
     # history
     history_clone = account_clone.history
-    expect(history_clone.some_stuff).to eq(history.some_stuff)
+    expect(history_clone.some_stuff).to eq('This is history about my life - 2')
 
     # tags
     tags_clone = clone.tags

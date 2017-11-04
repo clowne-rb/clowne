@@ -1,9 +1,11 @@
 module Clowne
   module Declarations
     class Trait < Struct.new(:name, :block)
+      MARKER = :traits
+
       def compile(plan, settings)
         options = settings[:options]
-        active_traits = Array(options && options[:for])
+        active_traits = Array(options && options[MARKER])
 
         if active_traits.include?(name)
           compile_trait(plan, settings)

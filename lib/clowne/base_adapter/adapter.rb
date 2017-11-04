@@ -19,6 +19,10 @@ module Clowne
           raise NotImplementedError
         end
 
+        def cloner_for(relation_name)
+          nil
+        end
+
         # Return plain duplicate of source
         def plain_clone(source)
           raise NotImplementedError

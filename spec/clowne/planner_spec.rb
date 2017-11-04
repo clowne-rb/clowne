@@ -90,7 +90,7 @@ RSpec.describe Clowne::Planner do
           end
         end
 
-        let(:options) { { for: [:with_nullify] } }
+        let(:options) { { traits: [:with_nullify] } }
 
         it { is_expected.to be_a_declarations([
           [ Clowne::Declarations::Nullify, {attributes: [:foo, :bar]} ]
@@ -124,7 +124,7 @@ RSpec.describe Clowne::Planner do
           end
         end
 
-        let(:options) { { for: :with_finalize } }
+        let(:options) { { traits: :with_finalize } }
 
         it { is_expected.to be_a_declarations([
           [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 3 }} ],
@@ -160,7 +160,7 @@ RSpec.describe Clowne::Planner do
       end
 
       context 'when one trait is active' do
-        let(:options) { { for: [:with_brands] } }
+        let(:options) { { traits: [:with_brands] } }
 
         it { is_expected.to be_a_declarations([
           [ Clowne::Declarations::IncludeAssociation, {name: :users} ],

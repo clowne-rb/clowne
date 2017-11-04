@@ -1,6 +1,6 @@
 RSpec.describe Clowne::ActiveRecordAdapter::Association do
   subject { described_class.call(source, record, declaration, params) }
-  let(:params) { Clowne::Params.new({}) }
+  let(:params) { {} }
 
   describe 'has_one' do
     let(:account) { Account.create(title: 'Some account') }
