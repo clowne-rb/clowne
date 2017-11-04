@@ -16,7 +16,7 @@ module Clowne
 
         plan = Clowne::Planner.compile(self, object, Clowne::Plan.new, **options)
         plan.validate!
-        adapter.clone(object, plan, Clowne::Params.new(options.except(:for)))
+        adapter.clone(object, plan, options.except(:for)) # TODO: #except is AS!
       end
     end
   end
