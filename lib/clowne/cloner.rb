@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Clowne
   class UnprocessableSourceError < StandardError; end
   class ConfigurationError < StandardError; end

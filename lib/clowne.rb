@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'clowne/version'
 require 'clowne/dsl'
 require 'clowne/configuration'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Clowne
   module BaseAdapter
     class Nullify

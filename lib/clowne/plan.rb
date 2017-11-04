@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Clowne
   class Plan
     Step = Struct.new(:key, :declaration)
