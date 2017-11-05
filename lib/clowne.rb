@@ -2,6 +2,7 @@ require 'clowne/version'
 require 'clowne/dsl'
 require 'clowne/configuration'
 require 'clowne/cloner'
+require 'clowne/plan'
 require 'clowne/planner'
 require 'clowne/params'
 

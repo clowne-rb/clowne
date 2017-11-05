@@ -49,7 +49,7 @@ RSpec.describe Clowne::Cloner do
     context 'when adapter not defined' do
       let(:cloner) { Class.new(Clowne::Cloner) }
 
-      it { expect{ cloner.call(double) }.to raise_error(Clowne::Cloner::ConfigurationError, 'Adapter is not defined') }
+      it { expect{ cloner.call(double) }.to raise_error(Clowne::ConfigurationError, 'Adapter is not defined') }
     end
 
     context 'when object is nil' do
@@ -57,7 +57,17 @@ RSpec.describe Clowne::Cloner do
         adapter FakeAdapter
       end }
 
-      it { expect{ cloner.call(nil) }.to raise_error(Clowne::Cloner::UnprocessableSourceError, 'Nil is not cloneable object') }
+      it { expect{ cloner.call(nil) }.to raise_error(Clowne::UnprocessableSourceError, 'Nil is not cloneable object') }
+    end
+
+    context 'when duplicate configurations' do
+      let(:cloner) { Class.new(Clowne::Cloner) do
+        adapter FakeAdapter
+        include_association :comments
+        include_association :comments
+      end }
+
+      it { expect{ cloner.call(double) }.to raise_error(Clowne::ConfigurationError, 'You have duplicate keys in configuration: comments') }
     end
   end
 

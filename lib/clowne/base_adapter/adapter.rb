@@ -7,7 +7,8 @@ module Clowne
         # +plan+:: Array of Declarations
         # +params+:: Instance of Clowne::Params (ex: Clowne::Parms.new({foo: :bar}))
         def clone(source, plan, params)
-          plan.inject(plain_clone(source)) do |record, declaration|
+          declarations = plan.declarations
+          declarations.inject(plain_clone(source)) do |record, declaration|
             resolver(declaration.class).call(source, record, declaration, params)
           end
         end

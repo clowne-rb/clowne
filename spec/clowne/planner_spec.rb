@@ -1,8 +1,9 @@
 RSpec.describe Clowne::Planner do
   describe 'compile' do
     let(:object) { double(reflections: {"users" => nil, "posts" => nil}) }
+    let(:options) { {} }
 
-    subject { described_class.compile(cloner, object) }
+    subject { described_class.compile(cloner, object, **options).declarations }
 
     context 'when cloner with one included association' do
       let(:cloner) do
@@ -27,8 +28,9 @@ RSpec.describe Clowne::Planner do
       end
 
       it { is_expected.to be_a_declarations([
-        [ Clowne::Declarations::IncludeAssociation, {name: :users, options: {}} ],
-        [ Clowne::Declarations::IncludeAssociation, {name: :posts} ]
+        [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
+        [ Clowne::Declarations::IncludeAssociation, {name: :posts} ],
+        [ Clowne::Declarations::IncludeAssociation, {name: :users, options: {}} ]
       ]) }
     end
 
@@ -42,8 +44,9 @@ RSpec.describe Clowne::Planner do
       end
 
       it { is_expected.to be_a_declarations([
-        [ Clowne::Declarations::IncludeAssociation, {name: :users, options: {clone_with: 'AnotherCloner'}} ],
-        [ Clowne::Declarations::IncludeAssociation, {name: :posts} ]
+        [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
+        [ Clowne::Declarations::IncludeAssociation, {name: :posts} ],
+        [ Clowne::Declarations::IncludeAssociation, {name: :users, options: {clone_with: 'AnotherCloner'}} ]
       ]) }
     end
 
@@ -72,8 +75,27 @@ RSpec.describe Clowne::Planner do
       end
 
       it { is_expected.to be_a_declarations([
-        [ Clowne::Declarations::Nullify, {attributes: [:baz]} ]
+        [ Clowne::Declarations::Nullify, {attributes: [:foo, :bar, :baz]} ]
       ]) }
+
+      context 'when cloner with main nullify declaration and with trait' do
+        let(:cloner) do
+          Class.new(Clowne::Cloner) do
+            adapter FakeAdapter
+            nullify :foo
+
+            trait :with_nullify do
+              nullify :bar
+            end
+          end
+        end
+
+        let(:options) { { for: [:with_nullify] } }
+
+        it { is_expected.to be_a_declarations([
+          [ Clowne::Declarations::Nullify, {attributes: [:foo, :bar]} ]
+        ]) }
+      end
     end
 
     context 'when cloner with finalize declaration' do
@@ -82,13 +104,33 @@ RSpec.describe Clowne::Planner do
           adapter FakeAdapter
           finalize &Proc.new { 1 + 1 }
           finalize &Proc.new { 1 + 2 }
-          finalize &Proc.new { 1 + 3 }
         end
       end
 
       it { is_expected.to be_a_declarations([
-        [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 3 }} ]
+        [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1 }} ],
+        [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 2 }} ]
       ]) }
+
+      context 'when cloner with main finalize declaration and with trait' do
+        let(:cloner) do
+          Class.new(Clowne::Cloner) do
+            adapter FakeAdapter
+            finalize &Proc.new { 1 + 3 }
+
+            trait :with_finalize do
+              finalize &Proc.new { 1 + 4 }
+            end
+          end
+        end
+
+        let(:options) { { for: :with_finalize } }
+
+        it { is_expected.to be_a_declarations([
+          [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 3 }} ],
+          [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 4 }} ]
+        ]) }
+      end
     end
 
     describe 'traits' do
@@ -109,11 +151,7 @@ RSpec.describe Clowne::Planner do
         end
       end
 
-      subject { described_class.compile(cloner, object, **options) }
-
       context 'when planing without traits' do
-        let(:options) { {} }
-
         it { is_expected.to be_a_declarations([
           [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
           [ Clowne::Declarations::IncludeAssociation, {name: :posts} ],
@@ -126,8 +164,9 @@ RSpec.describe Clowne::Planner do
 
         it { is_expected.to be_a_declarations([
           [ Clowne::Declarations::IncludeAssociation, {name: :users} ],
-          [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 2 }} ],
-          [ Clowne::Declarations::IncludeAssociation, {name: :brands} ]
+          [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1 }} ],
+          [ Clowne::Declarations::IncludeAssociation, {name: :brands} ],
+          [ Clowne::Declarations::Finalize, {block: Proc.new { 1 + 2 }} ]
         ]) }
       end
     end

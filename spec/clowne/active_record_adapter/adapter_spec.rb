@@ -20,15 +20,15 @@ RSpec.describe Clowne::ActiveRecordAdapter::Adapter do
     subject { described_class.clone(account, plan, Clowne::Params.new({})) }
 
     context 'when plan is empty' do
-      let(:plan) { [] }
+      let(:plan) { double(Clowne::Plan.new, declarations: [])  }
 
       it { expect(subject.as_json).to eq(Account.new(title: 'Some title').as_json) }
     end
 
     context 'when plan has association directive' do
-      let(:plan) { [
+      let(:plan) { double(Clowne::Plan.new, declarations: [
         Clowne::Declarations::IncludeAssociation.new(:history)
-      ] }
+      ]) }
 
       it 'duplicate history' do
         expect(subject.history.as_json).to eq(History.new(some_stuff: 'Some stuff').as_json)

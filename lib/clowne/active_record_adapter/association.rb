@@ -46,7 +46,7 @@ module Clowne
 
       def clone_with(child)
         if declaration.custom_cloner
-          @_plan ||= Clowne::Planner.compile(declaration.custom_cloner, child, **declaration.options)
+          @_plan ||= build_plan(child)
           Clowne::ActiveRecordAdapter::Adapter.clone(child, @_plan, params)
         else
           Clowne::ActiveRecordAdapter::Adapter.plain_clone(child)
@@ -67,6 +67,12 @@ module Clowne
       private
 
       attr_reader :source, :declaration, :params, :association_name
+
+      def build_plan(child)
+        plan = Clowne::Planner.compile(declaration.custom_cloner, child, **declaration.options)
+        plan.validate!
+        plan
+      end
     end
 
     class CloneHasOneAssociation < CloneAssociation
