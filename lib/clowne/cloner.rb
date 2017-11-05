@@ -21,7 +21,14 @@ module Clowne
 
         plan = Clowne::Planner.compile(self, object, Clowne::Plan.new, **options)
         plan.validate!
-        adapter.clone(object, plan, options.except(Clowne::Declarations::Trait::MARKER)) # TODO: #except is AS!
+        adapter.clone(object, plan, skip_traits(options))
+      end
+
+      private
+
+      def skip_traits(options)
+        options.delete(Clowne::Declarations::Trait::MARKER)
+        options
       end
     end
   end
