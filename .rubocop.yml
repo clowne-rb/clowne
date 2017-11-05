@@ -21,6 +21,17 @@ Naming/AccessorMethodName:
 Style/TrivialAccessors:
   Enabled: false
 
+Metrics/LineLength:
+  Max: 110
+
 Style/Documentation:
+  Exclude:
+    - 'spec/**/*.rb'
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - 'spec/**/*.rb'
+
+Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'

@@ -2,7 +2,9 @@
 
 module Clowne
   module Declarations
-    class Trait < Struct.new(:name, :block)
+    Trait = Struct.new(:name, :block)
+
+    class Trait # :nodoc: all
       MARKER = :traits
 
       def compile(plan, settings)
@@ -19,7 +21,10 @@ module Clowne
       private
 
       def compile_trait(plan, settings)
-        object, adapter, options = settings[:object], settings[:adapter], settings[:options]
+        object = settings[:object]
+        adapter = settings[:adapter]
+        options = settings[:options]
+
         anonymous_cloner = Class.new(Clowne::Cloner)
         anonymous_cloner.adapter(adapter)
         anonymous_cloner.instance_eval(&block)

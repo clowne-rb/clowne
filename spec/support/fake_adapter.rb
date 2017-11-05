@@ -12,8 +12,8 @@ class FakeAdapter < Clowne::BaseAdapter::Adapter
 
     def fake_reflections
       {
-        "users" => nil,
-        "posts" => nil
+        'users' => nil,
+        'posts' => nil
       }
     end
   end

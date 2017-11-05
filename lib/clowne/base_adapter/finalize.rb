@@ -2,14 +2,12 @@
 
 module Clowne
   module BaseAdapter
-    class Finalize
+    class Finalize # :nodoc: all
       def self.call(source, record, declaration, params)
-        if ! declaration.block.is_a?(Proc)
-          record
-        else
+        if declaration.block.is_a?(Proc)
           declaration.block.call(source, record, params)
-          record
         end
+        record
       end
     end
   end

@@ -23,8 +23,8 @@ RSpec.describe 'oGod spec for AR adapter' do
   end
 
   class PostCloner < BasePostCloner
-    include_association :account, clone_with: AccountCloner, traits: [:with_history, :nullify_title]
-    include_association :tags, -> (params) { where(value: params[:tags]) }
+    include_association :account, clone_with: AccountCloner, traits: %i[with_history nullify_title]
+    include_association :tags, ->(params) { where(value: params[:tags]) }
 
     trait :mark_as_clone do
       finalize do |source, record|
@@ -33,35 +33,38 @@ RSpec.describe 'oGod spec for AR adapter' do
     end
   end
 
-  class HistoryCloner < Clowne::Cloner
-    adapter Clowne::ActiveRecordAdapter::Adapter
+  before do
+    ActiveRecord::Base.subclasses.each(&:delete_all)
 
-    finalize do |_source, record, params|
-      record.some_stuff = record.some_stuff + ' - 2'
+    class HistoryCloner < Clowne::Cloner
+      adapter Clowne::ActiveRecordAdapter::Adapter
+
+      finalize do |_source, record|
+        record.some_stuff = record.some_stuff + ' - 2'
+      end
     end
   end
-
-  before { ActiveRecord::Base.subclasses.each(&:delete_all) }
 
   let!(:source) { Post.create(title: 'TeamCity') }
   let!(:account) { Account.create(title: 'Manager', post: source) }
   let!(:history) { History.create(some_stuff: 'This is history about my life', account: account) }
 
   before do
-    tags = %w(CI CD JVM).map { |value| Tag.create(value: value) }
+    tags = %w[CI CD JVM].map { |value| Tag.create(value: value) }
     source.tags = tags
     source.save
   end
 
-  it 'clone all stuff' do
+  it 'clone all stuff', cleanup: true do
     expect(Post.count).to eq(1)
     expect(Tag.count).to eq(3)
     expect(Account.count).to eq(1)
     expect(History.count).to eq(1)
 
-    clone = PostCloner.call(source,
+    clone = PostCloner.call(
+      source,
       traits: :mark_as_clone,
-      tags: %w(CI CD),
+      tags: %w[CI CD],
       post_contents: 'THIS IS CLONE! (☉_☉)'
     )
     clone.save!
@@ -76,7 +79,6 @@ RSpec.describe 'oGod spec for AR adapter' do
     expect(clone.title).to eq('TeamCity Super!')
     expect(clone.contents).to eq('THIS IS CLONE! (☉_☉)')
 
-
     # account
     account_clone = clone.account
     expect(account_clone).to be_a(Account)
@@ -89,6 +91,6 @@ RSpec.describe 'oGod spec for AR adapter' do
 
     # tags
     tags_clone = clone.tags
-    expect(tags_clone.map(&:value)).to match_array(%w(CI CD))
+    expect(tags_clone.map(&:value)).to match_array(%w[CI CD])
   end
 end

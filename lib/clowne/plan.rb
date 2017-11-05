@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Clowne
-  class Plan
+  class Plan # :nodoc: all
     Step = Struct.new(:key, :declaration)
 
     def initialize
@@ -10,11 +10,8 @@ module Clowne
 
     def validate!
       dups = @steps.group_by(&:key).select { |_step, count| count.size > 1 }.map(&:first)
-      if dups.any?
-        raise Clowne::ConfigurationError.new("You have duplicate keys in configuration: #{dups.join(', ')}")
-      else
-        true
-      end
+      return true unless dups.any?
+      raise(Clowne::ConfigurationError, "You have duplicate keys in configuration: #{dups.join(', ')}")
     end
 
     def get(key)

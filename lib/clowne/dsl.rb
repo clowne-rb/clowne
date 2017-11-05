@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Clowne
-  module DSL
+  module DSL # :nodoc: all
     def adapter(adapter = nil)
       @_adapter ||= adapter
     end

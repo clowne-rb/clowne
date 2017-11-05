@@ -2,11 +2,12 @@
 
 module Clowne
   module Declarations
-    class IncludeAll
+    class IncludeAll # :nodoc: all
       def compile(plan, settings)
-        object, adapter = settings[:object], settings[:adapter]
+        object = settings[:object]
+        adapter = settings[:adapter]
         reflections = adapter.reflections_for(object)
-        reflections.each do |name, _ref|
+        reflections.each_key do |name|
           plan.add(name, Clowne::Declarations::IncludeAssociation.new(name.to_sym))
         end
 

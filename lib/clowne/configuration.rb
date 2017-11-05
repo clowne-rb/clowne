@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Clowne
-  class Configuration
+  class Configuration # :nodoc: all
     attr_reader :declarations
 
     def initialize(init_declarations = [])

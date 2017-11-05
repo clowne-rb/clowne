@@ -2,11 +2,11 @@
 
 module Clowne
   module ActiveRecordAdapter
-    class Adapter < Clowne::BaseAdapter::Adapter
+    class Adapter < Clowne::BaseAdapter::Adapter # :nodoc: all
       RESOLVERS = {
         Clowne::Declarations::IncludeAssociation => Clowne::ActiveRecordAdapter::Association,
         Clowne::Declarations::Nullify => Clowne::BaseAdapter::Nullify,
-        Clowne::Declarations::Finalize => Clowne::BaseAdapter::Finalize,
+        Clowne::Declarations::Finalize => Clowne::BaseAdapter::Finalize
       }.freeze
 
       class << self
@@ -18,7 +18,7 @@ module Clowne
           name = ActiveSupport::Inflector.singularize(relation_name)
           expected_cloner = [name.capitalize, 'Cloner'].join
           cloner = ActiveSupport::Inflector.safe_constantize(expected_cloner)
-          cloner if cloner && cloner <= Clowne::Cloner
+          cloner if cloner && Clowne::Cloner.descendants.include?(cloner)
         end
 
         def plain_clone(source)

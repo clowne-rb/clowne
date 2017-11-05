@@ -2,7 +2,9 @@
 
 module Clowne
   module Declarations
-    class Nullify < Struct.new(:attributes)
+    Nullify = Struct.new(:attributes)
+
+    class Nullify # :nodoc: all
       PLAN_NAME = :nullify
 
       def compile(plan, _settings)

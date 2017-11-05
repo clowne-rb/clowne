@@ -1,22 +1,29 @@
 # frozen_string_literal: true
 
 module Clowne
-  module ActiveRecordAdapter
+  module ActiveRecordAdapter # :nodoc: all
     class Association
-      def self.call(source, record, declaration, params)
-        reflection = CloneAssociation.new(source, declaration, params).reflection
+      class << self
+        def call(source, record, declaration, params)
+          reflection = CloneAssociation.new(source, declaration, params).reflection
+          execute(source, record, declaration, params, reflection)
+        end
 
-        if reflection.is_a?(::ActiveRecord::Reflection::ThroughReflection)
-          record
-        elsif reflection.is_a?(::ActiveRecord::Reflection::HasOneReflection)
-          CloneHasOneAssociation.new(source, declaration, params).call(record)
-        elsif reflection.is_a?(::ActiveRecord::Reflection::HasManyReflection)
-          CloneHasManyAssociation.new(source, declaration, params).call(record)
-        elsif reflection.is_a?(::ActiveRecord::Reflection::HasAndBelongsToManyReflection)
-          CloneHasAndBelongsToManyAssociation.new(source, declaration, params).call(record)
-        else
-          warn("Reflection #{reflection.class.name} does not support")
-          record
+        private
+
+        def execute(source, record, declaration, params, reflection) # rubocop:disable Metrics/MethodLength
+          if reflection.is_a?(::ActiveRecord::Reflection::ThroughReflection)
+            record
+          elsif reflection.is_a?(::ActiveRecord::Reflection::HasOneReflection)
+            CloneHasOneAssociation.new(source, declaration, params).call(record)
+          elsif reflection.is_a?(::ActiveRecord::Reflection::HasManyReflection)
+            CloneHasManyAssociation.new(source, declaration, params).call(record)
+          elsif reflection.is_a?(::ActiveRecord::Reflection::HasAndBelongsToManyReflection)
+            CloneHasAndBelongsToManyAssociation.new(source, declaration, params).call(record)
+          else
+            warn("Reflection #{reflection.class.name} does not support")
+            record
+          end
         end
       end
     end
@@ -27,11 +34,13 @@ module Clowne
       # +declaration+:: = Relation description (ex: Clowne::Declarations::IncludeAssociation.new(:posts))
       # +params+:: = Instance of Clowne::Params
       def initialize(source, declaration, params)
-        @source, @declaration, @params = source, declaration, params
+        @source = source
+        @declaration = declaration
+        @params = params
         @association_name = declaration.name.to_s
       end
 
-      def call(record)
+      def call(_record)
         raise NotImplementedError
       end
 
@@ -81,7 +90,7 @@ module Clowne
       def call(record)
         child = association
         return record unless child
-        warn "Has one association should not has scope" unless declaration.scope.nil?
+        warn 'Has one association should not has scope' unless declaration.scope.nil?
 
         child_clone = clone_with(child)
         child_clone[:"#{reflection.foreign_key}"] = nil
