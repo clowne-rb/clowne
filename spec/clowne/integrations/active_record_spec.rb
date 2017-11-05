@@ -33,15 +33,17 @@ RSpec.describe 'oGod spec for AR adapter' do
     end
   end
 
-  class HistoryCloner < Clowne::Cloner
-    adapter Clowne::ActiveRecordAdapter::Adapter
+  before do
+    ActiveRecord::Base.subclasses.each(&:delete_all)
 
-    finalize do |_source, record, params|
-      record.some_stuff = record.some_stuff + ' - 2'
+    class HistoryCloner < Clowne::Cloner
+      adapter Clowne::ActiveRecordAdapter::Adapter
+
+      finalize do |_source, record, params|
+        record.some_stuff = record.some_stuff + ' - 2'
+      end
     end
   end
-
-  before { ActiveRecord::Base.subclasses.each(&:delete_all) }
 
   let!(:source) { Post.create(title: 'TeamCity') }
   let!(:account) { Account.create(title: 'Manager', post: source) }
@@ -53,7 +55,7 @@ RSpec.describe 'oGod spec for AR adapter' do
     source.save
   end
 
-  it 'clone all stuff' do
+  it 'clone all stuff', cleanup: true do
     expect(Post.count).to eq(1)
     expect(Tag.count).to eq(3)
     expect(Account.count).to eq(1)

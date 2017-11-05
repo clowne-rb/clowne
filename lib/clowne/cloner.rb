@@ -9,6 +9,11 @@ module Clowne
       def inherited(subclass)
         subclass.adapter(adapter)
         subclass.config(Clowne::Configuration.new(config.declarations.dup))
+        (@descendants ||= []) << subclass
+      end
+
+      def descendants
+        @descendants || []
       end
 
       def call(object, **options)
