@@ -1,6 +1,7 @@
 # Clowne
 
 A flexible gem for cloning your models.
+
 It is possible to use various adapters (currently only ActiveRecord is supported)
 
 ## Quick jump to DSL
@@ -80,11 +81,15 @@ include_association name, scope, options
 ```
 
 Scope can be a:
+
 `Symbol` - named scope.
+
 `Proc` - custom scope.
 
 Options keys:
+
 `:clone_with` - use custom cloner for all children
+
 `:traits` - define special traits
 
 Example:
@@ -144,7 +149,7 @@ UserCloner.call(user)
 
 Exclude association from copying
 
-```
+```ruby
 class UserCloner < Clowne::Cloner
   include_association :posts
 
@@ -168,7 +173,7 @@ clone2.posts
 
 Nullify attributes (joins with another `nullify` declarations)
 
-```
+```ruby
 class UserCloner < Clowne::Cloner
   nullify :name
 
@@ -196,7 +201,7 @@ clone.surename.nil?
 
 Simple callback for changing record manually (joins with another `finalize` declarations)
 
-```
+```ruby
 class UserCloner < Clowne::Cloner
   finalize do |source, record, params|
     record.name = 'This is copy!'
