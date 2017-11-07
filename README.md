@@ -175,7 +175,7 @@ Nullify attributes (joins with another `nullify` declarations)
 
 ```ruby
 class UserCloner < Clowne::Cloner
-  nullify :name
+  nullify :name, :email
 
   trait :nullify_surename do
     nullify :surename
@@ -185,6 +185,8 @@ end
 # nullify only name
 clone = UserCloner.call(user)
 clone.name.nil?
+# => true
+clone.email.nil?
 # => true
 clone.surename.nil?
 # => false
@@ -227,6 +229,33 @@ clone.name
 # => 'This is copy!'
 clone.email
 # => 'clone@example.com'
+```
+
+### <a name="traits"></a>Traits
+
+Traits allow you to group cloner declarations together and then apply them (like in factory_bot).
+
+```ruby
+class UserCloner < Clowne::Cloner
+  trait :with_posts do
+    include_association :posts
+  end
+
+  trait :with_profile do
+    include_association :profile
+  end
+
+  trait :nullify_name do
+    nullify :name
+  end
+end
+
+# execute first finalize
+UserCloner.call(user, traits: [:with_posts, :with_profile, :nullify_name])
+# or
+UserCloner.call(user, traits: :nullify_name)
+# or
+# ...
 ```
 
 ## License
