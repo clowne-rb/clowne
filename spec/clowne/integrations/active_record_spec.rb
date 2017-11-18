@@ -23,7 +23,7 @@ RSpec.describe 'oGod spec for AR adapter' do
   end
 
   class PostCloner < BasePostCloner
-    include_association :account, clone_with: AccountCloner, for: [:with_history, :nullify_title]
+    include_association :account, clone_with: AccountCloner, traits: [:with_history, :nullify_title]
     include_association :tags, -> (params) { where(value: params[:tags]) }
 
     trait :mark_as_clone do
@@ -33,7 +33,17 @@ RSpec.describe 'oGod spec for AR adapter' do
     end
   end
 
-  before { ActiveRecord::Base.subclasses.each(&:delete_all) }
+  before do
+    ActiveRecord::Base.subclasses.each(&:delete_all)
+
+    class HistoryCloner < Clowne::Cloner
+      adapter Clowne::ActiveRecordAdapter::Adapter
+
+      finalize do |_source, record, params|
+        record.some_stuff = record.some_stuff + ' - 2'
+      end
+    end
+  end
 
   let!(:source) { Post.create(title: 'TeamCity') }
   let!(:account) { Account.create(title: 'Manager', post: source) }
@@ -45,14 +55,14 @@ RSpec.describe 'oGod spec for AR adapter' do
     source.save
   end
 
-  it 'clone all stuff' do
+  it 'clone all stuff', cleanup: true do
     expect(Post.count).to eq(1)
     expect(Tag.count).to eq(3)
     expect(Account.count).to eq(1)
     expect(History.count).to eq(1)
 
     clone = PostCloner.call(source,
-      for: :mark_as_clone,
+      traits: :mark_as_clone,
       tags: %w(CI CD),
       post_contents: 'THIS IS CLONE! (☉_☉)'
     )
@@ -77,7 +87,7 @@ RSpec.describe 'oGod spec for AR adapter' do
 
     # history
     history_clone = account_clone.history
-    expect(history_clone.some_stuff).to eq(history.some_stuff)
+    expect(history_clone.some_stuff).to eq('This is history about my life - 2')
 
     # tags
     tags_clone = clone.tags

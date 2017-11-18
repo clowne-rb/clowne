@@ -12,6 +12,13 @@ module Clowne
           source.class.reflections
         end
 
+        def cloner_for(relation_name)
+          name = ActiveSupport::Inflector.singularize(relation_name)
+          expected_cloner = [name.capitalize, 'Cloner'].join
+          cloner = ActiveSupport::Inflector.safe_constantize(expected_cloner)
+          cloner if cloner && Clowne::Cloner.descendants.include?(cloner)
+        end
+
         def plain_clone(source)
           source.dup
         end

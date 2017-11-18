@@ -9,6 +9,11 @@ module Clowne
       def inherited(subclass)
         subclass.adapter(adapter)
         subclass.config(Clowne::Configuration.new(config.declarations.dup))
+        (@descendants ||= []) << subclass
+      end
+
+      def descendants
+        @descendants || []
       end
 
       def call(object, **options)
@@ -16,7 +21,14 @@ module Clowne
 
         plan = Clowne::Planner.compile(self, object, Clowne::Plan.new, **options)
         plan.validate!
-        adapter.clone(object, plan, Clowne::Params.new(options.except(:for)))
+        adapter.clone(object, plan, skip_traits(options))
+      end
+
+      private
+
+      def skip_traits(options)
+        options.delete(Clowne::Declarations::Trait::MARKER)
+        options
       end
     end
   end

@@ -1,23 +1,25 @@
 RSpec.describe Clowne::Cloner do
-  class SomeCloner < described_class
-    adapter FakeAdapter
+  before do
+    class SomeCloner < described_class
+      adapter FakeAdapter
 
-    include_all
+      include_all
 
-    include_association :comments
-    include_association :posts, :some_scope, clone_with: 'AnotherClonerClass'
-    include_association :tags, clone_with: 'AnotherCloner2Class'
+      include_association :comments
+      include_association :posts, :some_scope, clone_with: 'AnotherClonerClass'
+      include_association :tags, clone_with: 'AnotherCloner2Class'
 
-    exclude_association :users
+      exclude_association :users
 
-    nullify :title, :description
+      nullify :title, :description
 
-    finalize do |_source, _record, _params|
-      1 + 1
-    end
+      finalize do |_source, _record, _params|
+        1 + 1
+      end
 
-    trait :with_brands do
-      include_association :brands
+      trait :with_brands do
+        include_association :brands
+      end
     end
   end
 
@@ -73,7 +75,9 @@ RSpec.describe Clowne::Cloner do
 
   describe 'inheritance' do
     context 'when cloner child of another cloner' do
-      class Some2Cloner < SomeCloner; end
+      before do
+        class Some2Cloner < SomeCloner; end
+      end
 
       it 'child cloner settings' do
         expect(Some2Cloner.adapter).to eq(FakeAdapter)
@@ -86,22 +90,19 @@ RSpec.describe Clowne::Cloner do
     end
 
     context 'when child cloner has own declaration' do
-      class Some3Cloner < SomeCloner
-        trait :child_cloner_trait do
+      before do
+        class Some3Cloner < SomeCloner
+          trait :child_cloner_trait do
+          end
         end
       end
 
-      it 'child declarations' do
-        declarations = Some3Cloner.config.declarations
-
-        expect(declarations).to be_a_declarations(expected_declarations + [
+      it 'child and parent declarations' do
+        expect(Some3Cloner.config.declarations).to be_a_declarations(expected_declarations + [
           [Clowne::Declarations::Trait, {name: :child_cloner_trait, block: Proc.new {} }]
         ])
-      end
 
-      it 'parent declarations does not change' do
-        declarations = SomeCloner.config.declarations
-        expect(declarations).to be_a_declarations(expected_declarations)
+        expect(SomeCloner.config.declarations).to be_a_declarations(expected_declarations)
       end
     end
   end
