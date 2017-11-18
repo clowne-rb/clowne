@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Clowne
-  module ActiveRecordAdapter # :nodoc: all
+  module ActiveRecord # :nodoc: all
     class Association
       class << self
         def call(source, record, declaration, params)
@@ -50,7 +50,7 @@ module Clowne
 
       def reflection
         @_reflection ||= begin
-          reflections = Clowne::ActiveRecordAdapter::Adapter.reflections_for(source)
+          reflections = Clowne::ActiveRecord::Adapter.reflections_for(source)
           reflections[association_name]
         end
       end
@@ -58,9 +58,9 @@ module Clowne
       def clone_with(child)
         if declaration.custom_cloner
           @_plan ||= build_plan(child)
-          Clowne::ActiveRecordAdapter::Adapter.clone(child, @_plan, params)
+          Clowne::ActiveRecord::Adapter.clone(child, @_plan, params)
         else
-          Clowne::ActiveRecordAdapter::Adapter.plain_clone(child)
+          Clowne::ActiveRecord::Adapter.plain_clone(child)
         end
       end
 

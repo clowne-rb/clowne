@@ -22,7 +22,7 @@ RSpec.describe Clowne::Declarations::IncludeAssociation do
         it { is_expected.to be_nil }
 
         context 'and adapter is ActiveRecord' do
-          let(:adapter) { Clowne::ActiveRecordAdapter::Adapter }
+          let(:adapter) { Clowne::ActiveRecord::Adapter }
 
           it { is_expected.to eq(AnimalCloner) }
         end
@@ -36,7 +36,7 @@ RSpec.describe Clowne::Declarations::IncludeAssociation do
       end
 
       context 'when exist class with name like cloner' do
-        let(:adapter) { Clowne::ActiveRecordAdapter::Adapter }
+        let(:adapter) { Clowne::ActiveRecord::Adapter }
         let(:association_name) { :admins }
 
         before { class AdminCloner; end }

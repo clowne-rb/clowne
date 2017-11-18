@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Clowne
-  module ActiveRecordAdapter
+  module ActiveRecord
     class Adapter < Clowne::BaseAdapter::Adapter # :nodoc: all
       RESOLVERS = {
-        Clowne::Declarations::IncludeAssociation => Clowne::ActiveRecordAdapter::Association,
+        Clowne::Declarations::IncludeAssociation => Clowne::ActiveRecord::Association,
         Clowne::Declarations::Nullify => Clowne::BaseAdapter::Nullify,
         Clowne::Declarations::Finalize => Clowne::BaseAdapter::Finalize
       }.freeze

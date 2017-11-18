@@ -1,4 +1,4 @@
-RSpec.describe Clowne::ActiveRecordAdapter::Adapter do
+RSpec.describe Clowne::ActiveRecord::Adapter do
   describe '.reflections_for' do
     subject { described_class.reflections_for(Account.new) }
 

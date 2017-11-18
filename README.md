@@ -27,7 +27,7 @@ Configure your cloner
 
 ```ruby
 class UserCloner < Clowne::Cloner
-  adapter Clowne::ActiveRecordAdapter::Adapter
+  adapter Clowne::ActiveRecord::Adapter
 
   include_association :posts
 

@@ -19,6 +19,6 @@ require 'clowne/base_adapter/nullify'
 require 'clowne/base_adapter/adapter'
 
 if defined?(ActiveRecord)
-  require 'clowne/active_record_adapter/association'
-  require 'clowne/active_record_adapter/adapter'
+  require 'clowne/active_record/association'
+  require 'clowne/active_record/adapter'
 end

@@ -1,4 +1,4 @@
-RSpec.describe Clowne::ActiveRecordAdapter::Association do
+RSpec.describe Clowne::ActiveRecord::Association do
   let(:params) { {} }
 
   subject { described_class.call(source, record, declaration, params) }
@@ -20,7 +20,7 @@ RSpec.describe Clowne::ActiveRecordAdapter::Association do
     context 'when defined custom cloner on relation' do
       let(:account_custom_cloner) do
         Class.new(Clowne::Cloner) do
-          adapter Clowne::ActiveRecordAdapter::Adapter
+          adapter Clowne::ActiveRecord::Adapter
           include_association :history
         end
       end

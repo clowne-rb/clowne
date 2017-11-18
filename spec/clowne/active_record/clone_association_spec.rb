@@ -1,4 +1,4 @@
-RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
+RSpec.describe Clowne::ActiveRecord::CloneAssociation do
   let(:object) { described_class.new(source, declaration, params) }
   let(:params) { {} }
   let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts) }
@@ -34,7 +34,7 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
       let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts, nil, clone_with: post_cloner) }
       let(:post_cloner) do
         Class.new(Clowne::Cloner) do
-          adapter Clowne::ActiveRecordAdapter::Adapter
+          adapter Clowne::ActiveRecord::Adapter
 
           finalize do |_source, record, _params|
             record.title = 'Another post'
