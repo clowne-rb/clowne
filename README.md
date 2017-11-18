@@ -1,3 +1,8 @@
+[![Gem Version](https://badge.fury.io/rb/clowne.svg)](https://badge.fury.io/rb/clowne)
+[![Build Status](https://travis-ci.org/palkan/clowne.svg?branch=master)](https://travis-ci.org/palkan/clowne)
+[![Code Climate](https://codeclimate.com/github/palkan/clowne.svg)](https://codeclimate.com/github/palkan/clowne)
+[![Test Coverage](https://codeclimate.com/github/palkan/clowne/badges/coverage.svg)](https://codeclimate.com/github/palkan/clowne/coverage)
+
 # Clowne
 
 A flexible gem for cloning your models.
