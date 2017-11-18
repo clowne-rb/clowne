@@ -26,13 +26,21 @@ RSpec.describe Clowne::Cloner do
   let(:expected_declarations) do
     [
       [Clowne::Declarations::IncludeAll, {}],
-      [Clowne::Declarations::IncludeAssociation, {name: :comments, scope: nil, options: {}}],
-      [Clowne::Declarations::IncludeAssociation, {name: :posts, scope: :some_scope, options: {clone_with: 'AnotherClonerClass'}}],
-      [Clowne::Declarations::IncludeAssociation, {name: :tags, scope: nil, options: {clone_with: 'AnotherCloner2Class'}}],
-      [Clowne::Declarations::ExcludeAssociation, {name: :users}],
-      [Clowne::Declarations::Nullify, {attributes: [:title, :description]}],
-      [Clowne::Declarations::Finalize, {block: Proc.new { 1 + 1 } }],
-      [Clowne::Declarations::Trait, {name: :with_brands, block: Proc.new {} }]
+      [Clowne::Declarations::IncludeAssociation, { name: :comments, scope: nil, options: {} }],
+      [Clowne::Declarations::IncludeAssociation, {
+        name: :posts,
+        scope: :some_scope,
+        options: { clone_with: 'AnotherClonerClass' }
+      }],
+      [Clowne::Declarations::IncludeAssociation, {
+        name: :tags,
+        scope: nil,
+        options: { clone_with: 'AnotherCloner2Class' }
+      }],
+      [Clowne::Declarations::ExcludeAssociation, { name: :users }],
+      [Clowne::Declarations::Nullify, { attributes: %i[title description] }],
+      [Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }],
+      [Clowne::Declarations::Trait, { name: :with_brands, block: proc {} }]
     ]
   end
 
@@ -51,25 +59,41 @@ RSpec.describe Clowne::Cloner do
     context 'when adapter not defined' do
       let(:cloner) { Class.new(Clowne::Cloner) }
 
-      it { expect{ cloner.call(double) }.to raise_error(Clowne::ConfigurationError, 'Adapter is not defined') }
+      it 'raise ConfigurationError' do
+        expect { cloner.call(double) }.to raise_error(Clowne::ConfigurationError, 'Adapter is not defined')
+      end
     end
 
     context 'when object is nil' do
-      let(:cloner) { Class.new(Clowne::Cloner) do
-        adapter FakeAdapter
-      end }
+      let(:cloner) do
+        Class.new(Clowne::Cloner) do
+          adapter FakeAdapter
+        end
+      end
 
-      it { expect{ cloner.call(nil) }.to raise_error(Clowne::UnprocessableSourceError, 'Nil is not cloneable object') }
+      it 'raise UnprocessableSourceError' do
+        expect { cloner.call(nil) }.to raise_error(
+          Clowne::UnprocessableSourceError,
+          'Nil is not cloneable object'
+        )
+      end
     end
 
     context 'when duplicate configurations' do
-      let(:cloner) { Class.new(Clowne::Cloner) do
-        adapter FakeAdapter
-        include_association :comments
-        include_association :comments
-      end }
+      let(:cloner) do
+        Class.new(Clowne::Cloner) do
+          adapter FakeAdapter
+          include_association :comments
+          include_association :comments
+        end
+      end
 
-      it { expect{ cloner.call(double) }.to raise_error(Clowne::ConfigurationError, 'You have duplicate keys in configuration: comments') }
+      it 'raise ConfigurationError' do
+        expect { cloner.call(double) }.to raise_error(
+          Clowne::ConfigurationError,
+          'You have duplicate keys in configuration: comments'
+        )
+      end
     end
   end
 
@@ -99,7 +123,7 @@ RSpec.describe Clowne::Cloner do
 
       it 'child and parent declarations' do
         expect(Some3Cloner.config.declarations).to be_a_declarations(expected_declarations + [
-          [Clowne::Declarations::Trait, {name: :child_cloner_trait, block: Proc.new {} }]
+          [Clowne::Declarations::Trait, { name: :child_cloner_trait, block: proc {} }]
         ])
 
         expect(SomeCloner.config.declarations).to be_a_declarations(expected_declarations)

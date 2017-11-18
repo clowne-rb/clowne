@@ -4,9 +4,9 @@ RSpec.describe Clowne::BaseAdapter::Finalize do
   describe '.call' do
     let(:source) { User.new(email: 'admin@example.com') }
     let(:block) do
-      Proc.new { |source, record|
+      proc do |source, record|
         record.email = source.email.gsub('example.com', 'gmail.com')
-      }
+      end
     end
 
     it 'execute finalize block' do
@@ -18,14 +18,14 @@ RSpec.describe Clowne::BaseAdapter::Finalize do
 
     context 'with params' do
       let(:block) do
-        Proc.new { |source, record, params|
+        proc do |_source, record, params|
           record.email = params[:email]
-        }
+        end
       end
 
       it 'execute finalize block with params' do
         record = User.new
-        result = described_class.call(source, record, declaration, {email: 'admin@yahoo.com'})
+        result = described_class.call(source, record, declaration, email: 'admin@yahoo.com')
         expect(result).to be_a(User)
         expect(result.email).to eq('admin@yahoo.com')
       end

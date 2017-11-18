@@ -13,7 +13,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     Clowne::Cloner.descendants.each do |cloner|
-      if(cloner.name)
+      if cloner.name
         Object.send(:remove_const, cloner.name)
         Clowne::Cloner.descendants.delete(cloner)
       end

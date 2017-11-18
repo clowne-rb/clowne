@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module Clowne
-  class Planner
+  class Planner # :nodoc: all
     class << self
       # Params:
       # +cloner+:: implementation of Clowne::Cloner
@@ -10,7 +12,7 @@ module Clowne
         raise(Clowne::ConfigurationError, 'Adapter is not defined') unless cloner.adapter
 
         cloner.config.declarations.inject(init_plan) do |plan, declaration|
-          declaration.compile(plan, {object: object, adapter: cloner.adapter, options: options})
+          declaration.compile(plan, object: object, adapter: cloner.adapter, options: options)
         end
       end
     end

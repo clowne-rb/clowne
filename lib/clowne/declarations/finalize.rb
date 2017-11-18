@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
 module Clowne
   module Declarations
-    class Finalize < Struct.new(:block)
+    Finalize = Struct.new(:block)
+
+    class Finalize # :nodoc: all
       PLAN_NAME = :finalize
 
       def compile(plan, _settings)

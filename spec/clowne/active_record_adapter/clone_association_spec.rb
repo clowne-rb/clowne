@@ -4,7 +4,7 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
   let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts) }
 
   describe '#association' do
-    let(:posts) { 2.times.collect { Post.create } }
+    let(:posts) { Array.new(2) { Post.create } }
     let(:source) { User.create(posts: posts) }
 
     subject { object.association }
@@ -36,7 +36,7 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
         Class.new(Clowne::Cloner) do
           adapter Clowne::ActiveRecordAdapter::Adapter
 
-          finalize do |source, record, params|
+          finalize do |_source, record, _params|
             record.title = 'Another post'
           end
         end
@@ -57,24 +57,24 @@ RSpec.describe Clowne::ActiveRecordAdapter::CloneAssociation do
     subject { object.with_scope.map(&:title) }
 
     context 'when scope is a Proc' do
-      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts, Proc.new { where(title: 'Foo') }) }
+      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts, proc { where(title: 'Foo') }) }
 
       it { is_expected.to eq(['Foo']) }
     end
 
     context 'when scope is a Proc with params' do
-      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts,
-        Proc.new { |params| where(title: params[:title]) })
-      }
+      let(:declaration) do
+        Clowne::Declarations::IncludeAssociation.new(:posts, proc { |params| where(title: params[:title]) })
+      end
 
       context 'title of not exists post' do
-        let(:params) { {title: 'I am not exists post'} }
+        let(:params) { { title: 'I am not exists post' } }
 
         it { is_expected.to be_empty }
       end
 
       context 'title of Foo post' do
-        let(:params) { {title: 'Foo'} }
+        let(:params) { { title: 'Foo' } }
 
         it { is_expected.to eq(['Foo']) }
       end

@@ -1,6 +1,7 @@
 RSpec.describe Clowne::ActiveRecordAdapter::Association do
-  subject { described_class.call(source, record, declaration, params) }
   let(:params) { {} }
+
+  subject { described_class.call(source, record, declaration, params) }
 
   describe 'has_one' do
     let(:account) { Account.create(title: 'Some account') }
@@ -25,7 +26,9 @@ RSpec.describe Clowne::ActiveRecordAdapter::Association do
       end
 
       let!(:history) { History.create(some_stuff: 'Some stuff', account: account) }
-      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:account, nil, clone_with: account_custom_cloner) }
+      let(:declaration) do
+        Clowne::Declarations::IncludeAssociation.new(:account, nil, clone_with: account_custom_cloner)
+      end
 
       it "clone source's account -> history" do
         cloned_history = subject.account.history
@@ -39,7 +42,7 @@ RSpec.describe Clowne::ActiveRecordAdapter::Association do
     let(:source) { User.create }
     let(:record) { User.new }
 
-    before { 2.times.collect { Post.create(owner: source, title: 'Some post') } }
+    before { Array.new(2) { Post.create(owner: source, title: 'Some post') } }
 
     context 'when simple relation' do
       let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts) }
@@ -52,16 +55,18 @@ RSpec.describe Clowne::ActiveRecordAdapter::Association do
     context 'when defined scope on relation' do
       let!(:selected_post) { Post.create(owner: source, title: 'Selected post') }
 
-      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts, Proc.new { where.not(title: 'Some post') }) }
+      let(:declaration) do
+        Clowne::Declarations::IncludeAssociation.new(:posts, proc { where.not(title: 'Some post') })
+      end
 
-      it "clone only selected post" do
+      it 'clone only selected post' do
         expect(subject.posts.map(&:title)).to eq(['Selected post'])
       end
     end
   end
 
   describe 'has_and_belongs_to_many' do
-    let(:tags) { 2.times.collect { |i| Tag.create(value: "tag-#{i}") } }
+    let(:tags) { Array.new(2) { |i| Tag.create(value: "tag-#{i}") } }
     let(:source) { Post.create(tags: tags) }
     let(:record) { Post.new }
 
@@ -73,12 +78,10 @@ RSpec.describe Clowne::ActiveRecordAdapter::Association do
   end
 
   describe 'belongs_to (not supported)' do
-    let(:topic) { Topic.create(title: 'Some post', description: 'Some description' ) }
+    let(:topic) { Topic.create(title: 'Some post', description: 'Some description') }
     let(:source) { Post.create(topic: topic) }
     let(:record) { Post.new }
     let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:topic) }
-
-    subject { described_class.call(source, record, declaration, params) }
 
     it 'return unchanged record' do
       expect(subject.topic).to be_nil

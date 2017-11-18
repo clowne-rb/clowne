@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Clowne
   module BaseAdapter
-    class Adapter
+    class Adapter # :nodoc: all
       class << self
         # Using a plan make full duplicate of record
         # +source+:: Instance of cloned object (ex: User.new(posts: posts))
@@ -15,22 +17,22 @@ module Clowne
 
         # Return hash of reflections
         # Example: {"topic"=> #<ActiveRecord::Reflection::BelongsToReflection:0x007fb37a5cbd38 }
-        def reflections_for(source)
+        def reflections_for(_source)
           raise NotImplementedError
         end
 
-        def cloner_for(relation_name)
+        def cloner_for(_relation_name)
           nil
         end
 
         # Return plain duplicate of source
-        def plain_clone(source)
+        def plain_clone(_source)
           raise NotImplementedError
         end
 
         private
 
-        def resolver(declaration_class)
+        def resolver(_declaration_class)
           raise NotImplementedError
         end
       end

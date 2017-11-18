@@ -1,4 +1,6 @@
-module Clowne
+# frozen_string_literal: true
+
+module Clowne # :nodoc: all
   class UnprocessableSourceError < StandardError; end
   class ConfigurationError < StandardError; end
 

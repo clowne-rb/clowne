@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
 module Clowne
   module Declarations
-    class IncludeAssociation < Struct.new(:name, :scope, :options)
+    IncludeAssociation = Struct.new(:name, :scope, :options)
+
+    class IncludeAssociation # :nodoc: all
       def compile(plan, settings)
         if custom_cloner
           plan.add(name, self)
