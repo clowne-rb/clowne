@@ -3,5 +3,7 @@ rvm:
   - 2.2
   - 2.3
   - 2.4
+env:
+  - CODECLIMATE_REPO_TOKEN=02373bce2f7a1f43cbe6edc820f6782450906e408163bf2fcb9785010862b577
 script:
-  - CODECLIMATE_REPO_TOKEN=02373bce2f7a1f43cbe6edc820f6782450906e408163bf2fcb9785010862b577 bundle exec rspec && bundle exec codeclimate-test-reporter
+  - bundle exec rspec && bundle exec codeclimate-test-reporter
