@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'sqlite3'
   spec.add_development_dependency 'activerecord', '>= 4.2'
   spec.add_development_dependency 'rubocop', '~> 0.51'
+  spec.add_development_dependency 'codeclimate-test-reporter'
 end
