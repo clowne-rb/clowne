@@ -6,7 +6,7 @@ begin
 rescue LoadError # rubocop:disable Lint/HandleExceptions
 end
 
-if ENV['CODECLIMATE_REPO_TOKEN']
+if ENV['CC_REPORT']
   require 'simplecov'
   SimpleCov.start
 end

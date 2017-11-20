@@ -7,12 +7,16 @@
 
 A flexible gem for cloning your models. Clowne focuses on ease of use and provides the ability to connect various ORM adapters (currently only ActiveRecord is supported).
 
+### Alternatives
+
+TBD
+
 ## Installation
 
-To install Bunny with RubyGems:
+To install Clowne with RubyGems:
 
 ```ruby
-gem install bunny
+gem install clowne
 ```
 
 Or add this line to your application's Gemfile:
@@ -22,6 +26,7 @@ gem 'clowne'
 ```
 
 ## Quick Start
+
 This is a basic example that demonstrates how to clone your ActiveRecord model. For detailed documentation see [Features](#features).
 
 At first, define your cloneable model
@@ -339,6 +344,12 @@ UserCloner.call(user, traits: :nullify_name)
 # or
 # ...
 ```
+
+## Maintainers
+
+- [Vladimir Dementyev](https://github.com/palkan)
+
+- [Sverchkov Nikolay](https://github.com/ssnickolay)
 
 ## License
 

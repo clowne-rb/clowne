@@ -1,9 +1,9 @@
 sudo: false
 language: ruby
-rvm:
-  - 2.2
-  - 2.3
-  - 2.4
+
+notifications:
+  email: false
+
 before_script:
   # Only generate coverage report for the specified job
   - if [ "$CC_REPORT" == "true" ]; then curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter; fi
@@ -11,8 +11,9 @@ before_script:
   - if [ "$CC_REPORT" == "true" ]; then ./cc-test-reporter before-build; fi
 script:
   - bundle exec rake
-after_sciprt:
-  - if [ "$CC_REPORT" == "true" ]; ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+after_script:
+  - if [ "$CC_REPORT" == "true" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+
 matrix:
   fast_finish: true
   include:
