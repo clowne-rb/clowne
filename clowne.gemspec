@@ -6,12 +6,12 @@ require 'clowne/version'
 Gem::Specification.new do |spec|
   spec.name          = 'clowne'
   spec.version       = Clowne::VERSION
-  spec.authors       = ['Sverchkov Nikolay']
-  spec.email         = ['ssnikolay@gmail.com']
+  spec.authors       = ['Vladimir Dementyev', 'Sverchkov Nikolay']
+  spec.email         = ['palkan@evilmartians.com', 'ssnikolay@gmail.com']
 
   spec.summary       = 'A flexible gem for cloning your models.'
   spec.description   = 'A flexible gem for cloning your models.'
-  spec.homepage      = 'https://github.com/ssnickolay/clowne'
+  spec.homepage      = 'https://github.com/palkan/clowne'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'sqlite3'
   spec.add_development_dependency 'activerecord', '>= 4.2'
   spec.add_development_dependency 'rubocop', '~> 0.51'
+  spec.add_development_dependency 'codeclimate-test-reporter'
 end

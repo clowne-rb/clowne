@@ -1,41 +1,64 @@
+[![Gem Version](https://badge.fury.io/rb/clowne.svg)](https://badge.fury.io/rb/clowne)
+[![Build Status](https://travis-ci.org/palkan/clowne.svg?branch=master)](https://travis-ci.org/palkan/clowne)
+[![Code Climate](https://codeclimate.com/github/palkan/clowne.svg)](https://codeclimate.com/github/palkan/clowne)
+[![Test Coverage](https://codeclimate.com/github/palkan/clowne/badges/coverage.svg)](https://codeclimate.com/github/palkan/clowne/coverage)
+
 # Clowne
 
-A flexible gem for cloning your models.
-
-It is possible to use various adapters (currently only ActiveRecord is supported)
-
-## Quick jump to DSL
-
-- [Include All](#include_all)
-- [Include Association](#include_association)
-- [Exclude Association](#exclude_association)
-- [Nullify](#nullify)
-- [Finalize](#finalize)
-- [Traits](#traits)
+A flexible gem for cloning your models. Clowne focuses on ease of use and provides the ability to connect various ORM adapters (currently only ActiveRecord is supported).
 
 ## Installation
 
-Add this line to your application's Gemfile:
+To install Bunny with RubyGems:
+
+```ruby
+gem install bunny
+```
+
+Or add this line to your application's Gemfile:
 
 ```ruby
 gem 'clowne'
 ```
 
-## Usage
+## Quick Start
+This is a basic example that demonstrates how to clone your ActiveRecord model. For detailed documentation see [Features](#features).
 
-Configure your cloner
+At first, define your cloneable model
+
+```ruby
+class User < ActiveRecord::Base
+  # create_table :users do |t|
+  #  t.string :login
+  #  t.string :email
+  #  t.timestamps null: false
+  # end
+
+  has_one :profile
+  has_many :posts
+end
+```
+
+The next step is to declare cloner
 
 ```ruby
 class UserCloner < Clowne::Cloner
   adapter Clowne::ActiveRecord::Adapter
 
+  include_association :profile, clone_with: SpecialProfileCloner
   include_association :posts
 
-  nullify :name
+  nullify :login
 
-  finalize do |source, record, params|
+  finalize do |_source, record, params|
     record.email = params[:email]
   end
+end
+
+class SpecialProfileCloner < Clowne::Cloner
+  adapter Clowne::ActiveRecord::Adapter
+
+  nullify :name
 end
 ```
 
@@ -46,17 +69,30 @@ clone = UserCloner.call(User.last, { email: "fake@example.com" })
 clone.persisted?
 # => false
 clone.save!
-clone.posts.count == User.last.posts.count
-# => true
-clone.name
+clone.login
 # => nil
 clone.email
 # => "fake@example.com"
+
+# associations:
+clone.posts.count == User.last.posts.count
+# => true
+clone.profile.name
+# => nil
 ```
 
-## Configuration
+## <a name="features">Features
 
-### <a name="include_all"></a>Include All
+- [Include all associations](#include_all)
+- [Include one association](#include_association)
+- - [Scope](#include_association_scope)
+- - [Options](#include_association_options)
+- [Exclude association](#exclude_association)
+- [Nullify attribute(s)](#nullify)
+- [Execute finalize block](#finalize)
+- [Traits](#traits)
+
+### <a name="include_all"></a>Include all associations
 
 If you need to clone all model associations just use `include_all` declaration.
 
@@ -68,89 +104,123 @@ class User < ActiveRecord::Base
 end
 
 class UserCloner < Clowne::Cloner
+  adapter Clowne::ActiveRecord::Adapter
+
   include_all
 end
 ```
 
-### <a name="include_association"></a>Include Association
+### <a name="include_association"></a>Include one association
 
 Powerful declaration for including model's association.
+
+```ruby
+class User < ActiveRecord::Base
+  has_one :profile
+end
+
+class UserCloner < Clowne::Cloner
+  adapter Clowne::ActiveRecord::Adapter
+
+  include_association :profile
+end
+```
+
+But it's not all! :) The DSL looks like
 
 ```ruby
 include_association name, scope, options
 ```
 
+#### <a name="include_association_scope"></a>Include one association: Scope
 Scope can be a:
 
 `Symbol` - named scope.
 
-`Proc` - custom scope.
-
-Options keys:
-
-`:clone_with` - use custom cloner for all children
-
-`:traits` - define special traits
+`Proc` - custom scope (supports parameter passing).
 
 Example:
 
 ```ruby
-class Post < ActiveRecord::Base
+class User < ActiveRecord::Base
+  has_many :accounts
+  has_many :posts
+end
+
+class Account < ActiveRecord::Base
   scope :active, -> where(active: true)
 end
 
+class Post < ActiveRecord::Base
+  # t.string :status
+end
+
+class UserCloner < Clowne::Cloner
+  adapter Clowne::ActiveRecord::Adapter
+
+  include_association :accounts, :active
+  include_association :posts, ->(params) { where(state: params[:post_status] }
+end
+
+# posts will be cloned only with draft status
+UserCloner.call(user, { post_status: :draft })
+# => <#User...
+```
+
+#### <a name="include_association_options"></a>Include one association: Options
+
+Options keys can be a:
+
+`:clone_with` - use custom cloner for all children.
+
+`:traits` - define special traits.
+
+Example:
+
+```ruby
 class User < ActiveRecord::Base
   has_many :posts
+end
+
+class Post < ActiveRecord::Base
+  # t.string :title
+  has_many :tags
 end
 ```
 
 ```ruby
 class PostSpecialCloner < Clowne::Cloner
-  trait :with_category do
-    include_association :category
+  adapter Clowne::ActiveRecord::Adapter
+
+  nullify :title
+
+  trait :with_tags do
+    include_association :tags
   end
 end
 
 class UserCloner < Clowne::Cloner
-  include_association :posts
+  adapter Clowne::ActiveRecord::Adapter
+
+  include_association :posts, clone_with: PostSpecialCloner
+  # or clone user's posts with tags!
+  # include_association :posts, clone_with: PostSpecialCloner, traits: :with_tags
 end
 
 UserCloner.call(user)
 # => <#User...
 ```
 
-Example with custom scope:
-
-```ruby
-class UserCloner < Clowne::Cloner
-  include_association :posts, ->(params) { where(status: params[:status] }
-  # or
-  # include_association :posts, :active - for using named scope
-end
-
-# posts will be cloned only with draft status
-UserCloner.call(user, { status: :draft })
-```
-
-Example with custom cloner:
-
-```ruby
-class UserCloner < Clowne::Cloner
-  include_association :posts, clone_with: PostSpecialCloner, trait: :with_category
-end
-
-# posts will be cloned with using PostSpecialCloner cloner
-UserCloner.call(user)
-```
-
 **Notice: if custom cloner is not defined, clowne tries to find default cloner and use it. (PostCloner for previous example)**
 
-### <a name="exclude_association"></a>Exclude Association
+### <a name="exclude_association"></a>Exclude association
 
 Exclude association from copying
 
 ```ruby
 class UserCloner < Clowne::Cloner
+  adapter Clowne::ActiveRecord::Adapter
+
   include_association :posts
 
   trait :without_posts do
@@ -169,12 +239,20 @@ clone2.posts
 # => []
 ```
 
-### <a name="nullify"></a>Nullify
+### <a name="nullify"></a>Nullify attribute(s)
 
 Nullify attributes (joins with another `nullify` declarations)
 
 ```ruby
+class User < ActiveRecord::Base
+  # t.string :name
+  # t.string :surename
+  # t.string :email
+end
+
 class UserCloner < Clowne::Cloner
+  adapter Clowne::ActiveRecord::Adapter
+
   nullify :name, :email
 
   trait :nullify_surename do
@@ -199,12 +277,14 @@ clone.surename.nil?
 # => true
 ```
 
-### <a name="finalize"></a>Finalize
+### <a name="finalize"></a>Execute finalize block
 
 Simple callback for changing record manually (joins with another `finalize` declarations)
 
 ```ruby
 class UserCloner < Clowne::Cloner
+  adapter Clowne::ActiveRecord::Adapter
+
   finalize do |source, record, params|
     record.name = 'This is copy!'
   end
@@ -237,6 +317,8 @@ Traits allow you to group cloner declarations together and then apply them (like
 
 ```ruby
 class UserCloner < Clowne::Cloner
+  adapter Clowne::ActiveRecord::Adapter
+
   trait :with_posts do
     include_association :posts
   end
