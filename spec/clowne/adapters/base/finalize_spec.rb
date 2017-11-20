@@ -1,4 +1,4 @@
-RSpec.describe Clowne::BaseAdapter::Finalize do
+describe Clowne::Adapters::Base::Finalize do
   let(:declaration) { Clowne::Declarations::Finalize.new(block) }
 
   describe '.call' do

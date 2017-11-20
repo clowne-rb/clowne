@@ -1,7 +1,7 @@
-RSpec.describe 'oGod spec for AR adapter' do
-  class AccountCloner < Clowne::Cloner
-    adapter Clowne::ActiveRecord::Adapter
+describe 'AR adapter', :cleanup do
+  around(:each) { |ex| use_adapter(Clowne::ActiveRecord::Adapter, &ex) }
 
+  class AccountCloner < Clowne::Cloner
     include_all
 
     trait :with_history do
@@ -15,8 +15,6 @@ RSpec.describe 'oGod spec for AR adapter' do
   end
 
   class BasePostCloner < Clowne::Cloner
-    adapter Clowne::ActiveRecord::Adapter
-
     finalize do |_source, record, params|
       record.contents = params[:post_contents]
     end
@@ -33,15 +31,11 @@ RSpec.describe 'oGod spec for AR adapter' do
     end
   end
 
-  before do
-    ActiveRecord::Base.subclasses.each(&:delete_all)
+  class HistoryCloner < Clowne::Cloner
+    adapter FakeAdapter
 
-    class HistoryCloner < Clowne::Cloner
-      adapter Clowne::ActiveRecord::Adapter
-
-      finalize do |_source, record|
-        record.some_stuff = record.some_stuff + ' - 2'
-      end
+    finalize do |_source, record|
+      record.some_stuff = record.some_stuff + ' - 2'
     end
   end
 
@@ -55,7 +49,7 @@ RSpec.describe 'oGod spec for AR adapter' do
     source.save
   end
 
-  it 'clone all stuff', cleanup: true do
+  it 'clone all stuff' do
     expect(Post.count).to eq(1)
     expect(Tag.count).to eq(3)
     expect(Account.count).to eq(1)

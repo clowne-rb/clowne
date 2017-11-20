@@ -1,6 +1,6 @@
 require 'rspec/expectations'
 
-RSpec::Matchers.define :be_a_declarations do |expected_declarations|
+RSpec::Matchers.define :match_declarations do |expected_declarations|
   match do |actual| # TODO: write humanable error message
     expect(actual.count).to eq(expected_declarations.count)
     actual.each_with_index do |actual_declaration, index|

@@ -2,31 +2,23 @@
 
 module Clowne
   module Declarations
-    IncludeAssociation = Struct.new(:name, :scope, :options)
-
     class IncludeAssociation # :nodoc: all
-      def compile(plan, settings)
-        if custom_cloner
-          plan.add(name, self)
-        else
-          adapter = settings[:adapter]
-          base_cloner = adapter.cloner_for(name)
-          plan.add(name, self.class.new(name, scope, options_with_cloner(base_cloner)))
-        end
+      attr_accessor :name, :scope, :options
+
+      def initialize(name, scope = nil, options = {})
+        @name = name.to_sym
+        @scope = scope
+        @options = options
       end
 
-      def custom_cloner
-        options && options[:clone_with]
+      def compile(plan, _settings)
+        # Clear `#include_all`
+        plan.remove(:all_associations)
+        plan.add_to(:association, name, self)
       end
 
-      private
-
-      def options_with_cloner(cloner)
-        if cloner
-          options.merge(clone_with: cloner)
-        else
-          options
-        end
+      def clone_with
+        options[:clone_with]
       end
     end
   end

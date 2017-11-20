@@ -6,13 +6,13 @@ module Clowne
       # Params:
       # +cloner+:: implementation of Clowne::Cloner
       # +object+:: cloned object (for example: ActiveRecord object)
-      # +init_plan+:: Hash of init plan
-      # +options+:: {traits: [trait, ...]} of nothing
-      def compile(cloner, object, init_plan = Plan.new, **options)
+      # +init_plan+:: Init plan
+      # +traits+:: List of traits if any
+      def compile(cloner, init_plan: Plan.new, traits: nil)
         raise(Clowne::ConfigurationError, 'Adapter is not defined') unless cloner.adapter
 
-        cloner.config.declarations.inject(init_plan) do |plan, declaration|
-          declaration.compile(plan, object: object, adapter: cloner.adapter, options: options)
+        cloner.config.declarations.each_with_object(init_plan) do |plan, declaration|
+          declaration.compile(plan, cloner: cloner, adapter: cloner.adapter)
         end
       end
     end

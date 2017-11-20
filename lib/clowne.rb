@@ -6,19 +6,40 @@ require 'clowne/configuration'
 require 'clowne/cloner'
 require 'clowne/plan'
 require 'clowne/planner'
+require 'clowne/declarations'
+require 'clowne/adapters/base'
 
-require 'clowne/declarations/exclude_association'
-require 'clowne/declarations/finalize'
-require 'clowne/declarations/include_all'
-require 'clowne/declarations/include_association'
-require 'clowne/declarations/nullify'
-require 'clowne/declarations/trait'
+# Declarative models cloning
+module Clowne
+  # List of built-in adapters
+  ADAPTERS = {
+    base:          'Base',
+    active_record: 'ActiveRecord'
+  }.freeze
 
-require 'clowne/base_adapter/finalize'
-require 'clowne/base_adapter/nullify'
-require 'clowne/base_adapter/adapter'
+  class << self
+    attr_reader :default_adapter, :raise_on_override
 
-if defined?(ActiveRecord)
-  require 'clowne/active_record/association'
-  require 'clowne/active_record/adapter'
+    # Set default adapters for all cloners
+    def default_adapter=(adapter)
+      @default_adapter =
+        if adapter.is_a?(Class)
+          adapter.new
+        elsif adapter.is_a?(Symbol)
+          resolve_adapter(adapter)
+        else
+          adapter
+        end
+    end
+
+    private
+
+    def resolve_adapter(adapter)
+      adapter_class = ADAPTERS[adapter]
+      raise "Unknown adapter: #{adapter}" if adapter_class.nil?
+      Clowne::Adapters.const_get(adapter_class).new
+    end
+  end
 end
+
+require 'clowne/adapters/active_record' if defined?(::ActiveRecord)

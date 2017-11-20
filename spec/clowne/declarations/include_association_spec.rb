@@ -1,4 +1,4 @@
-RSpec.describe Clowne::Declarations::IncludeAssociation do
+describe Clowne::Declarations::IncludeAssociation do
   describe '#compile' do
     describe 'clone_with' do
       let(:settings) { { adapter: adapter } }
