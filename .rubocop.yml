@@ -1,13 +1,9 @@
 AllCops:
-  Include:
-    - 'lib/**/*.rb'
-    - 'spec/**/*.rb'
   Exclude:
     - 'bin/**/*'
     - 'tmp/**/*'
-    - 'Rakefile'
-    - 'Gemfile'
-    - '*.gemspec'
+    - 'vendor/**/*'
+    - 'gemfiles/vendor/**/*'
   DisplayCopNames: true
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.3
@@ -28,10 +24,19 @@ Style/Documentation:
   Exclude:
     - 'spec/**/*.rb'
 
+Style/SymbolArray:
+  Enabled: false
+
 Style/FrozenStringLiteralComment:
   Exclude:
     - 'spec/**/*.rb'
+    - 'Gemfile'
+    - 'Rakefile'
+    - '*.gemspec'
 
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
+
+Bundler/OrderedGems:
+  Enabled: false

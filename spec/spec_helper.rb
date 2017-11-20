@@ -1,6 +1,10 @@
 require 'active_record'
 require 'clowne'
-require 'pry'
+
+begin
+  require 'pry-byebug'
+rescue LoadError # rubocop:disable Lint/HandleExceptions
+end
 
 if ENV['CODECLIMATE_REPO_TOKEN']
   require 'simplecov'

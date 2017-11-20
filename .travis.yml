@@ -1,9 +1,36 @@
+sudo: false
 language: ruby
 rvm:
   - 2.2
   - 2.3
   - 2.4
-env:
-  - CODECLIMATE_REPO_TOKEN=02373bce2f7a1f43cbe6edc820f6782450906e408163bf2fcb9785010862b577
+before_script:
+  # Only generate coverage report for the specified job
+  - if [ "$CC_REPORT" == "true" ]; then curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter; fi
+  - if [ "$CC_REPORT" == "true" ]; then chmod +x ./cc-test-reporter; fi
+  - if [ "$CC_REPORT" == "true" ]; then ./cc-test-reporter before-build; fi
 script:
-  - bundle exec rspec && bundle exec codeclimate-test-reporter
+  - bundle exec rake
+after_sciprt:
+  - if [ "$CC_REPORT" == "true" ]; ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+matrix:
+  fast_finish: true
+  include:
+    - rvm: ruby-head
+      gemfile: gemfiles/railsmaster.gemfile
+    - rvm: jruby-9.1.0.0
+      gemfile: gemfiles/jruby.gemfile
+    - rvm: 2.4.1
+      gemfile: Gemfile
+      env: CC_REPORT=true
+    - rvm: 2.4.1
+      gemfile: gemfiles/activerecord42.gemfile
+    - rvm: 2.3.1
+      gemfile: Gemfile
+    - rvm: 2.2.0
+      gemfile: gemfiles/activerecord42.gemfile
+  allow_failures:
+    - rvm: ruby-head
+      gemfile: gemfiles/railsmaster.gemfile
+    - rvm: jruby-9.1.0.0
+      gemfile: gemfiles/jruby.gemfile
