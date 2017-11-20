@@ -5,10 +5,8 @@ module Clowne
     Finalize = Struct.new(:block)
 
     class Finalize # :nodoc: all
-      PLAN_NAME = :finalize
-
       def compile(plan, _settings)
-        plan.add([PLAN_NAME, __id__].join('-'), self)
+        plan.add(:finalize, self)
       end
     end
   end

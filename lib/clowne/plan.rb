@@ -2,46 +2,42 @@
 
 module Clowne
   class Plan # :nodoc: all
-    Step = Struct.new(:key, :declaration)
-
     def initialize
-      @steps = []
+      # By default, we store actions in arrays
+      @data = Hash.new { |h, k| h[k] = [] }
     end
 
-    def validate!
-      dups = @steps.group_by(&:key).select { |_step, count| count.size > 1 }.map(&:first)
-      return true unless dups.any?
-      raise(Clowne::ConfigurationError, "You have duplicate keys in configuration: #{dups.join(', ')}")
+    def add(type, declaration)
+      data[type] << declaration
     end
 
-    def get(key)
-      key = key.to_sym
-      @steps.detect { |step| step.key == key }
+    def add_to(type, id, declaration)
+      data[type] = {} unless data.key?(type)
+      data[type][id] = declaration
     end
 
-    def add(key, declaration)
-      @steps << Step.new(key.to_sym, declaration)
-      self
+    def set(type, declaration)
+      data[type] = declaration
     end
 
-    def update(key, declaration)
-      position = @steps.index(get(key))
-      if position
-        @steps[position] = Step.new(key, declaration)
-        self
-      else
-        add(key, declaration)
-      end
+    def remove(type)
+      data.delete(type)
     end
 
-    def delete(key)
-      key = key.to_sym
-      @steps.reject! { |step| step.key == key }
-      self
+    def remove_from(type, id)
+      return unless data[type]
+      data[type].delete(id)
     end
 
     def declarations
-      @steps.map(&:declaration)
+      data.flat_map do |(type, value)|
+        value = value.values if value.is_a?(Hash)
+        value.map { |v| [type, v] }
+      end
     end
+
+    private
+
+    attr_reader :data
   end
 end

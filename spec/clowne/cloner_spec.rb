@@ -1,6 +1,6 @@
-RSpec.describe Clowne::Cloner do
-  before do
-    class SomeCloner < described_class
+describe Clowne::Cloner do
+  let(:cloner) do
+    Class.new(described_class) do
       adapter FakeAdapter
 
       include_all
@@ -45,13 +45,13 @@ RSpec.describe Clowne::Cloner do
   end
 
   describe 'DSL and Configuration' do
-    it 'configure cloner' do
-      expect(SomeCloner.adapter).to eq(FakeAdapter)
-      expect(SomeCloner.config).to be_a(Clowne::Configuration)
+    it 'configure cloner', :aggregate_failures do
+      expect(cloner.adapter).to eq(FakeAdapter)
+      expect(cloner.config).to be_a(Clowne::Configuration)
 
-      declarations = SomeCloner.config.declarations
+      declarations = cloner.config.declarations
 
-      expect(declarations).to be_a_declarations(expected_declarations)
+      expect(declarations).to match_declarations(expected_declarations)
     end
   end
 
@@ -99,34 +99,32 @@ RSpec.describe Clowne::Cloner do
 
   describe 'inheritance' do
     context 'when cloner child of another cloner' do
-      before do
-        class Some2Cloner < SomeCloner; end
-      end
+      let(:cloner2) { Class.new(cloner) }
 
-      it 'child cloner settings' do
-        expect(Some2Cloner.adapter).to eq(FakeAdapter)
-        expect(Some2Cloner.config).to be_a(Clowne::Configuration)
+      it 'child cloner settings', :aggregate_failures do
+        expect(cloner2.adapter).to eq(FakeAdapter)
+        expect(cloner2.config).to be_a(Clowne::Configuration)
 
-        declarations = Some2Cloner.config.declarations
+        declarations = cloner2.config.declarations
 
-        expect(declarations).to be_a_declarations(expected_declarations)
+        expect(declarations).to match_declarations(expected_declarations)
       end
     end
 
     context 'when child cloner has own declaration' do
-      before do
-        class Some3Cloner < SomeCloner
+      let(:cloner2) do
+        Class.new(cloner) do
           trait :child_cloner_trait do
           end
         end
       end
 
       it 'child and parent declarations' do
-        expect(Some3Cloner.config.declarations).to be_a_declarations(expected_declarations + [
+        expect(cloner2.config.declarations).to match_declarations(expected_declarations + [
           [Clowne::Declarations::Trait, { name: :child_cloner_trait, block: proc {} }]
         ])
 
-        expect(SomeCloner.config.declarations).to be_a_declarations(expected_declarations)
+        expect(cloner.config.declarations).to match_declarations(expected_declarations)
       end
     end
   end

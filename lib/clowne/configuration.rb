@@ -12,16 +12,16 @@ module Clowne
       @declarations.push(Clowne::Declarations::IncludeAll.new)
     end
 
-    def add_included_association(name, scope, options)
-      @declarations.push(Clowne::Declarations::IncludeAssociation.new(name, scope, options))
+    def add_included_association(name, *args)
+      @declarations.push(Clowne::Declarations::IncludeAssociation.new(name, *args))
     end
 
     def add_excluded_association(name)
       @declarations.push(Clowne::Declarations::ExcludeAssociation.new(name))
     end
 
-    def add_nullify(attrs)
-      @declarations.push(Clowne::Declarations::Nullify.new(attrs))
+    def add_nullify(attr)
+      @declarations.push(Clowne::Declarations::Nullify.new(attr))
     end
 
     def add_finalize(block)
