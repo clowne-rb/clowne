@@ -5,7 +5,7 @@ module Clowne
     class IncludeAssociation # :nodoc: all
       attr_accessor :name, :scope, :options
 
-      def initialize(name, scope = nil, options = {})
+      def initialize(name, scope = nil, **options)
         @name = name.to_sym
         @scope = scope
         @options = options

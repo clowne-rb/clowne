@@ -1,5 +1,6 @@
 require 'active_record'
 require 'clowne'
+require 'factory_bot'
 
 begin
   require 'pry-byebug'
@@ -24,9 +25,14 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
+  config.include FactoryBot::Syntax::Methods
   config.include ClowneHelpers
 
   config.after(:each, cleanup: true) do
     ActiveRecord::Base.subclasses.each(&:delete_all)
+    Clowne::Cloner.descendants.each do |cloner|
+      Object.send(:remove_const, cloner.name) if cloner.name
+      Clowne::Cloner.descendants.delete(cloner)
+    end
   end
 end
