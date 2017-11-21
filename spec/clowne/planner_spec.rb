@@ -1,9 +1,8 @@
 describe Clowne::Planner do
   describe '.compile' do
-    let(:object) { double(reflections: { 'users' => nil, 'posts' => nil }) }
     let(:options) { {} }
 
-    subject { described_class.compile(cloner, object, **options).declarations }
+    subject { described_class.compile(cloner, **options).declarations }
 
     context 'when cloner with one included association' do
       let(:cloner) do
@@ -12,14 +11,29 @@ describe Clowne::Planner do
         end
       end
 
-      it 'matches declarations' do
+      specify do
         is_expected.to match_declarations(
-          [[Clowne::Declarations::IncludeAssociation, { name: :users }]]
+          [[:association, Clowne::Declarations::IncludeAssociation, { name: :users }]]
         )
       end
     end
 
-    context 'when cloner with include_all declaration' do
+    context 'when cloner with include_all declaration after include_association' do
+      let(:cloner) do
+        Class.new(Clowne::Cloner) do
+          include_association :users
+          include_all
+        end
+      end
+
+      specify do
+        is_expected.to match_declarations(
+          [[:all_associations, Clowne::Declarations::IncludeAll]]
+        )
+      end
+    end
+
+    context 'when cloner with include_all declaration before include_association' do
       let(:cloner) do
         Class.new(Clowne::Cloner) do
           include_all
@@ -27,40 +41,14 @@ describe Clowne::Planner do
         end
       end
 
-      it 'matches declarations' do
+      specify do
         is_expected.to match_declarations(
-          [
-            [Clowne::Declarations::IncludeAssociation, { name: :users }],
-            [Clowne::Declarations::IncludeAssociation, { name: :posts }],
-            [Clowne::Declarations::IncludeAssociation, { name: :users, options: {} }]
-          ]
+          [[:association, Clowne::Declarations::IncludeAssociation, { name: :users }]]
         )
       end
     end
 
-    context 'when cloner with include_all and redefined association' do
-      let(:cloner) do
-        Class.new(Clowne::Cloner) do
-          include_all
-          include_association :users, clone_with: 'AnotherCloner'
-        end
-      end
-
-      it 'matches declarations' do
-        is_expected.to match_declarations(
-          [
-            [Clowne::Declarations::IncludeAssociation, { name: :users }],
-            [Clowne::Declarations::IncludeAssociation, { name: :posts }],
-            [Clowne::Declarations::IncludeAssociation, {
-              name: :users,
-              options: { clone_with: 'AnotherCloner' }
-            }]
-          ]
-        )
-      end
-    end
-
-    context 'when cloner with include_all and excuding association' do
+    context 'when cloner with include_all and exclude_association' do
       let(:cloner) do
         Class.new(Clowne::Cloner) do
           include_all
@@ -68,25 +56,27 @@ describe Clowne::Planner do
         end
       end
 
-      it 'matches declarations' do
+      specify do
         is_expected.to match_declarations(
-          [[Clowne::Declarations::IncludeAssociation, { name: :posts }]]
+          [[:all_associations, Clowne::Declarations::IncludeAll, { excludes: Set.new(["users"]) }]]
         )
       end
     end
 
-    context 'when cloner with nullify declaration' do
+    context 'when cloner with nullify declarations' do
       let(:cloner) do
         Class.new(Clowne::Cloner) do
-          nullify :foo
-          nullify :bar
+          nullify :foo, :bar
           nullify :baz
         end
       end
 
-      it 'matches declarations' do
+      specify do
         is_expected.to match_declarations(
-          [[Clowne::Declarations::Nullify, { attributes: %i[foo bar baz] }]]
+          [
+            [:nullify, Clowne::Declarations::Nullify, { attributes: %i[foo bar] }],
+            [:nullify, Clowne::Declarations::Nullify, { attributes: %i[baz] }]
+          ]
         )
       end
 
@@ -103,9 +93,12 @@ describe Clowne::Planner do
 
         let(:options) { { traits: [:with_nullify] } }
 
-        it 'matches declarations' do
+        specify do
           is_expected.to match_declarations(
-            [[Clowne::Declarations::Nullify, { attributes: %i[foo bar] }]]
+            [
+              [:nullify, Clowne::Declarations::Nullify, { attributes: %i[foo] }],
+              [:nullify, Clowne::Declarations::Nullify, { attributes: %i[bar] }]
+            ]
           )
         end
       end
@@ -119,40 +112,17 @@ describe Clowne::Planner do
         end
       end
 
-      it 'matches declarations' do
+      specify do
         is_expected.to match_declarations(
           [
-            [Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }],
-            [Clowne::Declarations::Finalize, { block: proc { 1 + 2 } }]
+            [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }],
+            [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 2 } }]
           ]
         )
       end
-
-      context 'when cloner with main finalize declaration and with trait' do
-        let(:cloner) do
-          Class.new(Clowne::Cloner) do
-            finalize(&proc { 1 + 3 })
-
-            trait :with_finalize do
-              finalize(&proc { 1 + 4 })
-            end
-          end
-        end
-
-        let(:options) { { traits: :with_finalize } }
-
-        it 'matches declarations' do
-          is_expected.to match_declarations(
-            [
-              [Clowne::Declarations::Finalize, { block: proc { 1 + 3 } }],
-              [Clowne::Declarations::Finalize, { block: proc { 1 + 4 } }]
-            ]
-          )
-        end
-      end
     end
 
-    describe 'traits' do
+    context 'when multiple traits' do
       let(:cloner) do
         Class.new(Clowne::Cloner) do
           include_association :users
@@ -166,16 +136,24 @@ describe Clowne::Planner do
 
             finalize(&proc { 1 + 2 })
           end
+
+          trait :clear_fields do
+            nullify :extra, :data, :meta
+          end
+
+          trait :with_all do
+            include_all
+          end
         end
       end
 
       context 'when planing without traits' do
-        it 'matches declarations' do
+        specify do
           is_expected.to match_declarations(
             [
-              [Clowne::Declarations::IncludeAssociation, { name: :users }],
-              [Clowne::Declarations::IncludeAssociation, { name: :posts }],
-              [Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }]
+              [:association, Clowne::Declarations::IncludeAssociation, { name: :users }],
+              [:association, Clowne::Declarations::IncludeAssociation, { name: :posts }],
+              [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }]
             ]
           )
         end
@@ -184,13 +162,58 @@ describe Clowne::Planner do
       context 'when one trait is active' do
         let(:options) { { traits: [:with_brands] } }
 
-        it 'matches declarations' do
+        specify do
           is_expected.to match_declarations(
             [
-              [Clowne::Declarations::IncludeAssociation, { name: :users }],
-              [Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }],
-              [Clowne::Declarations::IncludeAssociation, { name: :brands }],
-              [Clowne::Declarations::Finalize, { block: proc { 1 + 2 } }]
+              [:association, Clowne::Declarations::IncludeAssociation, { name: :users }],
+              [:association, Clowne::Declarations::IncludeAssociation, { name: :brands }],
+              [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }],
+              [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 2 } }]
+            ]
+          )
+        end
+      end
+
+      context 'when all traits are active' do
+        let(:options) { { traits: [:with_brands, :clear_fields, :with_all] } }
+
+        specify do
+          is_expected.to match_declarations(
+            [
+              [:all_associations, Clowne::Declarations::IncludeAll],
+              [:nullify, Clowne::Declarations::Nullify, { attributes: %i[extra data meta] }],
+              [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }],
+              [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 2 } }]
+            ]
+          )
+        end
+      end
+
+      context 'when inherited cloner' do
+        let(:new_cloner) do
+          Class.new(cloner) do
+            include_association :files
+
+            trait :clear_fields do
+              nullify :files_cache
+            end
+          end
+        end
+
+        subject { described_class.compile(new_cloner, **options).declarations }
+
+        let(:options) { { traits: [:with_brands, :clear_fields] } }
+
+        specify do
+          is_expected.to match_declarations(
+            [
+              [:association, Clowne::Declarations::IncludeAssociation, { name: :users }],
+              [:association, Clowne::Declarations::IncludeAssociation, { name: :files }],
+              [:association, Clowne::Declarations::IncludeAssociation, { name: :brands }],
+              [:nullify, Clowne::Declarations::Nullify, { attributes: %i[extra data meta] }],
+              [:nullify, Clowne::Declarations::Nullify, { attributes: %i[files_cache] }],
+              [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }],
+              [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 2 } }]
             ]
           )
         end
