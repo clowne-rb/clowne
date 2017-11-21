@@ -15,6 +15,15 @@ module Clowne
           has_many: HasMany,
           has_and_belongs_to_many: HABTM
         }.freeze
+
+        # Returns an association cloner class for reflection
+        def self.cloner_for(reflection)
+          if reflection.is_a?(::ActiveRecord::Reflection::ThroughReflection)
+            Noop
+          else
+            AR_2_CLONER.fetch(reflection.macro, Noop)
+          end
+        end
       end
     end
   end
