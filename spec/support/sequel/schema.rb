@@ -1,4 +1,4 @@
-SEQUEL_DB.create_table :cars do
+SEQUEL_DB.create_table :topics do
   primary_key :id
   String :title
   String :description
@@ -6,7 +6,7 @@ SEQUEL_DB.create_table :cars do
   DateTime :updated_at, null: false
 end
 
-SEQUEL_DB.create_table :racers do
+SEQUEL_DB.create_table :users do
   primary_key :id
   String :name
   String :email
@@ -14,11 +14,18 @@ SEQUEL_DB.create_table :racers do
   DateTime :updated_at, null: false
 end
 
-SEQUEL_DB.create_table :tracks do
+SEQUEL_DB.create_table :posts do
+  primary_key :id
   Integer :owner_id
-  Integer :country_id
-  String :name
-  String :location
+  Integer :topic_id
+  String :title
+  String :contents
   DateTime :created_at, null: false
   DateTime :updated_at, null: false
+end
+
+SEQUEL_DB.create_table :accounts do
+  primary_key :id
+  Integer :post_id
+  String :title
 end
