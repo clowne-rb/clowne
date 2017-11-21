@@ -18,7 +18,7 @@ module Clowne
       end
 
       def except!(name)
-        @excludes << name
+        @excludes << name.to_s
       end
     end
   end
