@@ -5,9 +5,7 @@ module Clowne
     class Base
       module Finalize # :nodoc: all
         def self.call(source, record, declaration, params:, **_options)
-          if declaration.block.is_a?(Proc)
-            declaration.block.call(source, record, params)
-          end
+          declaration.block.call(source, record, params)
           record
         end
       end

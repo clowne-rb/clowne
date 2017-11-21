@@ -23,3 +23,10 @@ module Clowne
     end
   end
 end
+
+Clowne::Declarations.add :include_association, Clowne::Declarations::IncludeAssociation
+Clowne::Declarations.add :include_associations do |*names|
+  names.each do |name|
+    declarations.push Clowne::Declarations::IncludeAssociation.new(name)
+  end
+end

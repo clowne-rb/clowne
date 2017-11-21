@@ -39,7 +39,7 @@ module Clowne
             if scope.is_a?(Symbol)
               base_scope.__send__(scope)
             elsif scope.is_a?(Proc)
-              base_scope.instance_exec(params, &scope)
+              base_scope.instance_exec(params, &scope) || base_scope
             else
               base_scope
             end
