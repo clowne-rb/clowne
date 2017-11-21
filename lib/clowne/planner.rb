@@ -6,13 +6,27 @@ module Clowne
   class Planner # :nodoc: all
     class << self
       # Params:
-      # +declarations+:: List of declarations
+      # +cloner+:: Cloner object
       # +init_plan+:: Init plan
       # +traits+:: List of traits if any
-      def compile(declarations, init_plan: Plan.new, traits: nil)
+      def compile(cloner, init_plan: Plan.new, traits: nil)
+        declarations = cloner.declarations.dup
+
+        declarations += compile_traits(cloner, traits) unless traits.nil?
+
         declarations.each_with_object(init_plan) do |declaration, plan|
           declaration.compile(plan)
         end
+      end
+
+      private
+
+      def compile_traits(cloner, traits)
+        traits.map do |id|
+          trait = cloner.traits[id]
+          raise ConfigurationError, "Trait not found: #{id}" if trait.nil?
+          trait.compiled
+        end.flatten
       end
     end
   end

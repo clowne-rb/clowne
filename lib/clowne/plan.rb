@@ -58,11 +58,11 @@ module Clowne
 
     def initialize(registry = self.class.registry)
       @registry = registry
-      # By default, we store actions in arrays
-      @data = Hash.new { |h, k| h[k] = [] }
+      @data = {}
     end
 
     def add(type, declaration)
+      data[type] = [] unless data.key?(type)
       data[type] << declaration
     end
 
@@ -73,6 +73,10 @@ module Clowne
 
     def set(type, declaration)
       data[type] = declaration
+    end
+
+    def get(type)
+      data[type]
     end
 
     def remove(type)
@@ -91,6 +95,14 @@ module Clowne
         value = value.values if value.is_a?(Hash)
         value = Array(value)
         value.map { |v| [type, v] }
+      end.compact
+    end
+
+    def dup
+      self.class.new(registry).tap do |duped|
+        data.each do |k, v|
+          duped.set(k, v.dup)
+        end
       end
     end
 

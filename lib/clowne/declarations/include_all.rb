@@ -23,3 +23,5 @@ module Clowne
     end
   end
 end
+
+Clowne::Declarations.add :include_all, Clowne::Declarations::IncludeAll
