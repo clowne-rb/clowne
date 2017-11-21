@@ -6,7 +6,7 @@ module Clowne
       module Associations
         class HasMany < Base
           def call(record)
-            with_scope.find_each do |child|
+            with_scope.each do |child|
               child_clone = clone_one(child)
               child_clone[:"#{reflection.foreign_key}"] = nil
               record.__send__(association_name) << child_clone

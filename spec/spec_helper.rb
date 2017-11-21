@@ -26,7 +26,7 @@ RSpec.configure do |config|
   end
 
   config.include FactoryBot::Syntax::Methods
-  config.include ClowneHelpers
+  config.include_context 'adapter:active_record', adapter: :active_record
 
   config.after(:each, cleanup: true) do
     ActiveRecord::Base.subclasses.each(&:delete_all)

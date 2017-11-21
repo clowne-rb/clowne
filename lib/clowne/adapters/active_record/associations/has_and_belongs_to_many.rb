@@ -6,7 +6,7 @@ module Clowne
       module Associations
         class HABTM < Base
           def call(record)
-            with_scope.find_each do |child|
+            with_scope.each do |child|
               child_clone = clone_one(child)
               record.__send__(association_name) << child_clone
             end

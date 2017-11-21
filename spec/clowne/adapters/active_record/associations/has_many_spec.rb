@@ -1,14 +1,14 @@
-describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup do
+describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapter: :active_record do
   let(:source) { create(:user, :with_posts, posts_num: 2) }
   let(:record) { User.new }
   let(:reflection) { User.reflections['posts'] }
-  let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts) }
+  let(:scope) { {} }
+  let(:declaration_params) { {} }
+  let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts, scope, **declaration_params) }
   let(:params) { {} }
   let(:traits) { [] }
 
   subject(:resolver) { described_class.new(reflection, source, declaration, params, traits) }
-
-  around(:each) { |ex| use_adapter(:active_record, &ex) }
 
   before(:all) do
     class PostCloner < Clowne::Cloner
@@ -63,6 +63,49 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup do
       end
     end
 
+    context 'with scope' do
+      context 'block scope' do
+        let(:scope) { ->(params) { where(title: params[:title]) if params[:title] } }
+        let(:params) { { title: source.posts.first.title } }
+
+        it 'clones scoped children' do
+          expect(subject.posts.size).to eq 1
+          expect(subject.posts.first).to have_attributes(
+            owner_id: nil,
+            title: source.posts.first.title
+          )
+        end
+
+        context 'when block is no-op' do
+          let(:params) { {} }
+
+          it 'clones all children' do
+            expect(subject.posts.size).to eq 2
+          end
+        end
+      end
+
+      context 'symbol scope' do
+        let(:scope) { :alpha_first }
+
+        let(:post1) { source.posts.first }
+        let(:post2) { source.posts.second }
+
+        before do
+          post1.update! title: 'Zadyza'
+          post2.update! title: 'Ta-dam'
+        end
+
+        it 'clones scoped children' do
+          expect(subject.posts.size).to eq 1
+          expect(subject.posts.first).to have_attributes(
+            owner_id: nil,
+            title: 'Ta-dam'
+          )
+        end
+      end
+    end
+
     xcontext 'with traits' do
       let(:traits) { [:mark_as_clone] }
 
@@ -96,7 +139,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup do
         end
       end
 
-      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts, clone_with: post_cloner) }
+      let(:declaration_params) { { clone_with: post_cloner } }
 
       it 'applies custom cloner' do
         expect(subject.posts.size).to eq 1

@@ -1,91 +1,108 @@
-describe Clowne::Adapters::ActiveRecord::Association, :cleanup do
-  around(:each) { |ex| use_adapter(:active_record, &ex) }
+describe Clowne::Adapters::ActiveRecord::Association do
+  let(:params) { double }
+  let(:traits) { double }
+  let(:record) { double }
+  let(:association) {}
+  let(:source) { build_stubbed(:post) }
+  let(:declaration) { Clowne::Declarations::IncludeAssociation.new(association) }
 
-  let(:params) { {} }
+  subject { described_class.call(source, record, declaration, params: params, traits: traits) }
 
-  subject { described_class.call(source, record, declaration, params) }
+  context 'with has_many' do
+    let(:association) { :posts }
+    let(:source) { build_stubbed(:user) }
 
-  describe 'has_one' do
-    let(:account) { Account.create(title: 'Some account') }
-    let(:source) { Post.create(account: account) }
-    let(:record) { Post.new }
-
-    context 'when simple relation' do
-      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:account) }
-
-      it "clone source's account" do
-        expect(subject.account).to be_a(Account)
-        expect(subject.account.title).to eq('Some account')
-      end
-    end
-
-    context 'when defined custom cloner on relation' do
-      let(:account_custom_cloner) do
-        Class.new(Clowne::Cloner) do
-          include_association :history
+    it 'uses HasMany resolver' do
+      expect(Clowne::Adapters::ActiveRecord::Associations::HasMany).to receive(:new).with(
+        User.reflections['posts'], source, declaration, params, traits
+      ) do
+        double.tap do |resolver|
+          expect(resolver).to receive(:call).with(record)
         end
       end
 
-      let!(:history) { History.create(some_stuff: 'Some stuff', account: account) }
-      let(:declaration) do
-        Clowne::Declarations::IncludeAssociation.new(:account, nil, clone_with: account_custom_cloner)
-      end
-
-      it "clone source's account -> history" do
-        cloned_history = subject.account.history
-        expect(cloned_history).to be_a(History)
-        expect(cloned_history.some_stuff).to eq('Some stuff')
-      end
+      subject
     end
   end
 
-  describe 'has_many' do
-    let(:source) { User.create }
-    let(:record) { User.new }
+  context 'with has_many through' do
+    let(:association) { :accounts }
+    let(:source) { build_stubbed(:user) }
 
-    before { Array.new(2) { Post.create(owner: source, title: 'Some post') } }
-
-    context 'when simple relation' do
-      let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts) }
-
-      it "clone source's posts" do
-        expect(subject.posts.map(&:title)).to eq(['Some post', 'Some post'])
-      end
-    end
-
-    context 'when defined scope on relation' do
-      let!(:selected_post) { Post.create(owner: source, title: 'Selected post') }
-
-      let(:declaration) do
-        Clowne::Declarations::IncludeAssociation.new(:posts, proc { where.not(title: 'Some post') })
+    it 'uses Noop resolver' do
+      expect(Clowne::Adapters::ActiveRecord::Associations::Noop).to receive(:new).with(
+        User.reflections['accounts'], source, declaration, params, traits
+      ) do
+        double.tap do |resolver|
+          expect(resolver).to receive(:call).with(record)
+        end
       end
 
-      it 'clone only selected post' do
-        expect(subject.posts.map(&:title)).to eq(['Selected post'])
-      end
+      subject
     end
   end
 
-  describe 'has_and_belongs_to_many' do
-    let(:tags) { Array.new(2) { |i| Tag.create(value: "tag-#{i}") } }
-    let(:source) { Post.create(tags: tags) }
-    let(:record) { Post.new }
+  context 'with has_one' do
+    let(:association) { :account }
 
-    let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:tags) }
+    it 'uses HasOne resolver' do
+      expect(Clowne::Adapters::ActiveRecord::Associations::HasOne).to receive(:new).with(
+        Post.reflections['account'], source, declaration, params, traits
+      ) do
+        double.tap do |resolver|
+          expect(resolver).to receive(:call).with(record)
+        end
+      end
 
-    it "clone source's tags" do
-      expect(subject.tags.map(&:value)).to eq(['tag-0', 'tag-1'])
+      subject
     end
   end
 
-  describe 'belongs_to (not supported)' do
-    let(:topic) { Topic.create(title: 'Some post', description: 'Some description') }
-    let(:source) { Post.create(topic: topic) }
-    let(:record) { Post.new }
-    let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:topic) }
+  context 'with has_one through' do
+    let(:association) { :history }
 
-    it 'return unchanged record' do
-      expect(subject.topic).to be_nil
+    it 'uses Noop resolver' do
+      expect(Clowne::Adapters::ActiveRecord::Associations::Noop).to receive(:new).with(
+        Post.reflections['history'], source, declaration, params, traits
+      ) do
+        double.tap do |resolver|
+          expect(resolver).to receive(:call).with(record)
+        end
+      end
+
+      subject
+    end
+  end
+
+  context 'with belongs_to' do
+    let(:association) { :topic }
+
+    it 'uses Noop resolver' do
+      expect(Clowne::Adapters::ActiveRecord::Associations::Noop).to receive(:new).with(
+        Post.reflections['topic'], source, declaration, params, traits
+      ) do
+        double.tap do |resolver|
+          expect(resolver).to receive(:call).with(record)
+        end
+      end
+
+      subject
+    end
+  end
+
+  context 'with HABTM' do
+    let(:association) { :tags }
+
+    it 'uses HABTM resolver' do
+      expect(Clowne::Adapters::ActiveRecord::Associations::HABTM).to receive(:new).with(
+        Post.reflections['tags'], source, declaration, params, traits
+      ) do
+        double.tap do |resolver|
+          expect(resolver).to receive(:call).with(record)
+        end
+      end
+
+      subject
     end
   end
 end

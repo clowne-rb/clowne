@@ -6,9 +6,14 @@ module Clowne
       class Association
         class << self
           def call(source, record, declaration, params:, traits:)
-            reflection = source.class.reflections[name]
+            reflection = source.class.reflections[declaration.name.to_s]
 
-            cloner_class = Associations::AR_2_CLONER.fetch(reflection.macro, Associations::Noop)
+            cloner_class =
+              if reflection.is_a?(::ActiveRecord::Reflection::ThroughReflection)
+                Associations::Noop
+              else
+                Associations::AR_2_CLONER.fetch(reflection.macro, Associations::Noop)
+              end
 
             cloner_class.new(reflection, source, declaration, params, traits).call(record)
           end
