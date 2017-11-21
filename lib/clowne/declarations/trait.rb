@@ -34,3 +34,7 @@ module Clowne
     end
   end
 end
+
+Clowne::Declarations.add :trait do |*|
+  # no-op
+end

@@ -11,7 +11,7 @@ module Clowne
         @options = options
       end
 
-      def compile(plan, _settings)
+      def compile(plan)
         # Clear `#include_all`
         plan.remove(:all_associations)
         plan.add_to(:association, name, self)

@@ -9,7 +9,7 @@ module Clowne
         @name = name.to_sym
       end
 
-      def compile(plan, _settings)
+      def compile(plan)
         plan.remove_from(:association, name)
 
         # update all_associations plan
@@ -18,5 +18,12 @@ module Clowne
         all_associations.except! name
       end
     end
+  end
+end
+
+Clowne::Declarations.add :exclude_association, Clowne::Declarations::ExcludeAssociation
+Clowne::Declarations.add :exclude_associations do |*names|
+  names.each do |name|
+    declarations.push Clowne::Declarations::ExcludeAssociation.new(name)
   end
 end

@@ -5,9 +5,9 @@ module Clowne
     class Base
       module Nullify # :nodoc: all
         def self.call(_source, record, declaration, **_options)
-          attr = declaration.attribute
-
-          record.__send__("#{attr}=", nil)
+          declaration.attributes.each do |attr|
+            record.__send__("#{attr}=", nil)
+          end
 
           record
         end

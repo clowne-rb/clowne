@@ -10,7 +10,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup do
 
   around(:each) { |ex| use_adapter(:active_record, &ex) }
 
-  before do
+  before(:all) do
     class PostCloner < Clowne::Cloner
       nullify :topic_id, :owner_id
 
@@ -25,6 +25,8 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup do
       end
     end
   end
+
+  after(:all) { Object.send(:remove_const, 'PostCloner') }
 
   describe '.call' do
     subject { resolver.call(record) }

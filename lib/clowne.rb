@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
 require 'clowne/version'
-require 'clowne/dsl'
-require 'clowne/configuration'
-require 'clowne/cloner'
-require 'clowne/plan'
-require 'clowne/planner'
 require 'clowne/declarations'
+require 'clowne/cloner'
+
 require 'clowne/adapters/base'
 
 # Declarative models cloning

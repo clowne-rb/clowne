@@ -2,12 +2,19 @@
 
 module Clowne
   module Declarations
-    Nullify = Struct.new(:attribute)
-
     class Nullify # :nodoc: all
-      def compile(plan, _settings)
+      attr_reader :attributes
+
+      def initialize(*attributes)
+        raise ArgumentError, 'At least one attribute required' if attributes.empty?
+        @attributes = attributes
+      end
+
+      def compile(plan)
         plan.add(:nullify, self)
       end
     end
   end
 end
+
+Clowne::Declarations.add :nullify, Clowne::Declarations::Nullify
