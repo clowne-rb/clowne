@@ -11,7 +11,7 @@ module Clowne
         @excludes = Set.new
       end
 
-      def compile(plan, _settings)
+      def compile(plan)
         # Remove all configured associations
         plan.remove(:association)
         plan.set(:all_associations, self)

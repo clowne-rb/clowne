@@ -30,9 +30,5 @@ RSpec.configure do |config|
 
   config.after(:each, cleanup: true) do
     ActiveRecord::Base.subclasses.each(&:delete_all)
-    Clowne::Cloner.descendants.each do |cloner|
-      Object.send(:remove_const, cloner.name) if cloner.name
-      Clowne::Cloner.descendants.delete(cloner)
-    end
   end
 end
