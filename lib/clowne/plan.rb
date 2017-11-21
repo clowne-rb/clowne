@@ -2,7 +2,62 @@
 
 module Clowne
   class Plan # :nodoc: all
-    def initialize
+    class Registry
+      attr_reader :actions
+
+      def initialize
+        @actions = []
+      end
+
+      def insert_after(after, action)
+        validate_uniq!(action)
+
+        after_index = actions.find_index(after)
+
+        raise "Plan action not found: #{after}" if after_index.nil?
+
+        actions.insert(after_index + 1, action)
+      end
+
+      def insert_before(before, action)
+        validate_uniq!(action)
+
+        before_index = actions.find_index(before)
+
+        raise "Plan action not found: #{before}" if before_index.nil?
+
+        actions.insert(before_index, action)
+      end
+
+      def append(action)
+        validate_uniq!(action)
+        actions.push action
+      end
+
+      def prepend(action)
+        validate_uniq!(action)
+        actions.unshift action
+      end
+
+      private
+
+      def validate_uniq!(action)
+        raise "Plan action already registered: #{action}" if actions.include?(action)
+      end
+    end
+
+    class << self
+      attr_reader :registry
+
+      protected
+
+      attr_writer :registry
+    end
+
+    self.registry = Registry.new
+
+    def initialize(registry = self.class.registry)
+      @registry = registry
       # By default, we store actions in arrays
       @data = Hash.new { |h, k| h[k] = [] }
     end
@@ -30,14 +85,17 @@ module Clowne
     end
 
     def declarations
-      data.flat_map do |(type, value)|
+      registry.actions.flat_map do |type|
+        value = data[type]
+        next if value.nil?
         value = value.values if value.is_a?(Hash)
+        value = Array(value)
         value.map { |v| [type, v] }
       end
     end
 
     private
 
-    attr_reader :data
+    attr_reader :data, :registry
   end
 end

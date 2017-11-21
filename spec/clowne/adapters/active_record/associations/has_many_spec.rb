@@ -12,11 +12,11 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup do
 
   before(:all) do
     class PostCloner < Clowne::Cloner
-      nullify :topic_id, :owner_id
-
       finalize do |_source, record, params|
         record.topic_id = params[:topic_id] if params[:topic_id]
       end
+
+      nullify :topic_id, :owner_id
 
       trait :mark_as_clone do
         finalize do |source, record|

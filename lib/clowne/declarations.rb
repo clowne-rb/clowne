@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'clowne/dsl'
+require 'clowne/plan'
 
 module Clowne
   module Declarations # :nodoc:
@@ -21,6 +22,12 @@ module Clowne
     end
   end
 end
+
+# Register default actions in the specified order
+Clowne::Plan.registry.append :all_associations
+Clowne::Plan.registry.append :association
+Clowne::Plan.registry.append :nullify
+Clowne::Plan.registry.append :finalize
 
 require 'clowne/declarations/exclude_association'
 require 'clowne/declarations/finalize'
