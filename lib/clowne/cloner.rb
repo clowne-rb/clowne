@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'clowne/plan'
 require 'clowne/planner'
 require 'clowne/dsl'
 

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'clowne/plan'
+
 module Clowne
   class Planner # :nodoc: all
     class << self
