@@ -11,7 +11,7 @@ module Clowne
       def compile(cloner, init_plan: Plan.new, traits: nil)
         raise(Clowne::ConfigurationError, 'Adapter is not defined') unless cloner.adapter
 
-        cloner.config.declarations.each_with_object(init_plan) do |plan, declaration|
+        cloner.config.declarations.each_with_object(init_plan) do |declaration, plan|
           declaration.compile(plan, cloner: cloner, adapter: cloner.adapter)
         end
       end

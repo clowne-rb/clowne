@@ -6,6 +6,7 @@ module Clowne
       module Associations
         class Base
           # Params:
+          # +reflection+:: Association eflection object
           # +source+:: Instance of cloned object (ex: User.new(posts: posts))
           # +declaration+:: = Relation description (ex: Clowne::Declarations::IncludeAssociation.new(:posts))
           # +params+:: = Instance of Clowne::Params
@@ -49,7 +50,7 @@ module Clowne
           def cloner_for(child)
             return clone_with if clone_with
 
-            return child.cloner_class if child.respond_to?(:cloner_class)
+            return child.class.cloner_class if child.class.respond_to?(:cloner_class)
           end
 
           attr_reader :source, :scope, :clone_with, :params, :association_name, :reflection, :cloner_options
