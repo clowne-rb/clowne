@@ -5,12 +5,14 @@ module Clowne
     class ActiveRecord
       class Association
         class << self
-          def call(source, record, declaration, params:, traits:)
+          def call(source, record, declaration, params:)
             reflection = source.class.reflections[declaration.name.to_s]
 
             cloner_class = Associations.cloner_for(reflection)
 
-            cloner_class.new(reflection, source, declaration, params, traits).call(record)
+            cloner_class.new(reflection, source, declaration, params).call(record)
+
+            record
           end
         end
       end

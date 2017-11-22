@@ -29,6 +29,10 @@ RSpec.configure do |config|
   config.include_context 'adapter:active_record', adapter: :active_record
 
   config.after(:each, cleanup: true) do
-    ActiveRecord::Base.subclasses.each(&:delete_all)
+    ActiveRecord::Base.subclasses.each do |ar_class|
+      ar_class.delete_all
+      ar_class.remove_instance_variable(:@_clowne_cloner) if
+        ar_class.instance_variable_defined?(:@_clowne_cloner)
+    end
   end
 end

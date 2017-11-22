@@ -4,7 +4,7 @@ module Clowne
   module Adapters
     class Base
       module Finalize # :nodoc: all
-        def self.call(source, record, declaration, params:, **_options)
+        def self.call(source, record, declaration, params:)
           declaration.block.call(source, record, params)
           record
         end

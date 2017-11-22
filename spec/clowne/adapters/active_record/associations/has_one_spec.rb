@@ -8,9 +8,8 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter
   let(:association) { :account }
   let(:declaration) { Clowne::Declarations::IncludeAssociation.new(association, **declaration_params) }
   let(:params) { {} }
-  let(:traits) { [] }
 
-  subject(:resolver) { described_class.new(reflection, source, declaration, params, traits) }
+  subject(:resolver) { described_class.new(reflection, source, declaration, params) }
 
   before(:all) do
     class AccountCloner < Clowne::Cloner
@@ -90,10 +89,10 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter
       end
     end
 
-    xcontext 'with traits' do
-      let(:traits) { [:mark_as_clone] }
+    context 'with traits' do
+      let(:declaration_params) { { traits: [:mark_as_clone] } }
 
-      it 'pass traits to child cloner' do
+      it 'includes traits for self' do
         expect(subject.account).to be_new_record
         expect(subject.account).to have_attributes(
           updated_at: nil,
@@ -105,7 +104,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter
         expect(subject.account.history).to have_attributes(
           updated_at: nil,
           created_at: nil,
-          some_stuff: "#{account.history.some_stuff} (Cloned)",
+          some_stuff: account.history.some_stuff,
           account_id: nil
         )
       end

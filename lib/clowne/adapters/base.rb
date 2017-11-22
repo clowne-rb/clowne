@@ -31,12 +31,11 @@ module Clowne
       # Using a plan make full duplicate of record
       # +source+:: Instance of cloned object (ex: User.new(posts: posts))
       # +plan+:: Array of Declarations
-      # +traits+:: List of active traits
       # +params+:: Custom params hash
-      def clone(source, plan, traits: [], params: {})
+      def clone(source, plan, params: {})
         declarations = plan.declarations
         declarations.inject(clone_record(source)) do |record, (type, declaration)|
-          resolver_for(type).call(source, record, declaration, traits: traits, params: params)
+          resolver_for(type).call(source, record, declaration, params: params)
         end
       end
 

@@ -1,12 +1,11 @@
 describe Clowne::Adapters::ActiveRecord::Association do
   let(:params) { double }
-  let(:traits) { double }
   let(:record) { double }
   let(:association) {}
   let(:source) { build_stubbed(:post) }
   let(:declaration) { Clowne::Declarations::IncludeAssociation.new(association) }
 
-  subject { described_class.call(source, record, declaration, params: params, traits: traits) }
+  subject { described_class.call(source, record, declaration, params: params) }
 
   context 'with has_many' do
     let(:association) { :posts }
@@ -14,7 +13,7 @@ describe Clowne::Adapters::ActiveRecord::Association do
 
     it 'uses HasMany resolver' do
       expect(Clowne::Adapters::ActiveRecord::Associations::HasMany).to receive(:new).with(
-        User.reflections['posts'], source, declaration, params, traits
+        User.reflections['posts'], source, declaration, params
       ) do
         double.tap do |resolver|
           expect(resolver).to receive(:call).with(record)
@@ -31,7 +30,7 @@ describe Clowne::Adapters::ActiveRecord::Association do
 
     it 'uses Noop resolver' do
       expect(Clowne::Adapters::ActiveRecord::Associations::Noop).to receive(:new).with(
-        User.reflections['accounts'], source, declaration, params, traits
+        User.reflections['accounts'], source, declaration, params
       ) do
         double.tap do |resolver|
           expect(resolver).to receive(:call).with(record)
@@ -47,7 +46,7 @@ describe Clowne::Adapters::ActiveRecord::Association do
 
     it 'uses HasOne resolver' do
       expect(Clowne::Adapters::ActiveRecord::Associations::HasOne).to receive(:new).with(
-        Post.reflections['account'], source, declaration, params, traits
+        Post.reflections['account'], source, declaration, params
       ) do
         double.tap do |resolver|
           expect(resolver).to receive(:call).with(record)
@@ -63,7 +62,7 @@ describe Clowne::Adapters::ActiveRecord::Association do
 
     it 'uses Noop resolver' do
       expect(Clowne::Adapters::ActiveRecord::Associations::Noop).to receive(:new).with(
-        Post.reflections['history'], source, declaration, params, traits
+        Post.reflections['history'], source, declaration, params
       ) do
         double.tap do |resolver|
           expect(resolver).to receive(:call).with(record)
@@ -79,7 +78,7 @@ describe Clowne::Adapters::ActiveRecord::Association do
 
     it 'uses Noop resolver' do
       expect(Clowne::Adapters::ActiveRecord::Associations::Noop).to receive(:new).with(
-        Post.reflections['topic'], source, declaration, params, traits
+        Post.reflections['topic'], source, declaration, params
       ) do
         double.tap do |resolver|
           expect(resolver).to receive(:call).with(record)
@@ -95,7 +94,7 @@ describe Clowne::Adapters::ActiveRecord::Association do
 
     it 'uses HABTM resolver' do
       expect(Clowne::Adapters::ActiveRecord::Associations::HABTM).to receive(:new).with(
-        Post.reflections['tags'], source, declaration, params, traits
+        Post.reflections['tags'], source, declaration, params
       ) do
         double.tap do |resolver|
           expect(resolver).to receive(:call).with(record)

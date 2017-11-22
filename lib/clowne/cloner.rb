@@ -12,7 +12,7 @@ module Clowne # :nodoc: all
 
     class << self
       def inherited(subclass)
-        subclass.adapter(adapter)
+        subclass.adapter(adapter) unless self == Clowne::Cloner
         subclass.declarations = declarations.dup
 
         return if traits.nil?
@@ -45,14 +45,30 @@ module Clowne # :nodoc: all
 
         traits = options.delete(:traits)
 
+        traits = Array(traits) unless traits.nil?
+
         plan =
           if traits.nil? || traits.empty?
             default_plan
           else
-            build_plan_with_traits(traits)
+            plan_with_traits(traits)
           end
 
-        adapter.clone(object, plan, traits: traits, params: options)
+        adapter.clone(object, plan, params: options)
+      end
+
+      def default_plan
+        return @default_plan if instance_variable_defined?(:@default_plan)
+        @default_plan = Clowne::Planner.compile(self)
+      end
+
+      def plan_with_traits(ids)
+        # Cache plans for combinations of traits
+        traits_id = ids.map(&:to_s).join(':')
+        return traits_plans[traits_id] if traits_plans.key?(traits_id)
+        traits_plans[traits_id] = Clowne::Planner.compile(
+          self, traits: ids
+        )
       end
 
       protected
@@ -60,20 +76,6 @@ module Clowne # :nodoc: all
       attr_writer :declarations
 
       private
-
-      def default_plan
-        return @default_plan if instance_variable_defined?(:@default_plan)
-        @default_plan = Clowne::Planner.compile(self)
-      end
-
-      def build_plan_with_traits(traits)
-        # Cache plans for combinations of traits
-        traits_id = traits.map(&:to_s).join(':')
-        return traits_plans[traits_id] if traits_plans.key?(traits_id)
-        traits_plans[trait] = Clowne::Planner.compile(
-          self, init_plan: default_plan.dup, traits: traits
-        )
-      end
 
       def traits_plans
         return @traits_plans if instance_variable_defined?(:@traits_plans)

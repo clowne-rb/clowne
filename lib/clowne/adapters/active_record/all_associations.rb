@@ -5,7 +5,7 @@ module Clowne
     class ActiveRecord
       class AllAssociations
         class << self
-          def call(source, record, declaration, params:, traits:)
+          def call(source, record, declaration, params:)
             source.class.reflections.each do |name, reflection|
               next if declaration.excludes.include?(name)
 
@@ -13,8 +13,10 @@ module Clowne
 
               cloner_class = Associations.cloner_for(reflection)
 
-              cloner_class.new(reflection, source, declaration, params, traits).call(record)
+              cloner_class.new(reflection, source, declaration, params).call(record)
             end
+
+            record
           end
         end
       end

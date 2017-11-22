@@ -6,9 +6,8 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapte
   let(:declaration_params) { {} }
   let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts, scope, **declaration_params) }
   let(:params) { {} }
-  let(:traits) { [] }
 
-  subject(:resolver) { described_class.new(reflection, source, declaration, params, traits) }
+  subject(:resolver) { described_class.new(reflection, source, declaration, params) }
 
   before(:all) do
     class PostCloner < Clowne::Cloner
@@ -106,8 +105,8 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapte
       end
     end
 
-    xcontext 'with traits' do
-      let(:traits) { [:mark_as_clone] }
+    context 'with traits' do
+      let(:declaration_params) { { traits: :mark_as_clone } }
 
       it 'pass traits to child cloner' do
         expect(subject.posts.size).to eq 2

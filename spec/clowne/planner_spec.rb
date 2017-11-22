@@ -125,8 +125,7 @@ describe Clowne::Planner do
     context 'when multiple traits' do
       let(:cloner) do
         Class.new(Clowne::Cloner) do
-          include_association :users
-          include_association :posts
+          include_associations :users, :posts
 
           finalize(&proc { 1 + 1 })
 
