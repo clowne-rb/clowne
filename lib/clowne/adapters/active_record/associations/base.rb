@@ -10,15 +10,15 @@ module Clowne
           # +source+:: Instance of cloned object (ex: User.new(posts: posts))
           # +declaration+:: = Relation description (ex: Clowne::Declarations::IncludeAssociation.new(:posts))
           # +params+:: = Instance of Clowne::Params
-          # +traits+:: = List of active traits
-          def initialize(reflection, source, declaration, params, traits)
+          def initialize(reflection, source, declaration, params)
             @source = source
             @scope = declaration.scope
             @clone_with = declaration.clone_with
             @params = params
             @association_name = declaration.name.to_s
             @reflection = reflection
-            @cloner_options = params.merge(traits: traits)
+            @cloner_options = params
+            @cloner_options.merge!(traits: declaration.traits) if declaration.traits
           end
 
           def call(_record)

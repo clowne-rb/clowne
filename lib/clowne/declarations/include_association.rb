@@ -18,7 +18,18 @@ module Clowne
       end
 
       def clone_with
-        options[:clone_with]
+        return @clone_with if instance_variable_defined?(:@clone_with)
+        @clone_with =
+          case options[:clone_with]
+          when String, Symbol
+            Object.const_get(options[:clone_with].to_s)
+          else
+            options[:clone_with]
+          end
+      end
+
+      def traits
+        options[:traits]
       end
     end
   end

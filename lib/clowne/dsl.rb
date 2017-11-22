@@ -7,7 +7,7 @@ module Clowne
         return @_adapter if instance_variable_defined?(:@_adapter)
         @_adapter = Clowne.default_adapter
       else
-        @_adapter = adapter
+        @_adapter = Clowne.resolve_adapter(adapter)
       end
     end
   end

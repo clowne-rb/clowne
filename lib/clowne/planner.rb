@@ -9,12 +9,12 @@ module Clowne
       # +cloner+:: Cloner object
       # +init_plan+:: Init plan
       # +traits+:: List of traits if any
-      def compile(cloner, init_plan: Plan.new, traits: nil)
+      def compile(cloner, traits: nil)
         declarations = cloner.declarations.dup
 
         declarations += compile_traits(cloner, traits) unless traits.nil?
 
-        declarations.each_with_object(init_plan) do |declaration, plan|
+        declarations.each_with_object(Plan.new) do |declaration, plan|
           declaration.compile(plan)
         end
       end

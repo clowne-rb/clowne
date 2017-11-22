@@ -6,9 +6,8 @@ describe Clowne::Adapters::ActiveRecord::Associations::HABTM, :cleanup, adapter:
   let(:declaration_params) { {} }
   let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:tags, scope, **declaration_params) }
   let(:params) { {} }
-  let(:traits) { [] }
 
-  subject(:resolver) { described_class.new(reflection, source, declaration, params, traits) }
+  subject(:resolver) { described_class.new(reflection, source, declaration, params) }
 
   describe '.call' do
     subject { resolver.call(record) }
@@ -70,8 +69,8 @@ describe Clowne::Adapters::ActiveRecord::Associations::HABTM, :cleanup, adapter:
         end
       end
 
-      xcontext 'with traits' do
-        let(:traits) { [:mark_as_clone] }
+      context 'with traits' do
+        let(:declaration_params) { { clone_with: tag_cloner, traits: :mark_as_clone } }
 
         it 'pass traits to child cloner' do
           expect(subject.tags.size).to eq 2

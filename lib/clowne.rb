@@ -19,22 +19,19 @@ module Clowne
 
     # Set default adapters for all cloners
     def default_adapter=(adapter)
-      @default_adapter =
-        if adapter.is_a?(Class)
-          adapter.new
-        elsif adapter.is_a?(Symbol)
-          resolve_adapter(adapter)
-        else
-          adapter
-        end
+      @default_adapter = resolve_adapter(adapter)
     end
 
-    private
-
     def resolve_adapter(adapter)
-      adapter_class = ADAPTERS[adapter]
-      raise "Unknown adapter: #{adapter}" if adapter_class.nil?
-      Clowne::Adapters.const_get(adapter_class).new
+      if adapter.is_a?(Class)
+        adapter.new
+      elsif adapter.is_a?(Symbol)
+        adapter_class = ADAPTERS[adapter]
+        raise "Unknown adapter: #{adapter}" if adapter_class.nil?
+        Clowne::Adapters.const_get(adapter_class).new
+      else
+        adapter
+      end
     end
   end
 end
