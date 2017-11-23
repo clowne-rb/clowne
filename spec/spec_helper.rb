@@ -18,6 +18,8 @@ Clowne.default_adapter = FakeAdapter
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = '.rspec_status'
+  config.filter_run focus: true
+  config.run_all_when_everything_filtered = true
 
   config.order = :random
 
