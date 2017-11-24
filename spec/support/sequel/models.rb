@@ -6,13 +6,19 @@ module Sequel
   end
 
   class User < Sequel::Model
-    many_to_one :posts, foreign_key: :owner_id
+    one_to_many :posts, key: :owner_id
   end
 
   class Post < Sequel::Model
     many_to_one :topic
     many_to_one :owner, class_name: Sequel::User
     one_to_one :account
+
+    dataset_module do
+      def about_animals
+        filter(title: 'animals')
+      end
+    end
     # one_to_one :history, through: :account
     # has_and_belongs_to_many :tags
   end
