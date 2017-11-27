@@ -9,13 +9,18 @@
 
 A flexible gem for cloning your models. Clowne focuses on ease of use and provides the ability to connect various ORM adapters (currently only ActiveRecord is supported).
 
+<a href="https://evilmartians.com/">
+<img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54"></a>
+
 ### Alternatives
 
 Why did we decide to build our own cloning gem?
+
 First, existing solutions turned out not stable and flexible enough for us.
+
 Secondly, they are Rails-only. And we are not.
 
-Nevertheless, thanks to (amoeba)[https://github.com/amoeba-rb/amoeba] and [deep_cloneable](https://github.com/moiristo/deep_cloneable) for inspiration.
+Nevertheless, thanks to [amoeba](https://github.com/amoeba-rb/amoeba) and [deep_cloneable](https://github.com/moiristo/deep_cloneable) for inspiration.
 
 ## Installation
 
@@ -60,7 +65,8 @@ class UserCloner < Clowne::Cloner
   include_association :posts
 
   nullify :login
-
+  
+  # params here is an arbitrary hash passed into cloner
   finalize do |_source, record, params|
     record.email = params[:email]
   end
@@ -101,8 +107,8 @@ clone.profile.name
 - [Exclude association](#exclude_association)
 - [Nullify attribute(s)](#nullify)
 - [Execute finalize block](#finalize)
-- [Execution order](#execution_order)
 - [Traits](#traits)
+- [Execution order](#execution_order)
 
 ### <a name="configuration"></a>Configuration
 
