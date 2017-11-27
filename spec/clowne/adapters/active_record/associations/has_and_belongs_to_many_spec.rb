@@ -4,7 +4,9 @@ describe Clowne::Adapters::ActiveRecord::Associations::HABTM, :cleanup, adapter:
   let(:reflection) { Post.reflections['tags'] }
   let(:scope) { {} }
   let(:declaration_params) { {} }
-  let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:tags, scope, **declaration_params) }
+  let(:declaration) do
+    Clowne::Declarations::IncludeAssociation.new(:tags, scope, **declaration_params)
+  end
   let(:params) { {} }
 
   subject(:resolver) { described_class.new(reflection, source, declaration, params) }

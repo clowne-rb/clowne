@@ -58,7 +58,7 @@ describe Clowne::Planner do
 
       specify do
         is_expected.to match_declarations(
-          [[:all_associations, Clowne::Declarations::IncludeAll, { excludes: Set.new(["users"]) }]]
+          [[:all_associations, Clowne::Declarations::IncludeAll, { excludes: Set.new(['users']) }]]
         )
       end
     end

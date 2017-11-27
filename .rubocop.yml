@@ -18,7 +18,7 @@ Style/TrivialAccessors:
   Enabled: false
 
 Metrics/LineLength:
-  Max: 110
+  Max: 100
 
 Style/Documentation:
   Exclude:
@@ -39,4 +39,7 @@ Metrics/BlockLength:
     - 'spec/**/*.rb'
 
 Bundler/OrderedGems:
+  Enabled: false
+
+Gemspec/OrderedDependencies:
   Enabled: false

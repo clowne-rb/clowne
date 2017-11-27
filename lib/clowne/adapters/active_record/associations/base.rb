@@ -8,7 +8,8 @@ module Clowne
           # Params:
           # +reflection+:: Association eflection object
           # +source+:: Instance of cloned object (ex: User.new(posts: posts))
-          # +declaration+:: = Relation description (ex: Clowne::Declarations::IncludeAssociation.new(:posts))
+          # +declaration+:: = Relation description
+          #                   (ex: Clowne::Declarations::IncludeAssociation.new(:posts))
           # +params+:: = Instance of Clowne::Params
           def initialize(reflection, source, declaration, params)
             @source = source
@@ -53,7 +54,8 @@ module Clowne
             return child.class.cloner_class if child.class.respond_to?(:cloner_class)
           end
 
-          attr_reader :source, :scope, :clone_with, :params, :association_name, :reflection, :cloner_options
+          attr_reader :source, :scope, :clone_with, :params, :association_name,
+                      :reflection, :cloner_options
         end
       end
     end

@@ -42,7 +42,7 @@ FactoryBot.define do
   end
 
   factory :history do
-    sequence(:some_stuff) { |n|  "Bla-bla #{n}" }
+    sequence(:some_stuff) { |n| "Bla-bla #{n}" }
 
     account
   end

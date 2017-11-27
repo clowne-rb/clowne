@@ -4,7 +4,9 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapte
   let(:reflection) { User.reflections['posts'] }
   let(:scope) { {} }
   let(:declaration_params) { {} }
-  let(:declaration) { Clowne::Declarations::IncludeAssociation.new(:posts, scope, **declaration_params) }
+  let(:declaration) do
+    Clowne::Declarations::IncludeAssociation.new(:posts, scope, **declaration_params)
+  end
   let(:params) { {} }
 
   subject(:resolver) { described_class.new(reflection, source, declaration, params) }

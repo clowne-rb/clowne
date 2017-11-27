@@ -11,7 +11,7 @@ describe Clowne::Adapters::ActiveRecord::AllAssociations do
 
   subject { described_class.call(source, record, declaration, params: params) }
 
-  it "includes all associations (except belongs_to)" do
+  it 'includes all associations (except belongs_to)' do
     expect(Clowne::Adapters::ActiveRecord::Associations::HasOne).to receive(:new).with(
       Post.reflections['account'], source, anything, params
     ) do
@@ -39,10 +39,10 @@ describe Clowne::Adapters::ActiveRecord::AllAssociations do
     subject
   end
 
-  context "with excludes" do
+  context 'with excludes' do
     let(:excludes) { [:account, :history] }
 
-    it "includes all associations (except belongs_to and exlicitly excluded)" do
+    it 'includes all associations (except belongs_to and exlicitly excluded)' do
       expect(Clowne::Adapters::ActiveRecord::Associations::HasOne).not_to receive(:new)
       expect(Clowne::Adapters::ActiveRecord::Associations::Noop).not_to receive(:new)
 

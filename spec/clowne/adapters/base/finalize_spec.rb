@@ -25,7 +25,9 @@ describe Clowne::Adapters::Base::Finalize do
 
       it 'execute finalize block with params' do
         record = User.new
-        result = described_class.call(source, record, declaration, params: { email: 'admin@yahoo.com' })
+        result = described_class.call(
+          source, record, declaration, params: { email: 'admin@yahoo.com' }
+        )
         expect(result).to be_a(User)
         expect(result.email).to eq('admin@yahoo.com')
       end

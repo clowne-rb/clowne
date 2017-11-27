@@ -20,7 +20,8 @@ describe 'AR adapter', :cleanup, adapter: :active_record do
     end
 
     class PostCloner < BasePostCloner
-      include_association :account, clone_with: 'AccountCloner', traits: %i[with_history nullify_title]
+      include_association :account, clone_with: 'AccountCloner',
+                                    traits: %i[with_history nullify_title]
       include_association :tags, ->(params) { where(value: params[:tags]) }
 
       trait :mark_as_clone do
