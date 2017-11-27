@@ -1,33 +1,47 @@
 # frozen_string_literal: true
 
+require 'clowne/ext/string_constantize'
+
 module Clowne
   module Declarations
-    IncludeAssociation = Struct.new(:name, :scope, :options)
-
     class IncludeAssociation # :nodoc: all
-      def compile(plan, settings)
-        if custom_cloner
-          plan.add(name, self)
-        else
-          adapter = settings[:adapter]
-          base_cloner = adapter.cloner_for(name)
-          plan.add(name, self.class.new(name, scope, options_with_cloner(base_cloner)))
-        end
+      using Clowne::Ext::StringConstantize
+
+      attr_accessor :name, :scope, :options
+
+      def initialize(name, scope = nil, **options)
+        @name = name.to_sym
+        @scope = scope
+        @options = options
       end
 
-      def custom_cloner
-        options && options[:clone_with]
+      def compile(plan)
+        # Clear `#include_all`
+        plan.remove(:all_associations)
+        plan.add_to(:association, name, self)
       end
 
-      private
+      def clone_with
+        return @clone_with if instance_variable_defined?(:@clone_with)
+        @clone_with =
+          case options[:clone_with]
+          when String, Symbol
+            options[:clone_with].to_s.constantize
+          else
+            options[:clone_with]
+          end
+      end
 
-      def options_with_cloner(cloner)
-        if cloner
-          options.merge(clone_with: cloner)
-        else
-          options
-        end
+      def traits
+        options[:traits]
       end
     end
+  end
+end
+
+Clowne::Declarations.add :include_association, Clowne::Declarations::IncludeAssociation
+Clowne::Declarations.add :include_associations do |*names|
+  names.each do |name|
+    declarations.push Clowne::Declarations::IncludeAssociation.new(name)
   end
 end

@@ -2,46 +2,112 @@
 
 module Clowne
   class Plan # :nodoc: all
-    Step = Struct.new(:key, :declaration)
+    class Registry
+      attr_reader :actions
 
-    def initialize
-      @steps = []
-    end
+      def initialize
+        @actions = []
+      end
 
-    def validate!
-      dups = @steps.group_by(&:key).select { |_step, count| count.size > 1 }.map(&:first)
-      return true unless dups.any?
-      raise(Clowne::ConfigurationError, "You have duplicate keys in configuration: #{dups.join(', ')}")
-    end
+      def insert_after(after, action)
+        validate_uniq!(action)
 
-    def get(key)
-      key = key.to_sym
-      @steps.detect { |step| step.key == key }
-    end
+        after_index = actions.find_index(after)
 
-    def add(key, declaration)
-      @steps << Step.new(key.to_sym, declaration)
-      self
-    end
+        raise "Plan action not found: #{after}" if after_index.nil?
 
-    def update(key, declaration)
-      position = @steps.index(get(key))
-      if position
-        @steps[position] = Step.new(key, declaration)
-        self
-      else
-        add(key, declaration)
+        actions.insert(after_index + 1, action)
+      end
+
+      def insert_before(before, action)
+        validate_uniq!(action)
+
+        before_index = actions.find_index(before)
+
+        raise "Plan action not found: #{before}" if before_index.nil?
+
+        actions.insert(before_index, action)
+      end
+
+      def append(action)
+        validate_uniq!(action)
+        actions.push action
+      end
+
+      def prepend(action)
+        validate_uniq!(action)
+        actions.unshift action
+      end
+
+      private
+
+      def validate_uniq!(action)
+        raise "Plan action already registered: #{action}" if actions.include?(action)
       end
     end
 
-    def delete(key)
-      key = key.to_sym
-      @steps.reject! { |step| step.key == key }
-      self
+    class << self
+      attr_reader :registry
+
+      protected
+
+      attr_writer :registry
+    end
+
+    self.registry = Registry.new
+
+    def initialize(registry = self.class.registry)
+      @registry = registry
+      @data = {}
+    end
+
+    def add(type, declaration)
+      data[type] = [] unless data.key?(type)
+      data[type] << declaration
+    end
+
+    def add_to(type, id, declaration)
+      data[type] = {} unless data.key?(type)
+      data[type][id] = declaration
+    end
+
+    def set(type, declaration)
+      data[type] = declaration
+    end
+
+    def get(type)
+      data[type]
+    end
+
+    def remove(type)
+      data.delete(type)
+    end
+
+    def remove_from(type, id)
+      return unless data[type]
+      data[type].delete(id)
     end
 
     def declarations
-      @steps.map(&:declaration)
+      registry.actions.flat_map do |type|
+        value = data[type]
+        next if value.nil?
+        value = value.values if value.is_a?(Hash)
+        value = Array(value)
+        value.map { |v| [type, v] }
+      end.compact
     end
+
+    def dup
+      self.class.new(registry).tap do |duped|
+        data.each do |k, v|
+          duped.set(k, v.dup)
+        end
+      end
+    end
+
+    private
+
+    attr_reader :data, :registry
   end
 end

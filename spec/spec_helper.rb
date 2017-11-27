@@ -1,5 +1,6 @@
 require 'active_record'
 require 'clowne'
+require 'factory_bot'
 
 begin
   require 'pry-byebug'
@@ -13,19 +14,27 @@ end
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
+Clowne.default_adapter = FakeAdapter
+
 RSpec.configure do |config|
   config.example_status_persistence_file_path = '.rspec_status'
+  config.filter_run focus: true
+  config.run_all_when_everything_filtered = true
+
+  config.order = :random
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
 
-  config.before(:each) do
-    Clowne::Cloner.descendants.each do |cloner|
-      if cloner.name
-        Object.send(:remove_const, cloner.name)
-        Clowne::Cloner.descendants.delete(cloner)
-      end
+  config.include FactoryBot::Syntax::Methods
+  config.include_context 'adapter:active_record', adapter: :active_record
+
+  config.after(:each, cleanup: true) do
+    ActiveRecord::Base.subclasses.each do |ar_class|
+      ar_class.delete_all
+      ar_class.remove_instance_variable(:@_clowne_cloner) if
+        ar_class.instance_variable_defined?(:@_clowne_cloner)
     end
   end
 end

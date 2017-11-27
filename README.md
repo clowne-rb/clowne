@@ -5,11 +5,22 @@
 
 # Clowne
 
+**NOTICE**: gem is currently under heavy development, we plan to release the first version 'till the end of the year. 
+
 A flexible gem for cloning your models. Clowne focuses on ease of use and provides the ability to connect various ORM adapters (currently only ActiveRecord is supported).
+
+<a href="https://evilmartians.com/">
+<img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54"></a>
 
 ### Alternatives
 
-TBD
+Why did we decide to build our own cloning gem?
+
+First, existing solutions turned out not stable and flexible enough for us.
+
+Secondly, they are Rails-only. And we are not.
+
+Nevertheless, thanks to [amoeba](https://github.com/amoeba-rb/amoeba) and [deep_cloneable](https://github.com/moiristo/deep_cloneable) for inspiration.
 
 ## Installation
 
@@ -48,20 +59,21 @@ The next step is to declare cloner
 
 ```ruby
 class UserCloner < Clowne::Cloner
-  adapter Clowne::ActiveRecord::Adapter
+  adapter :active_record
 
   include_association :profile, clone_with: SpecialProfileCloner
   include_association :posts
 
   nullify :login
-
+  
+  # params here is an arbitrary hash passed into cloner
   finalize do |_source, record, params|
     record.email = params[:email]
   end
 end
 
 class SpecialProfileCloner < Clowne::Cloner
-  adapter Clowne::ActiveRecord::Adapter
+  adapter :active_record
 
   nullify :name
 end
@@ -88,7 +100,7 @@ clone.profile.name
 
 ## <a name="features">Features
 
-- [Include all associations](#include_all)
+- [Configuration](#configuration)
 - [Include one association](#include_association)
 - - [Scope](#include_association_scope)
 - - [Options](#include_association_options)
@@ -96,23 +108,15 @@ clone.profile.name
 - [Nullify attribute(s)](#nullify)
 - [Execute finalize block](#finalize)
 - [Traits](#traits)
+- [Execution order](#execution_order)
 
-### <a name="include_all"></a>Include all associations
+### <a name="configuration"></a>Configuration
 
-If you need to clone all model associations just use `include_all` declaration.
+You can configure the default adapter for cloners:
 
 ```ruby
-class User < ActiveRecord::Base
-  has_one :profile
-  has_many :posts
-  ...
-end
-
-class UserCloner < Clowne::Cloner
-  adapter Clowne::ActiveRecord::Adapter
-
-  include_all
-end
+# somewhere in initializers
+Clowne.default_adapter = :active_record
 ```
 
 ### <a name="include_association"></a>Include one association
@@ -195,7 +199,7 @@ end
 
 ```ruby
 class PostSpecialCloner < Clowne::Cloner
-  adapter Clowne::ActiveRecord::Adapter
+  adapter :active_record
 
   nullify :title
 
@@ -205,7 +209,7 @@ class PostSpecialCloner < Clowne::Cloner
 end
 
 class UserCloner < Clowne::Cloner
-  adapter Clowne::ActiveRecord::Adapter
+  adapter :active_record
 
   include_association :posts, clone_with: PostSpecialCloner
   # or clone user's posts with tags!
@@ -246,7 +250,7 @@ clone2.posts
 
 ### <a name="nullify"></a>Nullify attribute(s)
 
-Nullify attributes (joins with another `nullify` declarations)
+Nullify attributes:
 
 ```ruby
 class User < ActiveRecord::Base
@@ -284,7 +288,7 @@ clone.surename.nil?
 
 ### <a name="finalize"></a>Execute finalize block
 
-Simple callback for changing record manually (joins with another `finalize` declarations)
+Simple callback for changing record manually.
 
 ```ruby
 class UserCloner < Clowne::Cloner
@@ -344,6 +348,19 @@ UserCloner.call(user, traits: :nullify_name)
 # or
 # ...
 ```
+
+### <a name="execution_order"></a>Execution order
+
+The order of cloning actions depends on the adapter.
+
+For ActiveRecord:
+- clone associations
+- nullify attributes
+- run `finalize` blocks
+
+The order of `finalize` blocks is the order they've been written.
+
+*NOTE*: using a trait means appending the trait's rules to the main execution plan.
 
 ## Maintainers
 

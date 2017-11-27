@@ -1,19 +1,32 @@
 # frozen_string_literal: true
 
+require 'clowne/plan'
+
 module Clowne
   class Planner # :nodoc: all
     class << self
       # Params:
-      # +cloner+:: implementation of Clowne::Cloner
-      # +object+:: cloned object (for example: ActiveRecord object)
-      # +init_plan+:: Hash of init plan
-      # +options+:: {traits: [trait, ...]} of nothing
-      def compile(cloner, object, init_plan = Plan.new, **options)
-        raise(Clowne::ConfigurationError, 'Adapter is not defined') unless cloner.adapter
+      # +cloner+:: Cloner object
+      # +init_plan+:: Init plan
+      # +traits+:: List of traits if any
+      def compile(cloner, traits: nil)
+        declarations = cloner.declarations.dup
 
-        cloner.config.declarations.inject(init_plan) do |plan, declaration|
-          declaration.compile(plan, object: object, adapter: cloner.adapter, options: options)
+        declarations += compile_traits(cloner, traits) unless traits.nil?
+
+        declarations.each_with_object(Plan.new) do |declaration, plan|
+          declaration.compile(plan)
         end
+      end
+
+      private
+
+      def compile_traits(cloner, traits)
+        traits.map do |id|
+          trait = cloner.traits[id]
+          raise ConfigurationError, "Trait not found: #{id}" if trait.nil?
+          trait.compiled
+        end.flatten
       end
     end
   end

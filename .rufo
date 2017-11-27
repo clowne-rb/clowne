@@ -1,0 +1,3 @@
+trailing_commas :never
+spaces_inside_hash_brace :always
+spaces_after_comma :one

@@ -2,35 +2,43 @@
 
 module Clowne
   module Declarations
-    Trait = Struct.new(:name, :block)
-
     class Trait # :nodoc: all
-      MARKER = :traits
+      def initialize
+        @blocks = []
+      end
 
-      def compile(plan, settings)
-        options = settings[:options]
-        active_traits = Array(options && options[MARKER])
+      def extend_with(block)
+        @blocks << block
+      end
 
-        if active_traits.include?(name)
-          compile_trait(plan, settings)
-        else
-          plan
+      def compiled
+        return @compiled if instance_variable_defined?(:@compiled)
+        @compiled = compile
+      end
+
+      def dup
+        self.class.new.tap do |duped|
+          blocks.each { |b| duped.extend_with(b) }
         end
       end
 
       private
 
-      def compile_trait(plan, settings)
-        object = settings[:object]
-        adapter = settings[:adapter]
-        options = settings[:options]
+      attr_reader :blocks
 
+      def compile
         anonymous_cloner = Class.new(Clowne::Cloner)
-        anonymous_cloner.adapter(adapter)
-        anonymous_cloner.instance_eval(&block)
 
-        Clowne::Planner.compile(anonymous_cloner, object, plan, options)
+        blocks.each do |block|
+          anonymous_cloner.instance_eval(&block)
+        end
+
+        anonymous_cloner.declarations
       end
     end
   end
+end
+
+Clowne::Declarations.add :trait do |name, &block|
+  register_trait name, block
 end

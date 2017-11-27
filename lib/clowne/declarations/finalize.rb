@@ -2,14 +2,19 @@
 
 module Clowne
   module Declarations
-    Finalize = Struct.new(:block)
-
     class Finalize # :nodoc: all
-      PLAN_NAME = :finalize
+      attr_reader :block
 
-      def compile(plan, _settings)
-        plan.add([PLAN_NAME, __id__].join('-'), self)
+      def initialize
+        raise ArgumentError, 'Block is required for finalize' unless block_given?
+        @block = Proc.new
+      end
+
+      def compile(plan)
+        plan.add(:finalize, self)
       end
     end
   end
 end
+
+Clowne::Declarations.add :finalize, Clowne::Declarations::Finalize

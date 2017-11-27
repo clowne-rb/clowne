@@ -1,4 +1,4 @@
-RSpec.describe Clowne do
+describe Clowne do
   it 'has a version number' do
     # Sequel::Topic.association_reflections
     user = Sequel::User.create
