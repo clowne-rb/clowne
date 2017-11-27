@@ -5,7 +5,7 @@ describe Clowne do
     post = Sequel::Post.create
     user.add_post(post)
 
-    user.posts_dataset.about_animals.to_a # Get association with named scope
+    user.posts_dataset.alpha_first.to_a # Get association with named scope
     scope = Proc.new { |params| where(title: params[:title]) } # scope as Proc
     user.posts_dataset.instance_exec({title: "dog"}, &scope) # call it
 

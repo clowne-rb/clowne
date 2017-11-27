@@ -7,32 +7,33 @@ module Sequel
 
   class User < Sequel::Model
     one_to_many :posts, key: :owner_id
+    # has_many :accounts, through: :posts - Does not supported in Sequel
   end
 
   class Post < Sequel::Model
     many_to_one :topic
     many_to_one :owner, class_name: Sequel::User
     one_to_one :account
+    # has_one :history, through: :account - Does not supported in Sequel
+    many_to_many :tags
 
     dataset_module do
-      def about_animals
-        filter(title: 'animals')
+      def alpha_first
+        order('title').limit(1)
       end
     end
-    # one_to_one :history, through: :account
-    # has_and_belongs_to_many :tags
   end
 
   class Account < Sequel::Model
     many_to_one :post
-    # has_one :history
+    one_to_one :history
   end
-  #
-  # class History < Sequel::Model
-  #   belongs_to :account
-  # end
-  #
-  # class Tag < Sequel::Model
-  #   has_and_belongs_to_many :posts
-  # end
+
+  class History < Sequel::Model
+    many_to_one :account
+  end
+
+  class Tag < Sequel::Model
+    many_to_many :posts
+  end
 end
