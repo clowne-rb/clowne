@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require 'clowne/ext/string_constantize'
+
 module Clowne
   module Declarations
     class IncludeAssociation # :nodoc: all
+      using Clowne::Ext::StringConstantize
+
       attr_accessor :name, :scope, :options
 
       def initialize(name, scope = nil, **options)
@@ -22,7 +26,7 @@ module Clowne
         @clone_with =
           case options[:clone_with]
           when String, Symbol
-            Object.const_get(options[:clone_with].to_s)
+            options[:clone_with].to_s.constantize
           else
             options[:clone_with]
           end

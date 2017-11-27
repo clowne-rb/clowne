@@ -2,7 +2,7 @@ describe Clowne::Adapters::Base::Finalize do
   let(:declaration) { Clowne::Declarations::Finalize.new(&block) }
 
   describe '.call' do
-    let(:source) { User.new(email: 'admin@example.com') }
+    let(:source) { AR::User.new(email: 'admin@example.com') }
     let(:block) do
       proc do |source, record|
         record.email = source.email.gsub('example.com', 'gmail.com')
@@ -10,9 +10,9 @@ describe Clowne::Adapters::Base::Finalize do
     end
 
     it 'execute finalize block' do
-      record = User.new
+      record = AR::User.new
       result = described_class.call(source, record, declaration, params: {})
-      expect(result).to be_a(User)
+      expect(result).to be_a(AR::User)
       expect(result.email).to eq('admin@gmail.com')
     end
 
@@ -24,11 +24,11 @@ describe Clowne::Adapters::Base::Finalize do
       end
 
       it 'execute finalize block with params' do
-        record = User.new
+        record = AR::User.new
         result = described_class.call(
           source, record, declaration, params: { email: 'admin@yahoo.com' }
         )
-        expect(result).to be_a(User)
+        expect(result).to be_a(AR::User)
         expect(result.email).to eq('admin@yahoo.com')
       end
     end

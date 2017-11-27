@@ -3,8 +3,8 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter
   let(:post) { create(:post, account: account) }
   let(:source) { post }
   let(:declaration_params) { {} }
-  let(:record) { Post.new }
-  let(:reflection) { Post.reflections['account'] }
+  let(:record) { AR::Post.new }
+  let(:reflection) { AR::Post.reflections['account'] }
   let(:association) { :account }
   let(:declaration) do
     Clowne::Declarations::IncludeAssociation.new(association, **declaration_params)
@@ -14,40 +14,42 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter
   subject(:resolver) { described_class.new(reflection, source, declaration, params) }
 
   before(:all) do
-    class AccountCloner < Clowne::Cloner
-      finalize do |source, record, params|
-        record.created_at = source.created_at if params[:include_timestamps]
-      end
+    module AR
+      class AccountCloner < Clowne::Cloner
+        finalize do |source, record, params|
+          record.created_at = source.created_at if params[:include_timestamps]
+        end
 
-      nullify :updated_at, :created_at
+        nullify :updated_at, :created_at
 
-      include_association :history
+        include_association :history
 
-      trait :mark_as_clone do
-        finalize do |source, record|
-          record.title = source.title + ' (Cloned)'
+        trait :mark_as_clone do
+          finalize do |source, record|
+            record.title = source.title + ' (Cloned)'
+          end
         end
       end
-    end
 
-    class HistoryCloner < Clowne::Cloner
-      finalize do |source, record, params|
-        record.created_at = source.created_at if params[:include_timestamps]
-      end
+      class HistoryCloner < Clowne::Cloner
+        finalize do |source, record, params|
+          record.created_at = source.created_at if params[:include_timestamps]
+        end
 
-      nullify :updated_at, :created_at
+        nullify :updated_at, :created_at
 
-      trait :mark_as_clone do
-        finalize do |source, record|
-          record.title = source.title + ' (Cloned)'
+        trait :mark_as_clone do
+          finalize do |source, record|
+            record.title = source.title + ' (Cloned)'
+          end
         end
       end
     end
   end
 
   after(:all) do
-    Object.send(:remove_const, 'AccountCloner')
-    Object.send(:remove_const, 'HistoryCloner')
+    AR.send(:remove_const, 'AccountCloner')
+    AR.send(:remove_const, 'HistoryCloner')
   end
 
   describe '.call' do

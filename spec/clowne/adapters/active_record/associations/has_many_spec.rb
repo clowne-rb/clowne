@@ -1,7 +1,7 @@
 describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapter: :active_record do
   let(:source) { create(:user, :with_posts, posts_num: 2) }
-  let(:record) { User.new }
-  let(:reflection) { User.reflections['posts'] }
+  let(:record) { AR::User.new }
+  let(:reflection) { AR::User.reflections['posts'] }
   let(:scope) { {} }
   let(:declaration_params) { {} }
   let(:declaration) do
@@ -12,22 +12,24 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapte
   subject(:resolver) { described_class.new(reflection, source, declaration, params) }
 
   before(:all) do
-    class PostCloner < Clowne::Cloner
-      finalize do |_source, record, params|
-        record.topic_id = params[:topic_id] if params[:topic_id]
-      end
+    module AR
+      class PostCloner < Clowne::Cloner
+        finalize do |_source, record, params|
+          record.topic_id = params[:topic_id] if params[:topic_id]
+        end
 
-      nullify :topic_id, :owner_id
+        nullify :topic_id, :owner_id
 
-      trait :mark_as_clone do
-        finalize do |source, record|
-          record.title = source.title + ' (Cloned)'
+        trait :mark_as_clone do
+          finalize do |source, record|
+            record.title = source.title + ' (Cloned)'
+          end
         end
       end
     end
   end
 
-  after(:all) { Object.send(:remove_const, 'PostCloner') }
+  after(:all) { AR.send(:remove_const, 'PostCloner') }
 
   describe '.call' do
     subject { resolver.call(record) }
