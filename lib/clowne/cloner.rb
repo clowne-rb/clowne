@@ -58,6 +58,7 @@ module Clowne # :nodoc: all
 
         adapter.clone(object, plan, params: options)
       end
+
       # rubocop: enable Metrics/AbcSize
       # rubocop: enable Metrics/MethodLength
 
