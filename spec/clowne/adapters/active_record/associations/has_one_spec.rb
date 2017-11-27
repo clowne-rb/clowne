@@ -6,7 +6,9 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter
   let(:record) { Post.new }
   let(:reflection) { Post.reflections['account'] }
   let(:association) { :account }
-  let(:declaration) { Clowne::Declarations::IncludeAssociation.new(association, **declaration_params) }
+  let(:declaration) do
+    Clowne::Declarations::IncludeAssociation.new(association, **declaration_params)
+  end
   let(:params) { {} }
 
   subject(:resolver) { described_class.new(reflection, source, declaration, params) }

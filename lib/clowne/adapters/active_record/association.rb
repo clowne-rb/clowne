@@ -20,4 +20,7 @@ module Clowne
   end
 end
 
-Clowne::Adapters::ActiveRecord.register_resolver(:association, Clowne::Adapters::ActiveRecord::Association)
+Clowne::Adapters::ActiveRecord.register_resolver(
+  :association,
+  Clowne::Adapters::ActiveRecord::Association
+)
