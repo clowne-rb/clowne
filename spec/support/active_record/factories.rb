@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :user do
+  factory :user, class: 'AR::User' do
     sequence(:name) { |n| "John #{n}" }
     sequence(:email) { |n| "clowne_#{n}@test.rb" }
 
@@ -14,7 +14,7 @@ FactoryBot.define do
     end
   end
 
-  factory :post do
+  factory :post, class: 'AR::Post' do
     sequence(:title) { |n| "Post ##{n}" }
     sequence(:contents) { |n| "About a number #{n}" }
 
@@ -33,7 +33,7 @@ FactoryBot.define do
     end
   end
 
-  factory :account do
+  factory :account, class: 'AR::Account' do
     sequence(:title) { |n| "Account ##{n}" }
 
     trait :with_history do
@@ -41,13 +41,13 @@ FactoryBot.define do
     end
   end
 
-  factory :history do
+  factory :history, class: 'AR::History' do
     sequence(:some_stuff) { |n| "Bla-bla #{n}" }
 
     account
   end
 
-  factory :topic do
+  factory :topic, class: 'AR::Topic' do
     sequence(:title) { |n| "Topic ##{n}}" }
     sequence(:description) { |n| "Let's talk about #{n}" }
 
@@ -62,7 +62,7 @@ FactoryBot.define do
     end
   end
 
-  factory :tag do
+  factory :tag, class: 'AR::Tag' do
     sequence(:value) { |n| "T#{n}" }
 
     transient do

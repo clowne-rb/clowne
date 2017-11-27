@@ -13,7 +13,7 @@ describe Clowne::Adapters::ActiveRecord::AllAssociations do
 
   it 'includes all associations (except belongs_to)' do
     expect(Clowne::Adapters::ActiveRecord::Associations::HasOne).to receive(:new).with(
-      Post.reflections['account'], source, anything, params
+      AR::Post.reflections['account'], source, anything, params
     ) do
       double.tap do |resolver|
         expect(resolver).to receive(:call).with(record)
@@ -21,7 +21,7 @@ describe Clowne::Adapters::ActiveRecord::AllAssociations do
     end
 
     expect(Clowne::Adapters::ActiveRecord::Associations::Noop).to receive(:new).with(
-      Post.reflections['history'], source, anything, params
+      AR::Post.reflections['history'], source, anything, params
     ) do
       double.tap do |resolver|
         expect(resolver).to receive(:call).with(record)
@@ -29,7 +29,7 @@ describe Clowne::Adapters::ActiveRecord::AllAssociations do
     end
 
     expect(Clowne::Adapters::ActiveRecord::Associations::HABTM).to receive(:new).with(
-      Post.reflections['tags'], source, declaration, params
+      AR::Post.reflections['tags'], source, declaration, params
     ) do
       double.tap do |resolver|
         expect(resolver).to receive(:call).with(record)
@@ -47,7 +47,7 @@ describe Clowne::Adapters::ActiveRecord::AllAssociations do
       expect(Clowne::Adapters::ActiveRecord::Associations::Noop).not_to receive(:new)
 
       expect(Clowne::Adapters::ActiveRecord::Associations::HABTM).to receive(:new).with(
-        Post.reflections['tags'], source, declaration, params
+        AR::Post.reflections['tags'], source, declaration, params
       ) do
         double.tap do |resolver|
           expect(resolver).to receive(:call).with(record)

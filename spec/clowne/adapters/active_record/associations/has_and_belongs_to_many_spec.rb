@@ -1,7 +1,7 @@
 describe Clowne::Adapters::ActiveRecord::Associations::HABTM, :cleanup, adapter: :active_record do
   let(:source) { create(:post, :with_tags, tags_num: 2) }
-  let(:record) { Post.new }
-  let(:reflection) { Post.reflections['tags'] }
+  let(:record) { AR::Post.new }
+  let(:reflection) { AR::Post.reflections['tags'] }
   let(:scope) { {} }
   let(:declaration_params) { {} }
   let(:declaration) do

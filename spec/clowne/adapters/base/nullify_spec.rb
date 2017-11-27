@@ -2,12 +2,12 @@ describe Clowne::Adapters::Base::Nullify do
   let(:declaration) { Clowne::Declarations::Nullify.new(*args) }
 
   describe '.call' do
-    let(:record) { User.new(name: 'Admin', email: 'admin@example.com') }
+    let(:record) { AR::User.new(name: 'Admin', email: 'admin@example.com') }
     let(:args) { [:email] }
 
     it 'nullifies fields' do
       result = described_class.call(double, record, declaration)
-      expect(result).to be_a(User)
+      expect(result).to be_a(AR::User)
       expect(result.name).to eq('Admin')
       expect(result.email).to be_nil
     end
@@ -17,7 +17,7 @@ describe Clowne::Adapters::Base::Nullify do
 
       it 'nullifies fields' do
         result = described_class.call(double, record, declaration)
-        expect(result).to be_a(User)
+        expect(result).to be_a(AR::User)
         expect(result.name).to be_nil
         expect(result.email).to be_nil
       end
