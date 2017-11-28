@@ -1,4 +1,5 @@
 require 'active_record'
+require 'sequel'
 require 'clowne'
 require 'factory_bot'
 
@@ -29,6 +30,7 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   config.include_context 'adapter:active_record', adapter: :active_record
+  config.include_context 'adapter:sequel', adapter: :sequel
 
   config.after(:each, cleanup: true) do
     ActiveRecord::Base.subclasses.each do |ar_class|

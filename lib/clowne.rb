@@ -11,7 +11,8 @@ module Clowne
   # List of built-in adapters
   ADAPTERS = {
     base:          'Base',
-    active_record: 'ActiveRecord'
+    active_record: 'ActiveRecord',
+    sequel:        'Sequel'
   }.freeze
 
   class << self
@@ -37,3 +38,4 @@ module Clowne
 end
 
 require 'clowne/adapters/active_record' if defined?(::ActiveRecord)
+require 'clowne/adapters/sequel' if defined?(::Sequel)

@@ -2,7 +2,7 @@
 
 module Clowne
   module Adapters # :nodoc: all
-    class ActiveRecord
+    class Sequel
       module Associations
         class Base
           # Params:
