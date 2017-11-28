@@ -1,4 +1,5 @@
 Sequel::Model.plugin :timestamps, force: true, update_on_create: true
+Sequel::Model.plugin :nested_attributes#, force: true, update_on_create: true
 
 module Sequel
   class Topic < Sequel::Model
@@ -16,6 +17,8 @@ module Sequel
     one_to_one :account
     # has_one :history, through: :account - Does not supported in Sequel
     many_to_many :tags
+
+    nested_attributes :account
 
     dataset_module do
       def alpha_first
