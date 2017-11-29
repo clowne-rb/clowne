@@ -12,8 +12,7 @@ module Clowne
 
             child_clone = clone_one(child)
             child_clone[:"#{reflection[:key]}"] = nil
-            # record.__send__(:"#{association_name}=", child_clone)
-            record.__send__(:"#{association_name}_attributes=", child_clone.to_hash.except(:id))
+            record.__send__(:"#{association_name}_attributes=", clonable_attributes(child_clone))
 
             record
           end

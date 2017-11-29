@@ -1,5 +1,5 @@
 Sequel::Model.plugin :timestamps, force: true, update_on_create: true
-Sequel::Model.plugin :nested_attributes#, force: true, update_on_create: true
+Sequel::Model.plugin :nested_attributes
 
 module Sequel
   class Topic < Sequel::Model

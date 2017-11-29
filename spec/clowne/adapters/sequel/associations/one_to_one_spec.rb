@@ -56,15 +56,15 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
     subject { resolver.call(record) }
 
     it 'infers default cloner from model name' do
-      expect(subject.account).to be_new_record
-      expect(subject.account).to have_attributes(
+      expect(subject.account).to be_new
+      expect(subject.account.to_hash).to eq(
         updated_at: nil,
         created_at: nil,
         post_id: nil,
         title: account.title
       )
-      expect(subject.account.history).to be_new_record
-      expect(subject.account.history).to have_attributes(
+      expect(subject.account.history).to be_new
+      expect(subject.account.history.to_hash).to eq(
         updated_at: nil,
         created_at: nil,
         some_stuff: account.history.some_stuff,
@@ -76,15 +76,15 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
       let(:params) { { include_timestamps: true } }
 
       it 'pass params to child cloner' do
-        expect(subject.account).to be_new_record
-        expect(subject.account).to have_attributes(
+        expect(subject.account).to be_new
+        expect(subject.account.to_hash).to eq(
           updated_at: nil,
           created_at: account.created_at,
           post_id: nil,
           title: account.title
         )
-        expect(subject.account.history).to be_new_record
-        expect(subject.account.history).to have_attributes(
+        expect(subject.account.history).to be_new
+        expect(subject.account.history.to_hash).to eq(
           updated_at: nil,
           created_at: account.history.created_at,
           some_stuff: account.history.some_stuff,
@@ -97,15 +97,15 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
       let(:declaration_params) { { traits: [:mark_as_clone] } }
 
       it 'includes traits for self' do
-        expect(subject.account).to be_new_record
-        expect(subject.account).to have_attributes(
+        expect(subject.account).to be_new
+        expect(subject.account.to_hash).to eq(
           updated_at: nil,
           created_at: nil,
           post_id: nil,
           title: "#{account.title} (Cloned)"
         )
-        expect(subject.account.history).to be_new_record
-        expect(subject.account.history).to have_attributes(
+        expect(subject.account.history).to be_new
+        expect(subject.account.history.to_hash).to eq(
           updated_at: nil,
           created_at: nil,
           some_stuff: account.history.some_stuff,
@@ -126,8 +126,8 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
       let(:declaration_params) { { clone_with: account_cloner } }
 
       it 'applies custom cloner' do
-        expect(subject.account).to be_new_record
-        expect(subject.account).to have_attributes(
+        expect(subject.account).to be_new
+        expect(subject.account.to_hash).to eq(
           post_id: nil,
           title: "Copy of #{account.title}"
         )
