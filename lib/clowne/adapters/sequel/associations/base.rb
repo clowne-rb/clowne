@@ -32,7 +32,6 @@ module Clowne
 
           def clone_one(child)
             cloner = cloner_for(child)
-            binding.pry
             cloner ? cloner.call(child, cloner_options) : dup(child)
           end
 
