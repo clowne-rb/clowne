@@ -18,7 +18,7 @@ module Sequel
     # has_one :history, through: :account - Does not supported in Sequel
     many_to_many :tags
 
-    nested_attributes :account
+    nested_attributes :account # TODO: write specs!
 
     dataset_module do
       def alpha_first
@@ -30,6 +30,8 @@ module Sequel
   class Account < Sequel::Model
     many_to_one :post
     one_to_one :history
+
+    nested_attributes :history
   end
 
   class History < Sequel::Model
