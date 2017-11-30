@@ -57,8 +57,15 @@ module Clowne
             end
           end
 
-          def clonable_attributes(record)
-            record.to_hash.tap { |hash| hash.delete(:id) }
+          def clonable_attributes(record) # TODO: :cry:
+            object_hash = record.to_hash.tap { |hash| hash.delete(:id) }
+            record.class.association_reflections.map do |name, options|
+              nested = record.__send__(name)
+              if nested && options[:type] == :one_to_one
+                object_hash.merge!({"#{name}_attributes" => clonable_attributes(nested)})
+              end
+            end
+            object_hash
           end
 
           def cloner_for(child)

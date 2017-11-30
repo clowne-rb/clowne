@@ -13,9 +13,7 @@ module Clowne
             child_clone = clone_one(child)
             child_clone[:"#{reflection[:key]}"] = nil
             record.__send__(:"#{association_name}_attributes=", clonable_attributes(child_clone))
-            binding.pry
-            #[6] pry(#<Clowne::Adapters::Sequel::Associations::OneToOne>)>
-            # record.account_attributes = {title: "A", history_attributes: {some_stuff: "B"}}
+
             record
           end
         end
