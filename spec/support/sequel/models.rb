@@ -8,6 +8,8 @@ module Sequel
 
   class User < Sequel::Model
     one_to_many :posts, key: :owner_id
+
+    nested_attributes :posts
     # has_many :accounts, through: :posts - Does not supported in Sequel
   end
 
@@ -22,7 +24,7 @@ module Sequel
 
     dataset_module do
       def alpha_first
-        order('title').limit(1)
+        order(::Sequel.asc(:title)).limit(1)
       end
     end
   end
