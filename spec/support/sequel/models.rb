@@ -21,6 +21,7 @@ module Sequel
     many_to_many :tags
 
     nested_attributes :account # TODO: write specs!
+    nested_attributes :tags # TODO: write specs!
 
     dataset_module do
       def alpha_first

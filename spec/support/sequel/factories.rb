@@ -21,7 +21,6 @@ FactoryBot.define do
     sequence(:contents) { |n| "About a number #{n}" }
 
     association :owner, factory: 'sequel:user'
-    # association :account, factory: 'sequel:account'
     association :topic, factory: 'sequel:topic'
 
     transient do
@@ -30,7 +29,9 @@ FactoryBot.define do
 
     trait :with_tags do
       after(:create) do |post, ev|
-        create_list('sequel:tag', ev.tags_num, posts: [post])
+        create_list('sequel:tag', ev.tags_num).each do |tag|
+          tag.add_post(post)
+        end
       end
     end
   end
