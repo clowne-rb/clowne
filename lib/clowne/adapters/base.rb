@@ -31,6 +31,14 @@ module Clowne
           end
         end
 
+        def register_copier(copier)
+          @copier ||= copier
+        end
+
+        def copier
+          @copier || raise("Undefined copier for #{self}")
+        end
+
         protected
 
         attr_writer :registry
@@ -48,7 +56,7 @@ module Clowne
       # +params+:: Custom params hash
       def clone(source, plan, params: {})
         declarations = plan.declarations
-        declarations.inject(clone_record(source)) do |record, (type, declaration)|
+        declarations.inject(copier.call(source)) do |record, (type, declaration)|
           resolver_for(type).call(source, record, declaration, params: params)
         end
       end
@@ -57,9 +65,8 @@ module Clowne
         self.class.resolver_for(type)
       end
 
-      # Return #dup if any
-      def clone_record(source)
-        source.dup
+      def copier
+        self.class.copier
       end
     end
   end

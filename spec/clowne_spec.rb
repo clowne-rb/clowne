@@ -12,7 +12,6 @@ describe Clowne do
     Sequel::User.instance_variable_get("@create_timestamp_field")
     Sequel::User.instance_variable_get("@update_timestamp_field")
 
-    binding.pry
     expect(Clowne::VERSION).not_to be nil
   end
 end

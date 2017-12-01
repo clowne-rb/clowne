@@ -3,7 +3,7 @@
 require 'clowne/adapters/sequel/associations/base'
 require 'clowne/adapters/sequel/associations/noop'
 require 'clowne/adapters/sequel/associations/one_to_one'
-# require 'clowne/adapters/active_record/associations/has_many'
+require 'clowne/adapters/sequel/associations/one_to_many'
 # require 'clowne/adapters/active_record/associations/has_and_belongs_to_many'
 
 module Clowne
@@ -12,7 +12,7 @@ module Clowne
       module Associations
         Sequel_2_CLONER = {
           one_to_one: OneToOne,
-          # has_many: HasMany,
+          one_to_many: OneToMany,
           # has_and_belongs_to_many: HABTM
         }.freeze
 
