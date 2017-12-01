@@ -57,6 +57,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
 
     it 'infers default cloner from model name' do
       expect(subject.account).to be_new
+      expect(subject.account).to be_a(Sequel::Account)
       expect(subject.account.to_hash).to eq(
         updated_at: nil,
         created_at: nil,

@@ -36,6 +36,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
     it 'infers default cloner from model name' do
       expect(subject.posts.size).to eq 2
+      expect(subject.posts.first).to be_a(Sequel::Post)
       expect(subject.posts.first.to_hash).to eq(
         owner_id: nil,
         topic_id: nil,
