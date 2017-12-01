@@ -32,7 +32,7 @@ module Clowne
 
           def clone_one(child)
             cloner = cloner_for(child)
-            cloner ? cloner.call(child, cloner_options) : dup(child)
+            cloner ? cloner.call(child, cloner_options) : clone_record(child)
           end
 
           def with_scope
@@ -48,13 +48,8 @@ module Clowne
 
           private
 
-          def dup(record)
-            record.dup.tap do |record|
-              [:create_timestamp_field, :update_timestamp_field].each do |timestamp|
-                field = record.class.instance_variable_get("@#{ timestamp }")
-                record.__send__("#{field}=", nil) if field
-              end
-            end
+          def clone_record(record)
+            Clowne.resolve_adapter(:sequel).copier.call(record)
           end
 
           def clonable_attributes(record) # TODO: :cry:

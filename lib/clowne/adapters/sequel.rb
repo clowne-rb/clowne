@@ -23,3 +23,4 @@ end
 
 require 'clowne/adapters/sequel/associations'
 require 'clowne/adapters/sequel/association'
+require 'clowne/adapters/sequel/copier'

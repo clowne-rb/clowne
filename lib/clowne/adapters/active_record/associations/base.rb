@@ -32,7 +32,7 @@ module Clowne
 
           def clone_one(child)
             cloner = cloner_for(child)
-            cloner ? cloner.call(child, cloner_options) : child.dup
+            cloner ? cloner.call(child, cloner_options) : clone_record(child)
           end
 
           def with_scope
@@ -47,6 +47,10 @@ module Clowne
           end
 
           private
+
+          def clone_record(record)
+            Clowne.resolve_adapter(:active_record).copier.call(record)
+          end
 
           def cloner_for(child)
             return clone_with if clone_with
