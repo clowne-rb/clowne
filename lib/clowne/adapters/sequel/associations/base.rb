@@ -36,14 +36,14 @@ module Clowne
           end
 
           def with_scope
-            base_scope = association
+            base_scope = association_dataset
             if scope.is_a?(Symbol)
               base_scope.__send__(scope)
             elsif scope.is_a?(Proc)
               base_scope.instance_exec(params, &scope) || base_scope
             else
               base_scope
-            end
+            end.to_a
           end
 
           private
@@ -67,6 +67,10 @@ module Clowne
             return clone_with if clone_with
 
             return child.class.cloner_class if child.class.respond_to?(:cloner_class)
+          end
+
+          def association_dataset
+            @_association_dataset ||= source.__send__([association_name, 'dataset'].join('_'))
           end
 
           attr_reader :source, :scope, :clone_with, :params, :association_name,

@@ -12,7 +12,6 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
   subject(:resolver) { described_class.new(reflection, source, declaration, params) }
 
   before(:all) do
-    skip
     module Sequel
       class PostCloner < Clowne::Cloner
         finalize do |_source, record, params|
@@ -41,13 +40,17 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
         owner_id: nil,
         topic_id: nil,
         title: source.posts.first.title,
-        contents: source.posts.first.contents
+        contents: source.posts.first.contents,
+        created_at: nil,
+        updated_at: nil
       )
       expect(subject.posts.second.to_hash).to eq(
         owner_id: nil,
         topic_id: nil,
         title: source.posts.second.title,
-        contents: source.posts.second.contents
+        contents: source.posts.second.contents,
+        created_at: nil,
+        updated_at: nil
       )
     end
 
@@ -56,11 +59,11 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
       it 'pass params to child cloner' do
         expect(subject.posts.size).to eq 2
-        expect(subject.posts.first.to_hash).to eq(
+        expect(subject.posts.first.to_hash).to include(
           owner_id: nil,
           topic_id: 123
         )
-        expect(subject.posts.second.to_hash).to eq(
+        expect(subject.posts.second.to_hash).to include(
           owner_id: nil,
           topic_id: 123
         )
@@ -74,7 +77,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
         it 'clones scoped children' do
           expect(subject.posts.size).to eq 1
-          expect(subject.posts.first.to_hash).to eq(
+          expect(subject.posts.first.to_hash).to include(
             owner_id: nil,
             title: source.posts.first.title
           )
@@ -96,13 +99,13 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
         let(:post2) { source.posts.second }
 
         before do
-          post1.update! title: 'Zadyza'
-          post2.update! title: 'Ta-dam'
+          post1.update title: 'Zadyza'
+          post2.update title: 'Ta-dam'
         end
 
         it 'clones scoped children' do
           expect(subject.posts.size).to eq 1
-          expect(subject.posts.first.to_hash).to eq(
+          expect(subject.posts.first.to_hash).to include(
             owner_id: nil,
             title: 'Ta-dam'
           )
@@ -115,12 +118,12 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
       it 'pass traits to child cloner' do
         expect(subject.posts.size).to eq 2
-        expect(subject.posts.first.to_hash).to eq(
+        expect(subject.posts.first.to_hash).to include(
           owner_id: nil,
           topic_id: nil,
           title: "#{source.posts.first.title} (Cloned)"
         )
-        expect(subject.posts.second.to_hash).to eq(
+        expect(subject.posts.second.to_hash).to include(
           owner_id: nil,
           topic_id: nil,
           title: "#{source.posts.second.title} (Cloned)"
@@ -130,8 +133,8 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
     context 'with custom cloner' do
       let(:source) do
-        create(:user).tap do |u|
-          create(:post, title: 'Some post', owner: u)
+        create('sequel:user').tap do |user|
+          create('sequel:post', title: 'Some post', owner: user)
         end
       end
 
@@ -147,7 +150,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
       it 'applies custom cloner' do
         expect(subject.posts.size).to eq 1
-        expect(subject.posts.first.to_hash).to eq(
+        expect(subject.posts.first.to_hash).to include(
           owner_id: nil,
           topic_id: source.posts.first.topic_id,
           title: 'Copy of Some post'
