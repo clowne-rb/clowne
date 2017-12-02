@@ -6,12 +6,15 @@ module Clowne
       class Copier
         class << self
           def call(source)
-            source.dup.tap do |source|
-              [:create_timestamp_field, :update_timestamp_field].each do |timestamp|
-                field = source.class.instance_variable_get("@#{ timestamp }")
-                source.__send__("#{field}=", nil) if field
-              end
+            nullify_attrs = [:create_timestamp_field, :update_timestamp_field].map do |timestamp|
+              source.class.instance_variable_get("@#{ timestamp }")
+            end + [:id]
+
+            hash = source.dup.to_hash.tap do |hash|
+              nullify_attrs.each { |field| hash.delete(field) }
             end
+
+            source.class.new(hash)
           end
         end
       end

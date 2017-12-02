@@ -52,15 +52,18 @@ module Clowne
             Clowne.resolve_adapter(:sequel).copier.call(record)
           end
 
-          def clonable_attributes(record) # TODO: :cry:
-            object_hash = record.to_hash.tap { |hash| hash.delete(:id) }
-            record.class.association_reflections.map do |name, options|
-              nested = record.__send__(name)
-              if nested && options[:type] == :one_to_one
-                object_hash.merge!({"#{name}_attributes" => clonable_attributes(nested)})
-              end
+          def clonable_attributes(record, prev_assoc = nil) # TODO: think about how to get rid of conversion
+            record.associations.each_with_object(record.dup.to_hash) do |(name, value), memo|
+              next if !prev_assoc.nil? && value.is_a?(prev_assoc)
+
+              association_hash =
+                if value.is_a?(Array)
+                  value.map { |v| clonable_attributes(v, record.class) }
+                else
+                  clonable_attributes(value, record.class)
+                end
+              memo.merge!({"#{name}_attributes" => association_hash})
             end
-            object_hash
           end
 
           def cloner_for(child)

@@ -19,13 +19,9 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
       expect(subject.tags.first).to be_a(Sequel::Tag)
       expect(subject.tags.first.to_hash).to eq(
         value: source.tags.first.value,
-        created_at: nil,
-        updated_at: nil
       )
       expect(subject.tags.second.to_hash).to eq(
         value: source.tags.second.value,
-        created_at: nil,
-        updated_at: nil
       )
     end
 
