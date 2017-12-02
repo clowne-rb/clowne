@@ -38,5 +38,11 @@ RSpec.configure do |config|
       ar_class.remove_instance_variable(:@_clowne_cloner) if
         ar_class.instance_variable_defined?(:@_clowne_cloner)
     end
+
+    Sequel::Model.subclasses.each do |sequel_class|
+      sequel_class.dataset.delete
+      sequel_class.remove_instance_variable(:@_clowne_cloner) if
+        sequel_class.instance_variable_defined?(:@_clowne_cloner)
+    end
   end
 end

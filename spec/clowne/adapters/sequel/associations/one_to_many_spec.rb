@@ -42,16 +42,12 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
         topic_id: nil,
         title: source.posts.first.title,
         contents: source.posts.first.contents,
-        created_at: nil,
-        updated_at: nil
       )
       expect(subject.posts.second.to_hash).to eq(
         owner_id: nil,
         topic_id: nil,
         title: source.posts.second.title,
         contents: source.posts.second.contents,
-        created_at: nil,
-        updated_at: nil
       )
     end
 
