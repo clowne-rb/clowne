@@ -1,5 +1,5 @@
 FactoryBot.define do
-  to_create { |instance| instance.save }
+  to_create(&:save)
 
   factory 'sequel:user', class: 'Sequel::User' do
     sequence(:name) { |n| "John #{n}" }

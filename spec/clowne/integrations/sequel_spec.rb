@@ -47,7 +47,9 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel do
 
   let!(:post) { create('sequel:post', title: 'TeamCity') }
   let!(:account) { create('sequel:account', title: 'Manager', post: post) }
-  let!(:history) { create('sequel:history', some_stuff: 'This is history about my life', account: account) }
+  let!(:history) do
+    create('sequel:history', some_stuff: 'This is history about my life', account: account)
+  end
   let(:topic) { post.topic }
 
   let!(:tags) do

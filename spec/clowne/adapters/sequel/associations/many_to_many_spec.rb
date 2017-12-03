@@ -18,10 +18,10 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
       expect(subject.tags.size).to eq 2
       expect(subject.tags.first).to be_a(Sequel::Tag)
       expect(subject.tags.first.to_hash).to eq(
-        value: source.tags.first.value,
+        value: source.tags.first.value
       )
       expect(subject.tags.second.to_hash).to eq(
-        value: source.tags.second.value,
+        value: source.tags.second.value
       )
     end
 

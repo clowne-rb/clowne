@@ -44,13 +44,13 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
         owner_id: nil,
         topic_id: nil,
         title: source.posts.first.title,
-        contents: source.posts.first.contents,
+        contents: source.posts.first.contents
       )
       expect(subject.posts.second.to_hash).to eq(
         owner_id: nil,
         topic_id: nil,
         title: source.posts.second.title,
-        contents: source.posts.second.contents,
+        contents: source.posts.second.contents
       )
     end
 

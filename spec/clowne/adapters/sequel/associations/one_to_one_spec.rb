@@ -124,7 +124,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
         expect(subject.account).to be_new
         expect(subject.account.to_hash).to include(
           post_id: nil,
-          title: "Copy of #{account.title}",
+          title: "Copy of #{account.title}"
         )
         expect(subject.account.history).to be_nil
       end
