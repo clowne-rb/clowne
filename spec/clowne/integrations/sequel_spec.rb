@@ -32,8 +32,6 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel do
       end
 
       class HistoryCloner < Clowne::Cloner
-        adapter FakeAdapter
-
         finalize do |_source, record|
           record.some_stuff = record.some_stuff + ' - 2'
         end

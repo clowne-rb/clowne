@@ -120,7 +120,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
 
       let(:declaration_params) { { clone_with: account_cloner } }
 
-      xit 'applies custom cloner' do
+      it 'applies custom cloner' do
         expect(subject.account).to be_new
         expect(subject.account.to_hash).to include(
           post_id: nil,

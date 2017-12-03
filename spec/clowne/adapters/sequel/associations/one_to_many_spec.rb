@@ -14,6 +14,8 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
   before(:all) do
     module Sequel
       class PostCloner < Clowne::Cloner
+        include_associations :account, :tags
+
         finalize do |_source, record, params|
           record.topic_id = params[:topic_id] if params[:topic_id]
         end
@@ -37,6 +39,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
     it 'infers default cloner from model name' do
       expect(subject.posts.size).to eq 2
       expect(subject.posts.first).to be_a(Sequel::Post)
+      expect(subject.posts.first.account).to be_nil
       expect(subject.posts.first.to_hash).to eq(
         owner_id: nil,
         topic_id: nil,
@@ -49,6 +52,35 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
         title: source.posts.second.title,
         contents: source.posts.second.contents,
       )
+    end
+
+    context 'when post has account' do
+      let!(:accounts) do
+        source.posts.map { |post| create('sequel:account', post: post) }
+      end
+
+      it 'infers nested account cloner' do
+        expect(subject.posts.first.account).to be_a(Sequel::Account)
+        expect(subject.posts.first.account.to_hash).to include(
+          title: accounts.first.title
+        )
+      end
+    end
+
+    context 'when post has tags' do
+      let!(:tags) do
+        source.posts.map do |post|
+          create('sequel:tag').tap { |tag| tag.add_post(post) }
+        end
+      end
+
+      it 'infers nested account cloner' do
+        post = subject.posts.first
+        expect(post.tags.first).to be_a(Sequel::Tag)
+        expect(post.tags.first.to_hash).to include(
+          value: tags.first.value
+        )
+      end
     end
 
     context 'with params' do
