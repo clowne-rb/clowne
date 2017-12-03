@@ -7,14 +7,14 @@ module Clowne
         class << self
           def call(source)
             nullify_attrs = [:create_timestamp_field, :update_timestamp_field].map do |timestamp|
-              source.class.instance_variable_get("@#{ timestamp }")
+              source.class.instance_variable_get("@#{timestamp}")
             end + [:id]
 
-            hash = source.dup.to_hash.tap do |hash|
+            dup_hash = source.dup.to_hash.tap do |hash|
               nullify_attrs.each { |field| hash.delete(field) }
             end
 
-            source.class.new(hash)
+            source.class.new(dup_hash)
           end
         end
       end

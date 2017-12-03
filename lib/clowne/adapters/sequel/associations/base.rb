@@ -52,7 +52,8 @@ module Clowne
             Clowne.resolve_adapter(:sequel).copier.call(record)
           end
 
-          def clonable_attributes(record, prev_assoc = nil) # TODO: think about how to get rid of conversion
+          # TODO: think about how to get rid of conversion
+          def clonable_attributes(record, prev_assoc = nil)
             record.associations.each_with_object(record.dup.to_hash) do |(name, value), memo|
               next if !prev_assoc.nil? && value.is_a?(prev_assoc)
 
@@ -62,7 +63,7 @@ module Clowne
                 else
                   clonable_attributes(value, record.class)
                 end
-              memo.merge!({"#{name}_attributes" => association_hash})
+              memo["#{name}_attributes"] = association_hash
             end
           end
 
