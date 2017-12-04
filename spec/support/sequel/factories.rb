@@ -74,7 +74,9 @@ FactoryBot.define do
 
     trait :with_posts do
       after(:create) do |tag, ev|
-        create_list('sequel:post', ev.posts_num, tags: [tag])
+        create_list('sequel:post', ev.posts_num).each do |post|
+          post.add_tag(tag)
+        end
       end
     end
   end
