@@ -6,16 +6,16 @@ module Clowne
       module Associations
         class OneToMany < Base
           def call(record)
-            clones =
-              with_scope.map do |child|
-                child_clone = clone_one(child)
-                child_clone[:"#{reflection[:key]}"] = nil
+            for_clonable(record) do
+              clones =
+                with_scope.map do |child|
+                  child_clone = clone_one(child)
+                  child_clone[:"#{reflection[:key]}"] = nil
 
-                clonable_attributes(child_clone)
-              end
-            record.__send__(:"#{association_name}_attributes=", clones)
-
-            record
+                  clonable_attributes(child_clone)
+                end
+              record.__send__(:"#{association_name}_attributes=", clones)
+            end
           end
         end
       end

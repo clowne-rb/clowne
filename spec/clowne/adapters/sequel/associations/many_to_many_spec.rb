@@ -82,6 +82,19 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
           )
         end
       end
+
+      context 'not clonable association' do
+        let(:source) { create('sequel:tag', :with_posts, posts_num: 2) }
+        let(:record) { Sequel::Tag.new }
+        let(:reflection) { Sequel::Tag.association_reflections[:posts] }
+        let(:declaration) do
+          Clowne::Declarations::IncludeAssociation.new(:posts, {}, {})
+        end
+
+        it 'dont clone posts' do
+          expect(subject.posts.size).to eq 0
+        end
+      end
     end
   end
 end

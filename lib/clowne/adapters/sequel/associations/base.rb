@@ -52,7 +52,24 @@ module Clowne
             Clowne.resolve_adapter(:sequel).copier.call(record)
           end
 
-          # TODO: think about how to get rid of conversion
+          def for_clonable(record)
+            if clonable_assoc?(record)
+              yield
+            else
+              warn <<-WARN
+                Relation #{association_name} does not configure for Sequel::Plugins::NestedAttributes
+              WARN
+            end
+
+            record
+          end
+
+          def clonable_assoc?(record)
+            record.class.plugins.include?(::Sequel::Plugins::NestedAttributes) &&
+              record.respond_to?(:"#{association_name}_attributes=")
+          end
+
+          # TODO: think how to get rid of many conversion
           def clonable_attributes(record, prev_assoc = nil)
             record.associations.each_with_object(record.dup.to_hash) do |(name, value), memo|
               next if !prev_assoc.nil? && value.is_a?(prev_assoc)
