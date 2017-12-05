@@ -8,13 +8,13 @@ module Clowne
         def constantize
           names = split('::')
 
-          Object.const_get(self) if names.empty?
+          return nil if names.empty?
 
           # Remove the first blank element in case of '::ClassName' notation.
           names.shift if names.size > 1 && names.first.empty?
 
           names.inject(Object) do |constant, name|
-            constant.const_get(name)
+            constant.const_get(name) if constant.const_defined?(name)
           end
         end
       end
