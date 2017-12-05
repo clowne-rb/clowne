@@ -6,7 +6,7 @@ describe Clowne::Ext::StringConstantize do
     expect('::Clowne'.constantize).to eq Clowne
     expect('Clowne'.constantize).to eq Clowne
     expect('Clowne::Ext'.constantize).to eq Clowne::Ext
-    expect { 'CLownelqw'.constantize }.to raise_error(NameError)
-    expect { ''.constantize }.to raise_error(NameError)
+    expect('CLownelqw'.constantize).to be_nil
+    expect(''.constantize).to be_nil
   end
 end
