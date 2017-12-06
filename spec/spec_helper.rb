@@ -32,17 +32,19 @@ RSpec.configure do |config|
   config.include_context 'adapter:active_record', adapter: :active_record
   config.include_context 'adapter:sequel', adapter: :sequel
 
-  config.after(:each, cleanup: true) do
-    ActiveRecord::Base.subclasses.each do |ar_class|
-      ar_class.delete_all
-      ar_class.remove_instance_variable(:@_clowne_cloner) if
-        ar_class.instance_variable_defined?(:@_clowne_cloner)
-    end
+  config.before(:each, cleanup: true) do
+    cleanup(ActiveRecord::Base, &:delete_all)
 
-    Sequel::Model.subclasses.each do |sequel_class|
+    cleanup(Sequel::Model) do |sequel_class|
       sequel_class.dataset.delete
-      sequel_class.remove_instance_variable(:@_clowne_cloner) if
-        sequel_class.instance_variable_defined?(:@_clowne_cloner)
+    end
+  end
+
+  def cleanup(base_class)
+    base_class.subclasses.each do |orm_class|
+      yield(orm_class)
+      orm_class.remove_instance_variable(:@_clowne_cloner) if
+        orm_class.instance_variable_defined?(:@_clowne_cloner)
     end
   end
 end
