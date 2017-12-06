@@ -5,9 +5,9 @@
 
 # Clowne
 
-**NOTICE**: gem is currently under heavy development, we plan to release the first version 'till the end of the year. 
+**NOTICE**: gem is currently under heavy development, we plan to release the first version 'till the end of the year.
 
-A flexible gem for cloning your models. Clowne focuses on ease of use and provides the ability to connect various ORM adapters (currently only ActiveRecord is supported).
+A flexible gem for cloning your models. Clowne focuses on ease of use and provides the ability to connect various ORM adapters (see [supported adapters](#adapters)).
 
 <a href="https://evilmartians.com/">
 <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54"></a>
@@ -65,7 +65,7 @@ class UserCloner < Clowne::Cloner
   include_association :posts
 
   nullify :login
-  
+
   # params here is an arbitrary hash passed into cloner
   finalize do |_source, record, params|
     record.email = params[:email]
@@ -97,6 +97,42 @@ clone.posts.count == User.last.posts.count
 clone.profile.name
 # => nil
 ```
+
+## <a name="adapters">Supported adapters
+
+Clowne supports following ORM adapters and associations
+
+Adapter                                   |1:1         | 1:M         | M:M                     |
+------------------------------------------|------------|-------------|-------------------------|
+[Active Record](#adapter_active_record)   | has_one    | has_many    | has_and_belongs_to_many |
+[Sequel](#adapter_sequel)                 | one_to_one | one_to_many | many_to_many            |
+
+### <a name="adapter_active_record">Active Record
+
+Everything works "out of box" ツ
+
+### <a name="adapter_sequel">Sequel
+
+Clowne uses Sequel [NestedAttributes plugin](http://sequel.jeremyevans.net/rdoc-plugins/classes/Sequel/Plugins/NestedAttributes.html) for cloning source's assocations and you need to configure it.
+
+Example:
+
+```ruby
+class UserCloner < Clowne::Cloner
+  adapter :sequel
+
+  include_association :account
+end
+
+class User < Sequel::Model
+  plugin :nested_attributes
+
+  one_to_one :account
+  nested_attributes :account
+end
+```
+
+If you try to clone associations without NestedAttributes plugin Clowne will skip this declaration.
 
 ## <a name="features">Features
 
