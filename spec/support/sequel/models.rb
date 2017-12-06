@@ -20,8 +20,8 @@ module Sequel
     # has_one :history, through: :account - Does not supported in Sequel
     many_to_many :tags
 
-    nested_attributes :account # TODO: write specs!
-    nested_attributes :tags # TODO: write specs!
+    nested_attributes :account
+    nested_attributes :tags
 
     dataset_module do
       def alpha_first
