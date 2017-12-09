@@ -17,8 +17,8 @@ module Clowne
             @_init_scope ||= source.__send__([association_name, 'dataset'].join('_'))
           end
 
-          def for_clonable(record)
-            if clonable_assoc?(record)
+          def with_clonable(record)
+            if clonable_assoc?
               yield
             else
               warn <<-WARN
@@ -29,9 +29,9 @@ module Clowne
             record
           end
 
-          def clonable_assoc?(record)
-            record.class.plugins.include?(::Sequel::Plugins::NestedAttributes) &&
-              record.respond_to?(:"#{association_name}_attributes=")
+          def clonable_assoc?
+            source.class.plugins.include?(::Sequel::Plugins::NestedAttributes) &&
+              source.respond_to?(:"#{association_name}_attributes=")
           end
 
           # TODO: think how to get rid of many conversion
