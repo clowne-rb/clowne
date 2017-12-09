@@ -6,14 +6,14 @@ module Clowne
       module Associations
         class OneToOne < Base
           def call(record)
-            for_clonable(record) do
+            with_clonable(record) do
               child = association
               return record unless child
               warn '[Clowne] Has one association does not support scopes' unless scope.nil?
 
               child_clone = clone_one(child)
               child_clone[:"#{reflection[:key]}"] = nil
-              record.__send__(:"#{association_name}_attributes=", clonable_attributes(child_clone))
+              record.remember_assoc(:"#{association_name}_attributes", child_clone)
             end
           end
         end

@@ -6,7 +6,7 @@ module Clowne
       module Associations
         class OneToMany < Base
           def call(record)
-            for_clonable(record) do
+            with_clonable(record) do
               clones =
                 with_scope.map do |child|
                   child_clone = clone_one(child)
