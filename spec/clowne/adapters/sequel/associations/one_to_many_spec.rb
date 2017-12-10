@@ -1,6 +1,6 @@
 describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :sequel do
   let(:source) { create('sequel:user', :with_posts, posts_num: 2) }
-  let(:record) { Sequel::User.new }
+  let(:record) { Clowne::Adapters::Sequel::RecordWrapper.new(Sequel::User.new) }
   let(:reflection) { Sequel::User.association_reflections[:posts] }
   let(:scope) { {} }
   let(:declaration_params) { {} }
@@ -34,7 +34,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
   after(:all) { Sequel.send(:remove_const, 'PostCloner') }
 
   describe '.call' do
-    subject { resolver.call(record) }
+    subject { resolver.call(record).to_model }
 
     it 'infers default cloner from model name' do
       expect(subject.posts.size).to eq 2

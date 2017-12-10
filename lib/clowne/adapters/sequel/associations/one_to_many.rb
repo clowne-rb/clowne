@@ -9,12 +9,14 @@ module Clowne
             with_clonable(record) do
               clones =
                 with_scope.map do |child|
-                  child_clone = clone_one(child)
-                  child_clone[:"#{reflection[:key]}"] = nil
-
-                  clonable_attributes(child_clone)
+                  clone_one(child).tap do |child_clone|
+                    child_clone[:"#{reflection[:key]}"] = nil
+                  end
+                  # child_clone
+                  # clonable_attributes(child_clone)
                 end
-              record.__send__(:"#{association_name}_attributes=", clones)
+              record.remember_assoc(:"#{association_name}_attributes", clones)
+              # record.__send__(:"#{association_name}_attributes=", clones)
             end
           end
         end
