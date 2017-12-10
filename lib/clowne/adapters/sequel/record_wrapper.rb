@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Clowne
   module Adapters # :nodoc: all
     class Sequel
@@ -15,6 +17,8 @@ module Clowne
               record_wrapper.to_hash
             end
           end
+
+          private
 
           def association_to_model(assoc)
             if assoc.is_a?(Array)
@@ -44,27 +48,17 @@ module Clowne
           @record.class.new(RecordWrapper.to_hash(self))
         end
 
-        # def build_record
-        #   @association_store.each_with_object(record.to_hash) do |(name, value), memo|
-        #     memo[name] = association_to_model(value)
-        #   end
-        # end
-
-        def method_missing(method, *args, &block)
-          record.send(method, *args, &block)
+        def respond_to_missing?(method_name, include_private = false)
+          record.respond_to?(method_name) || super
         end
 
-        private
-
-        # def association_to_model(assoc)
-        #   if assoc.is_a?(Array)
-        #     assoc.map(&:build_record)
-        #   elsif assoc.is_a?(RecordWrapper)
-        #     assoc.build_record
-        #   else
-        #     assoc.to_hash
-        #   end
-        # end
+        def method_missing(method_name, *args, &block)
+          if record.respond_to?(method_name)
+            record.public_send(method_name, *args, &block)
+          else
+            super
+          end
+        end
       end
     end
   end
