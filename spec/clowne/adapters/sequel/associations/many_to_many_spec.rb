@@ -1,6 +1,6 @@
 describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: :sequel do
   let(:source) { create('sequel:post', :with_tags, tags_num: 2) }
-  let(:record) { Sequel::Post.new }
+  let(:record) { Clowne::Adapters::Sequel::RecordWrapper.new(Sequel::Post.new) }
   let(:reflection) { Sequel::Post.association_reflections[:tags] }
   let(:scope) { {} }
   let(:declaration_params) { {} }
@@ -12,7 +12,7 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
   subject(:resolver) { described_class.new(reflection, source, declaration, params) }
 
   describe '.call' do
-    subject { resolver.call(record) }
+    subject { resolver.call(record).to_model }
 
     it 'clones all the tags withtout cloner' do
       expect(subject.tags.size).to eq 2
@@ -85,7 +85,7 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
 
       context 'not clonable association' do
         let(:source) { create('sequel:tag', :with_posts, posts_num: 2) }
-        let(:record) { Sequel::Tag.new }
+        let(:record) { Clowne::Adapters::Sequel::RecordWrapper.new(Sequel::Tag.new) }
         let(:reflection) { Sequel::Tag.association_reflections[:posts] }
         let(:declaration) do
           Clowne::Declarations::IncludeAssociation.new(:posts, {}, {})
