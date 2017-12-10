@@ -114,6 +114,7 @@ Everything works "out of box" ツ
 ### <a name="adapter_sequel">Sequel
 
 Clowne uses Sequel [NestedAttributes plugin](http://sequel.jeremyevans.net/rdoc-plugins/classes/Sequel/Plugins/NestedAttributes.html) for cloning source's assocations and you need to configure it.
+`Sequel` target record wrapped to special class for implementation full `Clowne`'s behaviour. You need to use method `to_model` for getting final cloned `Sequel::Model` object (or you can use `save` for saving cloned object to DB).
 
 Example:
 
@@ -130,6 +131,13 @@ class User < Sequel::Model
   one_to_one :account
   nested_attributes :account
 end
+
+wrapper = UserCloner.call(User.last)
+wrapper.class
+# => Clowne::Adapters::Sequel::RecordWrapper
+cloned_record = wrapper.to_model
+cloned_record.class
+# => User
 ```
 
 If you try to clone associations without NestedAttributes plugin Clowne will skip this declaration.

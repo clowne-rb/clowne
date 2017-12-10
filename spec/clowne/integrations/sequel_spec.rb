@@ -65,13 +65,13 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel do
     expect(Sequel::Account.count).to eq(1)
     expect(Sequel::History.count).to eq(1)
 
-    cloned = Sequel::PostCloner.call(
+    cloned_wrapper = Sequel::PostCloner.call(
       post,
       traits: :mark_as_clone,
       tags: %w[CI CD],
       post_contents: 'THIS IS CLONE! (☉_☉)'
     )
-    cloned.save
+    cloned = cloned_wrapper.save
 
     expect(Sequel::Topic.count).to eq(1)
     expect(Sequel::Post.count).to eq(2)
