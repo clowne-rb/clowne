@@ -33,23 +33,6 @@ module Clowne
             source.class.plugins.include?(::Sequel::Plugins::NestedAttributes) &&
               source.respond_to?(:"#{association_name}_attributes=")
           end
-
-          # TODO: think how to get rid of many conversion
-          def clonable_attributes(record, prev_assoc = nil)
-            record.associations.each_with_object(record.to_hash) do |(name, value), memo|
-              next if !prev_assoc.nil? && value.is_a?(prev_assoc)
-
-              memo["#{name}_attributes"] = clone_association(record.class, value)
-            end
-          end
-
-          def clone_association(record_class, assoc)
-            if assoc.is_a?(Array)
-              assoc.map { |v| clonable_attributes(v, record_class) }
-            else
-              clonable_attributes(assoc, record_class)
-            end
-          end
         end
       end
     end
