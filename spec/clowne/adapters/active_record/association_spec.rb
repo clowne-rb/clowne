@@ -1,7 +1,6 @@
 describe Clowne::Adapters::ActiveRecord::Association do
   let(:params) { double }
   let(:record) { double }
-  let(:association) {}
   let(:source) { build_stubbed(:post) }
   let(:declaration) { Clowne::Declarations::IncludeAssociation.new(association) }
 

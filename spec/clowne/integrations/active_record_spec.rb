@@ -33,7 +33,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record do
       end
 
       class HistoryCloner < Clowne::Cloner
-        adapter FakeAdapter
+        adapter :base
 
         finalize do |_source, record|
           record.some_stuff = record.some_stuff + ' - 2'

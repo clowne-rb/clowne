@@ -357,10 +357,8 @@ For ActiveRecord:
 - clone associations
 - nullify attributes
 - run `finalize` blocks
-
 The order of `finalize` blocks is the order they've been written.
 
-*NOTE*: using a trait means appending the trait's rules to the main execution plan.
 
 ## Maintainers
 

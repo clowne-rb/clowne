@@ -22,5 +22,6 @@ end
 
 Clowne::Adapters::ActiveRecord.register_resolver(
   :association,
-  Clowne::Adapters::ActiveRecord::Association
+  Clowne::Adapters::ActiveRecord::Association,
+  before: :nullify
 )

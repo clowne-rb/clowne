@@ -14,7 +14,7 @@ module Clowne
 
         declarations += compile_traits(cloner, traits) unless traits.nil?
 
-        declarations.each_with_object(Plan.new) do |declaration, plan|
+        declarations.each_with_object(Plan.new(cloner.adapter.registry)) do |declaration, plan|
           declaration.compile(plan)
         end
       end
