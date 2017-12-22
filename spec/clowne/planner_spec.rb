@@ -1,4 +1,4 @@
-describe Clowne::Planner do
+describe Clowne::Planner, adapter: :active_record do
   describe '.compile' do
     let(:options) { {} }
 

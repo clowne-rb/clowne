@@ -25,5 +25,6 @@ module Clowne
 end
 
 Clowne::Adapters::ActiveRecord.register_resolver(
-  :all_associations, Clowne::Adapters::ActiveRecord::AllAssociations
+  :all_associations, Clowne::Adapters::ActiveRecord::AllAssociations,
+  before: :association
 )

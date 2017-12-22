@@ -13,4 +13,7 @@ module Clowne
   end
 end
 
-Clowne::Adapters::Base.register_resolver(:finalize, Clowne::Adapters::Base::Finalize)
+Clowne::Adapters::Base.register_resolver(
+  :finalize, Clowne::Adapters::Base::Finalize,
+  after: :nullify
+)

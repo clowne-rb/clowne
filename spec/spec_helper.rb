@@ -14,7 +14,7 @@ end
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
-Clowne.default_adapter = FakeAdapter
+Clowne.default_adapter = :base
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = '.rspec_status'
