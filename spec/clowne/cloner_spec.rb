@@ -8,6 +8,7 @@ describe Clowne::Cloner do
       include_association :tags, clone_with: 'AnotherCloner2Class'
 
       exclude_association :users
+      include_association :users
 
       nullify :title, :description
 
@@ -82,60 +83,6 @@ describe Clowne::Cloner do
       expect(plan.declarations).to match_declarations(expected_plan)
 
       expect(cloner.plan_with_traits([:with_brands, :without_comments])).to equal(plan)
-    end
-  end
-
-  describe 'order' do
-    context 'when reversed cloner' do
-      let(:reverse_cloner) do
-        Class.new(described_class) do
-          adapter :active_record
-
-          finalize do |_source, _record, _params|
-            1 + 1
-          end
-
-          nullify :title, :description
-
-          include_association :comments
-          include_association :posts, :some_scope, clone_with: 'AnotherClonerClass'
-          include_association :tags, clone_with: 'AnotherCloner2Class'
-
-          exclude_association :users
-        end
-      end
-
-      it 'compiles same plan', :aggregate_failures do
-        plan = reverse_cloner.default_plan
-
-        expect(plan.declarations).to match_declarations(expected_plan)
-      end
-    end
-
-    context 'when totally reversed cloner' do
-      let(:reverse_cloner) do
-        Class.new(described_class) do
-          adapter :active_record
-
-          finalize do |_source, _record, _params|
-            1 + 1
-          end
-
-          nullify :title, :description
-
-          exclude_association :users
-
-          include_association :tags, clone_with: 'AnotherCloner2Class'
-          include_association :posts, :some_scope, clone_with: 'AnotherClonerClass'
-          include_association :comments
-        end
-      end
-
-      it 'compiles same plan', :aggregate_failures do
-        plan = reverse_cloner.default_plan
-
-        expect(plan.declarations).to match_declarations(expected_plan)
-      end
     end
   end
 

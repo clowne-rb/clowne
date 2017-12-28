@@ -37,6 +37,16 @@ describe Clowne::Plan do
           [:b, 'item_2']
         ]
       )
+
+      subject.add_to(:a, :key_1, 'new_item')
+
+      expect(subject.declarations).to eq(
+        [
+          [:a, 'value_2'],
+          [:b, 'item_1'],
+          [:b, 'item_2']
+        ]
+      )
     end
   end
 end

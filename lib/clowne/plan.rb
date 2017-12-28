@@ -2,6 +2,28 @@
 
 module Clowne
   class Plan # :nodoc: all
+    class TwoPhaseSet
+      def initialize
+        @added = {}
+        @removed = []
+      end
+
+      def []=(k, v)
+        return if @removed.include?(k)
+        @added[k] = v
+      end
+
+      def delete(k)
+        return if @removed.include?(k)
+        @removed << k
+        @added.delete(k)
+      end
+
+      def values
+        @added.values
+      end
+    end
+
     def initialize(registry)
       @registry = registry
       @data = {}
@@ -13,7 +35,7 @@ module Clowne
     end
 
     def add_to(type, id, declaration)
-      data[type] = {} unless data.key?(type)
+      data[type] = TwoPhaseSet.new unless data.key?(type)
       data[type][id] = declaration
     end
 
@@ -38,7 +60,7 @@ module Clowne
       registry.actions.flat_map do |type|
         value = data[type]
         next if value.nil?
-        value = value.values if value.is_a?(Hash)
+        value = value.values if value.is_a?(TwoPhaseSet)
         value = Array(value)
         value.map { |v| [type, v] }
       end.compact
