@@ -3,10 +3,17 @@
 module Clowne
   module Adapters # :nodoc: all
     class ActiveRecord
+      class UnknownAssociation < StandardError; end
+
       class Association
         class << self
           def call(source, record, declaration, params:)
             reflection = source.class.reflections[declaration.name.to_s]
+
+            if reflection.nil?
+              raise UnknownAssociation,
+                    "Association #{declaration.name} couldn't be found for #{source.class}"
+            end
 
             cloner_class = Associations.cloner_for(reflection)
 

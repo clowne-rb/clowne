@@ -18,51 +18,6 @@ describe Clowne::Planner, adapter: :active_record do
       end
     end
 
-    context 'when cloner with include_all declaration after include_association' do
-      let(:cloner) do
-        Class.new(Clowne::Cloner) do
-          include_association :users
-          include_all
-        end
-      end
-
-      specify do
-        is_expected.to match_declarations(
-          [[:all_associations, Clowne::Declarations::IncludeAll]]
-        )
-      end
-    end
-
-    context 'when cloner with include_all declaration before include_association' do
-      let(:cloner) do
-        Class.new(Clowne::Cloner) do
-          include_all
-          include_association :users
-        end
-      end
-
-      specify do
-        is_expected.to match_declarations(
-          [[:association, Clowne::Declarations::IncludeAssociation, { name: :users }]]
-        )
-      end
-    end
-
-    context 'when cloner with include_all and exclude_association' do
-      let(:cloner) do
-        Class.new(Clowne::Cloner) do
-          include_all
-          exclude_association :users
-        end
-      end
-
-      specify do
-        is_expected.to match_declarations(
-          [[:all_associations, Clowne::Declarations::IncludeAll, { excludes: Set.new(['users']) }]]
-        )
-      end
-    end
-
     context 'when cloner with nullify declarations' do
       let(:cloner) do
         Class.new(Clowne::Cloner) do
@@ -139,10 +94,6 @@ describe Clowne::Planner, adapter: :active_record do
           trait :clear_fields do
             nullify :extra, :data, :meta
           end
-
-          trait :with_all do
-            include_all
-          end
         end
       end
 
@@ -174,12 +125,13 @@ describe Clowne::Planner, adapter: :active_record do
       end
 
       context 'when all traits are active' do
-        let(:options) { { traits: [:with_brands, :clear_fields, :with_all] } }
+        let(:options) { { traits: [:with_brands, :clear_fields] } }
 
         specify do
           is_expected.to match_declarations(
             [
-              [:all_associations, Clowne::Declarations::IncludeAll],
+              [:association, Clowne::Declarations::IncludeAssociation, { name: :users }],
+              [:association, Clowne::Declarations::IncludeAssociation, { name: :brands }],
               [:nullify, Clowne::Declarations::Nullify, { attributes: %i[extra data meta] }],
               [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }],
               [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 2 } }]

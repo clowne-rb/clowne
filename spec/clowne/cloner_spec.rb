@@ -3,8 +3,6 @@ describe Clowne::Cloner do
     Class.new(described_class) do
       adapter :active_record
 
-      include_all
-
       include_association :comments
       include_association :posts, :some_scope, clone_with: 'AnotherClonerClass'
       include_association :tags, clone_with: 'AnotherCloner2Class'
@@ -99,8 +97,6 @@ describe Clowne::Cloner do
 
           nullify :title, :description
 
-          include_all
-
           include_association :comments
           include_association :posts, :some_scope, clone_with: 'AnotherClonerClass'
           include_association :tags, clone_with: 'AnotherCloner2Class'
@@ -132,8 +128,6 @@ describe Clowne::Cloner do
           include_association :tags, clone_with: 'AnotherCloner2Class'
           include_association :posts, :some_scope, clone_with: 'AnotherClonerClass'
           include_association :comments
-
-          include_all
         end
       end
 

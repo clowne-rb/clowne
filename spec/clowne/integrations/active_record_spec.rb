@@ -2,9 +2,6 @@ describe 'AR adapter', :cleanup, adapter: :active_record do
   before(:all) do
     module AR
       class AccCloner < Clowne::Cloner
-        include_all
-        exclude_association :history
-
         trait :with_history do
           include_association :history
         end
