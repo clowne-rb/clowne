@@ -249,6 +249,25 @@ clone2.posts
 # => []
 ```
 
+**NOTE**: once excluded association cannot be re-included, e.g. the following cloner:
+
+```ruby
+class UserCloner < Clowne::Cloner
+  exclude_association :comments
+
+  trait :with_comments do
+    # That wouldn't work
+    include_association :comments
+  end
+end
+
+clone = UserCloner.call(user, traits: :with_comments)
+clone.comments.empty? #=> true
+```
+
+Why so? That allows to have deterministic cloning plans when combining multiple traits
+(or inheriting cloners).
+
 ### <a name="nullify"></a>Nullify attribute(s)
 
 Nullify attributes:
