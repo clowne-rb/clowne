@@ -1,24 +1,34 @@
 # frozen_string_literal: true
 
+require 'clowne/adapters/registry'
+
 module Clowne
   module Adapters
     # ORM-independant adapter (just calls #dup).
     # Works with nullify/finalize.
     class Base
       class << self
+        attr_reader :registry
+
         def inherited(subclass)
-          # Register all resolvers
-          resolvers.each do |k, v|
-            subclass.register_resolver(k, v)
-          end
+          # Duplicate registry
+          subclass.registry = registry.dup
         end
 
         def resolver_for(type)
-          resolvers[type] || raise("Uknown resolver #{type} for #{self}")
+          registry.mapping[type] || raise("Uknown resolver #{type} for #{self}")
         end
 
-        def register_resolver(type, resolver)
-          resolvers[type] = resolver
+        def register_resolver(type, resolver, after: nil, before: nil)
+          registry.mapping[type] = resolver
+
+          if after
+            registry.insert_after after, type
+          elsif before
+            registry.insert_before before, type
+          else
+            registry.append type
+          end
         end
 
         def register_copier(copier)
@@ -31,9 +41,13 @@ module Clowne
 
         protected
 
-        def resolvers
-          @resolvers ||= {}
-        end
+        attr_writer :registry
+      end
+
+      self.registry = Registry.new
+
+      def registry
+        self.class.registry
       end
 
       # Using a plan make full duplicate of record

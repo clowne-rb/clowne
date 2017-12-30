@@ -1,15 +1,14 @@
 describe Clowne::Cloner do
   let(:cloner) do
     Class.new(described_class) do
-      adapter FakeAdapter
-
-      include_all
+      adapter :active_record
 
       include_association :comments
       include_association :posts, :some_scope, clone_with: 'AnotherClonerClass'
       include_association :tags, clone_with: 'AnotherCloner2Class'
 
       exclude_association :users
+      include_association :users
 
       nullify :title, :description
 
@@ -91,7 +90,7 @@ describe Clowne::Cloner do
     context 'when object is nil' do
       let(:cloner) do
         Class.new(Clowne::Cloner) do
-          adapter FakeAdapter
+          adapter :base
         end
       end
 
@@ -106,7 +105,7 @@ describe Clowne::Cloner do
     context 'when trait is unknown' do
       let(:cloner) do
         Class.new(Clowne::Cloner) do
-          adapter FakeAdapter
+          adapter :active_record
 
           trait :with_comments do
             include_association :comments
