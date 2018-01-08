@@ -38,8 +38,8 @@ module Clowne # :nodoc: all
         @traits[name].extend_with(block)
       end
 
-      # rubocop: disable Metrics/AbcSize
-      # rubocop: disable Metrics/MethodLength
+      # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
+      # rubocop: disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def call(object, **options)
         raise(UnprocessableSourceError, 'Nil is not cloneable object') if object.nil?
 
@@ -56,11 +56,13 @@ module Clowne # :nodoc: all
             plan_with_traits(traits)
           end
 
+        plan = Clowne::Planner.enhance(plan, Proc.new) if block_given?
+
         adapter.clone(object, plan, params: options)
       end
 
-      # rubocop: enable Metrics/AbcSize
-      # rubocop: enable Metrics/MethodLength
+      # rubocop: enable Metrics/AbcSize, Metrics/MethodLength
+      # rubocop: enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       def default_plan
         return @default_plan if instance_variable_defined?(:@default_plan)
