@@ -5,12 +5,13 @@ module Clowne
     class ActiveRecord
       module Associations
         class HasOne < Base
+          # rubocop: disable Metrics/MethodLength
           def call(record)
             child = association
             return record unless child
             unless scope.nil?
               warn(
-                "[Clowne] Has one association does not support scopes " \
+                '[Clowne] Has one association does not support scopes ' \
                 "(#{@association_name} for #{@source.class})"
               )
             end
@@ -21,6 +22,7 @@ module Clowne
 
             record
           end
+          # rubocop: enable Metrics/MethodLength
         end
       end
     end
