@@ -37,4 +37,8 @@ RSpec.configure do |config|
         ar_class.instance_variable_defined?(:@_clowne_cloner)
     end
   end
+
+  config.after(:each, cleandb: true) do
+    ActiveRecord::Base.subclasses.each(&:delete_all)
+  end
 end
