@@ -109,6 +109,7 @@ clone.profile.name
 - [Execute finalize block](#finalize)
 - [Traits](#traits)
 - [Execution order](#execution_order)
+- [ActiveRecord DSL](#ar_dsl)
 - [Customization](#customization)
 
 ### <a name="configuration"></a>Configuration
@@ -378,6 +379,38 @@ For ActiveRecord:
 - nullify attributes
 - run `finalize` blocks
 The order of `finalize` blocks is the order they've been written.
+
+### <a name="ar_dsl"></a>Active Record DSL
+
+Clowne provides an optional ActiveRecord integration which allows you to configure cloners in your models and adds a shortcut to invoke cloners (`#clowne` method). (Note: that's exactly the way [`amoeba`](https://github.com/amoeba-rb/amoeba) works).
+
+To enable this integration you must require `"clowne/adapters/active_record/dsl"` somewhere in your app, e.g. in initializer:
+
+```ruby
+# config/initializers/clowne.rb
+require "clowne/adapters/active_record/dsl"
+```
+
+Now you can specify cloning configs in your AR models:
+
+```ruby
+class User < ActiveRecord::Base
+  clowne_config do
+    include_associations :profile
+
+    nullify :email
+
+    # whatever available for your cloners,
+    # active_record adapter is set implicitly here
+  end
+end
+```
+
+And then you can clone objects like this:
+
+```ruby
+cloned_user = user.clowne(traits: my_traits, **params)
+```
 
 ### <a name="customization"></a>Customization
 

@@ -14,6 +14,10 @@ Rails:
 Naming/AccessorMethodName:
   Enabled: false
 
+Naming/ClassAndModuleCamelCase:
+  Exclude:
+    - 'spec/**/*.rb'
+
 Style/TrivialAccessors:
   Enabled: false
 
