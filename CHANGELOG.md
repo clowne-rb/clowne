@@ -1,6 +1,8 @@
 # Change log
 
-## master branch
+## master
+
+## 0.1.0.beta1 (2018-01-08)
 
 - Initial version. ([@ssnickolay][], [@palkan][])
 
