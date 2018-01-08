@@ -16,8 +16,6 @@ module Clowne
       end
 
       def compile(plan)
-        # Clear `#include_all`
-        plan.remove(:all_associations)
         plan.add_to(:association, name, self)
       end
 
