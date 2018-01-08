@@ -82,19 +82,19 @@ end
 and call it
 
 ```ruby
-clone = UserCloner.call(User.last, { email: "fake@example.com" })
-clone.persisted?
+cloned = UserCloner.call(User.last, { email: "fake@example.com" })
+cloned.persisted?
 # => false
-clone.save!
-clone.login
+cloned.save!
+cloned.login
 # => nil
-clone.email
+cloned.email
 # => "fake@example.com"
 
 # associations:
-clone.posts.count == User.last.posts.count
+cloned.posts.count == User.last.posts.count
 # => true
-clone.profile.name
+cloned.profile.name
 # => nil
 ```
 
@@ -102,6 +102,8 @@ clone.profile.name
 
 - [Configuration](#configuration)
 - [Include association](#include_association)
+- - [Inline configuration](#config-inline)
+- [Include one association](#include_association)
 - - [Scope](#include_association_scope)
 - - [Options](#include_association_options)
 - - [Multiple associations](#include_associations)
@@ -120,6 +122,39 @@ You can configure the default adapter for cloners:
 ```ruby
 # somewhere in initializers
 Clowne.default_adapter = :active_record
+```
+
+#### <a name="config-inline"></a>Inline Configuration
+
+You can also enhance the cloner configuration inline (i.e. add dynamic declarations):
+
+```ruby
+cloned = UserCloner.call(User.last) do
+  exclude_association :profile
+
+  finalize do |source, record|
+    record.email = "clone_of_#{source.email}"
+  end
+end
+
+cloned.email
+# => "clone_of_john@example.com"
+
+# associations:
+cloned.posts.size == User.last.posts.size
+# => true
+cloned.profile
+# => nil
+```
+
+Inline enhancement doesn't affect the _global_ configuration, so you can use it without any fear.
+
+Thus it's also possible to clone objects without any cloner classes at all by using `Clowne::Cloner`:
+
+```ruby
+cloned = Clowne::Cloner.call(user) do
+  # anything you want!
+end
 ```
 
 ### <a name="include_association"></a>Include one association
