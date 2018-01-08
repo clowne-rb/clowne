@@ -5,7 +5,7 @@
 
 # Clowne
 
-**NOTICE**: gem is currently under heavy development, we plan to release the first version 'till the end of the year. 
+**NOTICE**: gem is currently under heavy development, we plan to release the first version 'till the end of the year.
 
 A flexible gem for cloning your models. Clowne focuses on ease of use and provides the ability to connect various ORM adapters (currently only ActiveRecord is supported).
 
@@ -65,7 +65,7 @@ class UserCloner < Clowne::Cloner
   include_association :posts
 
   nullify :login
-  
+
   # params here is an arbitrary hash passed into cloner
   finalize do |_source, record, params|
     record.email = params[:email]
@@ -101,10 +101,12 @@ clone.profile.name
 ## <a name="features">Features
 
 - [Configuration](#configuration)
-- [Include one association](#include_association)
+- [Include association](#include_association)
 - - [Scope](#include_association_scope)
 - - [Options](#include_association_options)
+- - [Multiple associations](#include_associations)
 - [Exclude association](#exclude_association)
+- - [Multiple associations](#exclude_associations)
 - [Nullify attribute(s)](#nullify)
 - [Execute finalize block](#finalize)
 - [Traits](#traits)
@@ -223,6 +225,23 @@ UserCloner.call(user)
 
 **Notice: if custom cloner is not defined, clowne tries to find default cloner and use it. (PostCloner for previous example)**
 
+#### <a name="include_associations"></a>Include multiple association
+
+It's possible to include multiple associations at once with default options and scope
+
+```ruby
+class User < ActiveRecord::Base
+  has_many :accounts
+  has_many :posts
+end
+
+class UserCloner < Clowne::Cloner
+  adapter :active_record
+
+  include_associations :accounts, :posts
+end
+```
+
 ### <a name="exclude_association"></a>Exclude association
 
 Exclude association from copying
@@ -267,6 +286,10 @@ clone.comments.empty? #=> true
 
 Why so? That allows to have deterministic cloning plans when combining multiple traits
 (or inheriting cloners).
+
+#### <a name="exclude_associations"></a>Exclude multiple association
+
+It's possible to exclude multiple associations the same way as `include_associations` but with `exclude_associations`
 
 ### <a name="nullify"></a>Nullify attribute(s)
 
