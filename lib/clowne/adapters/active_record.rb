@@ -16,4 +16,3 @@ end
 
 require 'clowne/adapters/active_record/associations'
 require 'clowne/adapters/active_record/association'
-require 'clowne/adapters/active_record/copier'
