@@ -11,11 +11,6 @@ module Clowne
 
       def compile(plan)
         plan.remove_from(:association, name)
-
-        # update all_associations plan
-        all_associations = plan.get(:all_associations)
-        return if all_associations.nil?
-        all_associations.except! name
       end
     end
   end
