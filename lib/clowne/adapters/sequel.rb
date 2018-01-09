@@ -6,6 +6,9 @@ module Clowne
   module Adapters
     # Cloning adapter for Sequel
     class Sequel < Base
+      def dup_source(source)
+        Clowne::Adapters::Sequel::Copier.call(source)
+      end
     end
   end
 end

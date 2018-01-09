@@ -21,7 +21,3 @@ module Clowne
     end
   end
 end
-
-Clowne::Adapters::Sequel.register_copier(
-  Clowne::Adapters::Sequel::Copier
-)
