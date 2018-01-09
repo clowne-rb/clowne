@@ -10,7 +10,7 @@ module Clowne
           private
 
           def clone_record(record)
-            Clowne.resolve_adapter(:active_record).dup_source(record)
+            record.dup
           end
 
           def init_scope
