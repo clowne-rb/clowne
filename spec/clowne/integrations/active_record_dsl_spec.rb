@@ -67,7 +67,7 @@ describe 'AR DSl', :cleandb do
   let!(:draft_account) { AR_DSL::Account.create!(post: draft_post, title: 'Draf of Union Black') }
 
   describe '#clowne' do
-    it 'uses inline config' do
+    it 'uses in-model config' do
       cloned_post = post.clowne(title: 'New Post')
 
       expect(cloned_post.title).to eq 'New Post'
@@ -94,6 +94,16 @@ describe 'AR DSl', :cleandb do
       expect(cloned_admin.email).to be_nil
       expect(cloned_admin.posts.size).to eq 1
       expect(cloned_admin.posts.first.title).to eq 'Clone of Pirates of XXI century'
+    end
+
+    it 'works with inline config' do
+      cloned_post = draft_post.clowne(title: 'New Post') do
+        nullify :owner_id
+      end
+
+      expect(cloned_post.title).to eq '[wip]'
+      expect(cloned_post.account).to be_nil
+      expect(cloned_post.owner_id).to be_nil
     end
   end
 end

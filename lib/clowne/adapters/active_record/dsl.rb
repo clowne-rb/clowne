@@ -6,8 +6,8 @@ module Clowne
     module ActiveRecordDSL
       module InstanceMethods # :nodoc:
         # Shortcut to call class's cloner call with self
-        def clowne(*args)
-          self.class.cloner_class.call(self, *args)
+        def clowne(*args, &block)
+          self.class.cloner_class.call(self, *args, &block)
         end
       end
 
