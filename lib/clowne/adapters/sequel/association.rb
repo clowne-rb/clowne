@@ -6,7 +6,7 @@ module Clowne
       class Association
         class << self
           def call(source, record, declaration, params:)
-            with_clonable(source, record, declaration) do |record|
+            with_clonable(source, record, declaration) do
               reflection = source.class.association_reflections[declaration.name.to_sym]
 
               cloner_class = Associations.cloner_for(reflection)

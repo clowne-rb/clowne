@@ -1,3 +1,10 @@
+if ENV['CC_REPORT']
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter '/spec/'
+  end
+end
+
 require 'active_record'
 require 'sequel'
 require 'clowne'
@@ -8,9 +15,8 @@ begin
 rescue LoadError # rubocop:disable Lint/HandleExceptions
 end
 
-if ENV['CC_REPORT']
-  require 'simplecov'
-  SimpleCov.start
+%w[active_record sequel].each do |orm|
+  require_relative "./support/#{orm}/initializer.rb"
 end
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
