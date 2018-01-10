@@ -10,7 +10,7 @@ module Clowne
   module Adapters # :nodoc: all
     class Sequel
       module Associations
-        Sequel_2_CLONER = {
+        SEQUEL_2_CLONER = {
           one_to_one: OneToOne,
           one_to_many: OneToMany,
           many_to_many: ManyToMany
@@ -18,7 +18,7 @@ module Clowne
 
         # Returns an association cloner class for reflection
         def self.cloner_for(reflection)
-          Sequel_2_CLONER.fetch(reflection[:type], Noop)
+          SEQUEL_2_CLONER.fetch(reflection[:type], Noop)
         end
       end
     end
