@@ -71,4 +71,18 @@ describe Clowne::Adapters::Sequel::Association do
       subject
     end
   end
+
+  context 'not clonable association' do
+    let(:association) { :owner }
+
+    it 'does not call any resolver' do
+      expect(Clowne::Adapters::Sequel::Associations::Noop).not_to receive(:new) do
+        double.tap do |resolver|
+          expect(resolver).to receive(:call)
+        end
+      end
+
+      subject
+    end
+  end
 end

@@ -22,6 +22,7 @@ module Sequel
 
     nested_attributes :account
     nested_attributes :tags
+    nested_attributes :topic # For testing Noop resolver
 
     dataset_module do
       def alpha_first
