@@ -23,15 +23,8 @@ module Clowne
   end
 end
 
-# Register default actions in the specified order
-Clowne::Plan.registry.append :all_associations
-Clowne::Plan.registry.append :association
-Clowne::Plan.registry.append :nullify
-Clowne::Plan.registry.append :finalize
-
 require 'clowne/declarations/exclude_association'
 require 'clowne/declarations/finalize'
-require 'clowne/declarations/include_all'
 require 'clowne/declarations/include_association'
 require 'clowne/declarations/nullify'
 require 'clowne/declarations/trait'

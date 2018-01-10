@@ -15,7 +15,7 @@ end
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
-Clowne.default_adapter = FakeAdapter
+Clowne.default_adapter = :base
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = '.rspec_status'
@@ -46,5 +46,9 @@ RSpec.configure do |config|
       orm_class.remove_instance_variable(:@_clowne_cloner) if
         orm_class.instance_variable_defined?(:@_clowne_cloner)
     end
+  end
+
+  config.after(:each, cleandb: true) do
+    ActiveRecord::Base.subclasses.each(&:delete_all)
   end
 end

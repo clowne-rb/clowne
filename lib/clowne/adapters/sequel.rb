@@ -12,11 +12,15 @@ module Clowne
       # +params+:: Custom params hash
       def clone(source, plan, params: {})
         declarations = plan.declarations
-        init_record = RecordWrapper.new(copier.call(source))
+        init_record = RecordWrapper.new(dup_source(source))
 
         declarations.inject(init_record) do |record, (type, declaration)|
           resolver_for(type).call(source, record, declaration, params: params)
         end
+      end
+
+      def dup_source(source)
+        Clowne::Adapters::Sequel::Copier.call(source)
       end
     end
   end

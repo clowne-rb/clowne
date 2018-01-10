@@ -1,9 +1,9 @@
-describe Clowne::Adapters::ActiveRecord::Copier do
+describe Clowne::Adapters::ActiveRecord do
   let(:source) { create(:post) }
 
-  subject { described_class.call(source) }
+  subject { described_class.new.dup_source(source) }
 
-  it "get source's clone" do
+  it "get source's dup" do
     expect(subject).to be_a(::AR::Post)
     expect(subject).to be_new_record
     expect(subject.id).to be_nil

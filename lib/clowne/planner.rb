@@ -5,17 +5,24 @@ require 'clowne/plan'
 module Clowne
   class Planner # :nodoc: all
     class << self
-      # Params:
-      # +cloner+:: Cloner object
-      # +init_plan+:: Init plan
-      # +traits+:: List of traits if any
+      # Compile plan for cloner with traits
       def compile(cloner, traits: nil)
         declarations = cloner.declarations.dup
 
         declarations += compile_traits(cloner, traits) unless traits.nil?
 
-        declarations.each_with_object(Plan.new) do |declaration, plan|
+        declarations.each_with_object(Plan.new(cloner.adapter.registry)) do |declaration, plan|
           declaration.compile(plan)
+        end
+      end
+
+      # Extend previously compiled plan with an arbitrary block
+      # NOTE: It doesn't modify the plan itself but return a copy
+      def enhance(plan, block)
+        trait = Clowne::Declarations::Trait.new.tap { |t| t.extend_with(block) }
+
+        trait.compiled.each_with_object(plan.dup) do |declaration, new_plan|
+          declaration.compile(new_plan)
         end
       end
 

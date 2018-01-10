@@ -1,11 +1,10 @@
 [![Gem Version](https://badge.fury.io/rb/clowne.svg)](https://badge.fury.io/rb/clowne)
 [![Build Status](https://travis-ci.org/palkan/clowne.svg?branch=master)](https://travis-ci.org/palkan/clowne)
-[![Code Climate](https://codeclimate.com/github/palkan/clowne.svg)](https://codeclimate.com/github/palkan/clowne)
 [![Test Coverage](https://codeclimate.com/github/palkan/clowne/badges/coverage.svg)](https://codeclimate.com/github/palkan/clowne/coverage)
 
 # Clowne
 
-**NOTICE**: gem is currently under heavy development, we plan to release the first version 'till the end of the year.
+**NOTE**: this is the documentation for pre-release version **0.1.0.beta1**.
 
 A flexible gem for cloning your models. Clowne focuses on ease of use and provides the ability to connect various ORM adapters (see [supported adapters](#adapters)).
 
@@ -82,19 +81,19 @@ end
 and call it
 
 ```ruby
-clone = UserCloner.call(User.last, { email: "fake@example.com" })
-clone.persisted?
+cloned = UserCloner.call(User.last, { email: "fake@example.com" })
+cloned.persisted?
 # => false
-clone.save!
-clone.login
+cloned.save!
+cloned.login
 # => nil
-clone.email
+cloned.email
 # => "fake@example.com"
 
 # associations:
-clone.posts.count == User.last.posts.count
+cloned.posts.count == User.last.posts.count
 # => true
-clone.profile.name
+cloned.profile.name
 # => nil
 ```
 
@@ -145,14 +144,20 @@ If you try to clone associations without NestedAttributes plugin Clowne will ski
 ## <a name="features">Features
 
 - [Configuration](#configuration)
+- [Include association](#include_association)
+- - [Inline configuration](#config-inline)
 - [Include one association](#include_association)
 - - [Scope](#include_association_scope)
 - - [Options](#include_association_options)
+- - [Multiple associations](#include_associations)
 - [Exclude association](#exclude_association)
+- - [Multiple associations](#exclude_associations)
 - [Nullify attribute(s)](#nullify)
 - [Execute finalize block](#finalize)
 - [Traits](#traits)
 - [Execution order](#execution_order)
+- [ActiveRecord DSL](#ar_dsl)
+- [Customization](#customization)
 
 ### <a name="configuration"></a>Configuration
 
@@ -161,6 +166,39 @@ You can configure the default adapter for cloners:
 ```ruby
 # somewhere in initializers
 Clowne.default_adapter = :active_record
+```
+
+#### <a name="config-inline"></a>Inline Configuration
+
+You can also enhance the cloner configuration inline (i.e. add dynamic declarations):
+
+```ruby
+cloned = UserCloner.call(User.last) do
+  exclude_association :profile
+
+  finalize do |source, record|
+    record.email = "clone_of_#{source.email}"
+  end
+end
+
+cloned.email
+# => "clone_of_john@example.com"
+
+# associations:
+cloned.posts.size == User.last.posts.size
+# => true
+cloned.profile
+# => nil
+```
+
+Inline enhancement doesn't affect the _global_ configuration, so you can use it without any fear.
+
+Thus it's also possible to clone objects without any cloner classes at all by using `Clowne::Cloner`:
+
+```ruby
+cloned = Clowne::Cloner.call(user) do
+  # anything you want!
+end
 ```
 
 ### <a name="include_association"></a>Include one association
@@ -266,6 +304,23 @@ UserCloner.call(user)
 
 **Notice: if custom cloner is not defined, clowne tries to find default cloner and use it. (PostCloner for previous example)**
 
+#### <a name="include_associations"></a>Include multiple association
+
+It's possible to include multiple associations at once with default options and scope
+
+```ruby
+class User < ActiveRecord::Base
+  has_many :accounts
+  has_many :posts
+end
+
+class UserCloner < Clowne::Cloner
+  adapter :active_record
+
+  include_associations :accounts, :posts
+end
+```
+
 ### <a name="exclude_association"></a>Exclude association
 
 Exclude association from copying
@@ -291,6 +346,29 @@ clone2 = UserCloner.call(user, traits: :without_posts)
 clone2.posts
 # => []
 ```
+
+**NOTE**: once excluded association cannot be re-included, e.g. the following cloner:
+
+```ruby
+class UserCloner < Clowne::Cloner
+  exclude_association :comments
+
+  trait :with_comments do
+    # That wouldn't work
+    include_association :comments
+  end
+end
+
+clone = UserCloner.call(user, traits: :with_comments)
+clone.comments.empty? #=> true
+```
+
+Why so? That allows to have deterministic cloning plans when combining multiple traits
+(or inheriting cloners).
+
+#### <a name="exclude_associations"></a>Exclude multiple association
+
+It's possible to exclude multiple associations the same way as `include_associations` but with `exclude_associations`
 
 ### <a name="nullify"></a>Nullify attribute(s)
 
@@ -401,10 +479,116 @@ For ActiveRecord:
 - clone associations
 - nullify attributes
 - run `finalize` blocks
-
 The order of `finalize` blocks is the order they've been written.
 
-*NOTE*: using a trait means appending the trait's rules to the main execution plan.
+### <a name="ar_dsl"></a>Active Record DSL
+
+Clowne provides an optional ActiveRecord integration which allows you to configure cloners in your models and adds a shortcut to invoke cloners (`#clowne` method). (Note: that's exactly the way [`amoeba`](https://github.com/amoeba-rb/amoeba) works).
+
+To enable this integration you must require `"clowne/adapters/active_record/dsl"` somewhere in your app, e.g. in initializer:
+
+```ruby
+# config/initializers/clowne.rb
+require "clowne/adapters/active_record/dsl"
+```
+
+Now you can specify cloning configs in your AR models:
+
+```ruby
+class User < ActiveRecord::Base
+  clowne_config do
+    include_associations :profile
+
+    nullify :email
+
+    # whatever available for your cloners,
+    # active_record adapter is set implicitly here
+  end
+end
+```
+
+And then you can clone objects like this:
+
+```ruby
+cloned_user = user.clowne(traits: my_traits, **params)
+```
+
+### <a name="customization"></a>Customization
+
+Clowne is built with extensibility in mind. You can create your own DSL commands and resolvers.
+
+Let's consider an example.
+
+Suppose that you want to add `include_all` declaration to automagically include all associations (for ActiveRecord).
+
+First, you should add a custom declaration:
+
+```ruby
+class IncludeAll # :nodoc: all
+  def compile(plan)
+    # Just add all_associations object to plan
+    plan.set(:all_associations, self)
+    # Plan supports 3 types of registers:
+    #
+    # 1) Scalar
+    #
+    # plan.set(key, value)
+    # plan.remove(key)
+    #
+    # 2) Append-only lists
+    #
+    # plan.add(key, value)
+    #
+    # 3) Two-phase set (2P-Set) (see below)
+    #
+    # plan.add_to(type, key, value)
+    # plan.remove_from(type, key)
+  end
+end
+
+# Register our declrations, i.e. extend DSL
+Clowne::Declarations.add :include_all, Clowne::Declarations::IncludeAll
+```
+
+\* Operations over [2P-Set](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type#2P-Set_(Two-Phase_Set)) (adding/removing) do not depend on the order of execution; we use "remove-wins" semantics, i.e. when a key has been removed, it cannot be re-added.
+
+Secondly, register a resolver:
+
+```ruby
+class AllAssociations
+  # This method is called when all_associations command is applied.
+  #
+  #   source – source record
+  #   record – target record (our clone)
+  #   declaration – declaration object
+  #   params – custom params passed to cloner
+  def call(source, record, declaration, params:)
+    source.class.reflections.each do |name, reflection|
+      # Exclude belongs_to associations
+      next if reflection.macro == :belongs_to
+      # Resolve and apply association cloner
+      cloner_class = Clowne::Adapters::ActiveRecord::Associations.cloner_for(reflection)
+      cloner_class.new(reflection, source, declaration, params).call(record)
+    end
+    record
+  end
+end
+
+# Finally, register the resolver
+Clowne::Adapters::ActiveRecord.register_resolver(
+  :all_associations, AllAssociations
+)
+```
+
+Now you can use it likes this:
+
+```ruby
+class UserCloner < Clowne::Cloner
+  adapter :active_record
+
+  include_all
+end
+```
 
 ## Maintainers
 

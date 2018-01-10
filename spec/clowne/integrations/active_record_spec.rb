@@ -2,9 +2,6 @@ describe 'AR adapter', :cleanup, adapter: :active_record do
   before(:all) do
     module AR
       class AccCloner < Clowne::Cloner
-        include_all
-        exclude_association :history
-
         trait :with_history do
           include_association :history
         end
@@ -33,8 +30,6 @@ describe 'AR adapter', :cleanup, adapter: :active_record do
       end
 
       class HistoryCloner < Clowne::Cloner
-        adapter FakeAdapter
-
         finalize do |_source, record|
           record.some_stuff = record.some_stuff + ' - 2'
         end
