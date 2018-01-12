@@ -51,7 +51,7 @@ class AllAssociations
   #   declaration – declaration object
   #   params – custom params passed to cloner
   def call(source, record, declaration, params:)
-    source.class.reflections.each do |name, reflection|
+    source.class.reflections.each_value do |_name, reflection|
       # Exclude belongs_to associations
       next if reflection.macro == :belongs_to
       # Resolve and apply association cloner

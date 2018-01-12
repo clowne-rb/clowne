@@ -1,12 +1,18 @@
+require:
+ - 'rubocop-md'
 AllCops:
   Exclude:
     - 'bin/**/*'
     - 'tmp/**/*'
+    - 'docs/web/**/*'
     - 'vendor/**/*'
     - 'gemfiles/vendor/**/*'
   DisplayCopNames: true
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.3
+
+Markdown:
+  WarnInvalid: true
 
 Rails:
   Enabled: false
@@ -26,6 +32,7 @@ Metrics/LineLength:
 
 Style/Documentation:
   Exclude:
+    - 'docs/*.md'
     - 'spec/**/*.rb'
 
 Style/SymbolArray:
@@ -33,6 +40,7 @@ Style/SymbolArray:
 
 Style/FrozenStringLiteralComment:
   Exclude:
+    - 'docs/*.md'
     - 'spec/**/*.rb'
     - 'Gemfile'
     - 'Rakefile'
@@ -47,3 +55,7 @@ Bundler/OrderedGems:
 
 Gemspec/OrderedDependencies:
   Enabled: false
+
+Lint/Void:
+  Exclude:
+    - 'docs/*.md'

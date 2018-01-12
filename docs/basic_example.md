@@ -45,7 +45,7 @@ end
 and call it
 
 ```ruby
-cloned = UserCloner.call(User.last, { email: "fake@example.com" })
+cloned = UserCloner.call(User.last, email: 'fake@example.com')
 cloned.persisted?
 # => false
 cloned.save!

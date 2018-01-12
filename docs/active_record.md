@@ -31,5 +31,6 @@ end
 And then you can clone objects like this:
 
 ```ruby
-cloned_user = user.clowne(traits: my_traits, **params)
+user.clowne(traits: my_traits, **params)
+# => <#User...
 ```

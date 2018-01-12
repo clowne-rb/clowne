@@ -32,4 +32,7 @@ Thus it's also possible to clone objects without any cloner classes at all by us
 cloned = Clowne::Cloner.call(user) do
   # anything you want!
 end
+
+cloned
+# => <#User..
 ```
