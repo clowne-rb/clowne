@@ -30,7 +30,7 @@ class Button extends React.Component {
   render() {
     return (
       <div className="pluginWrapper buttonWrapper">
-        <a className="button" href={this.props.href} target={this.props.target}>
+        <a className={`button ${this.props.className}`} href={this.props.href} target={this.props.target}>
           {this.props.children}
         </a>
       </div>
@@ -40,6 +40,7 @@ class Button extends React.Component {
 
 Button.defaultProps = {
   target: '_self',
+  className: '',
 };
 
 const SplashContainer = props => (
@@ -58,7 +59,7 @@ const Logo = props => (
 
 const ProjectTitle = props => (
   <h2 className="projectTitle">
-    {siteConfig.title}
+    <span className="projectTitleName">{siteConfig.title}</span>
     <small>{siteConfig.tagline}</small>
   </h2>
 );
@@ -80,9 +81,8 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
-            <Button href="#try">Try It Out</Button>
-            <Button href={docUrl('doc1.html', language)}>Example Link</Button>
-            <Button href={docUrl('doc2.html', language)}>Example Link 2</Button>
+            <Button href="/clowne/docs/installation.html" className="getStarted">Getting Started</Button>
+            <Button href={docUrl('configuration.html', language)}>Configuration</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -92,27 +92,39 @@ class HomeSplash extends React.Component {
 
 const Block = props => (
   <Container
-    padding={['bottom', 'top']}
+    padding={props.padding}
     id={props.id}
     background={props.background}>
     <GridBlock align="center" contents={props.children} layout={props.layout} />
   </Container>
 );
 
+Block.defaultProps = {
+  padding: ['bottom', 'top'],
+};
+
 const Features = props => (
-  <Block layout="fourColumn">
+  <Block layout="twoColumn" padding={['bottom']}>
     {[
       {
-        content: 'This is the content of my feature',
-        image: imgUrl('docusaurus.svg'),
+        content: 'Rich DSL and different uses',
         imageAlign: 'top',
-        title: 'Feature One',
+        title: 'Powerful',
       },
       {
-        content: 'The content of my second feature',
-        image: imgUrl('docusaurus.svg'),
+        content: 'Now supported ActiveRecord and Sequel',
         imageAlign: 'top',
-        title: 'Feature Two',
+        title: 'ORM adapters',
+      },
+      {
+        content: '<p>You have the ability to change</p><p>parts of the behavior</p>',
+        imageAlign: 'top',
+        title: 'Customization',
+      },
+      {
+        content: 'You can use it in any Ruby projects',
+        imageAlign: 'top',
+        title: 'Non Rails',
       },
     ]}
   </Block>
@@ -205,11 +217,11 @@ class Index extends React.Component {
         <HomeSplash language={language} />
         <div className="mainContainer">
           <Features />
-          <FeatureCallout />
-          <LearnHow />
-          <TryOut />
-          <Description />
-          <Showcase language={language} />
+          {/* <FeatureCallout /> */}
+          {/* <LearnHow /> */}
+          {/* <TryOut /> */}
+          {/* <Description /> */}
+          {/* <Showcase language={language} /> */}
         </div>
       </div>
     );

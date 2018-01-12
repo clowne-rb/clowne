@@ -1,10 +1,21 @@
 {
   "docs": {
-    "Docusaurus": ["doc1"],
-    "First Category": ["doc2"],
-    "Second Category": ["doc3"]
-  },
-  "docs-other": {
-    "First Category": ["doc4", "doc5"]
+    "Getting Started": ["installation", "configuration", "basic_example", "alternatives"],
+    "API": [
+      "include_association",
+      "exclude_association",
+      "nullify",
+      "finalize",
+      "traits"
+    ],
+    "Adapters": [
+      "active_record"
+    ],
+    "Features": [
+      "default_cloner",
+      "execution_order",
+      "inline_configuration",
+      "customization"
+    ]
   }
 }
