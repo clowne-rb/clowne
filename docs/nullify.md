@@ -33,8 +33,8 @@ clone.surname.nil?
 
 # nullify name and surname
 clone2 = UserCloner.call(user, traits: :nullify_surname)
-clone.name.nil?
+clone2.name.nil?
 # => true
-clone.surname.nil?
+clone2.surname.nil?
 # => true
 ```

@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
 end
 
 class Account < ActiveRecord::Base
-  scope :active, -> where(active: true)
+  scope :active, -> { where(active: true) }
 end
 
 class Post < ActiveRecord::Base
@@ -51,11 +51,11 @@ class UserCloner < Clowne::Cloner
   adapter Clowne::ActiveRecord::Adapter
 
   include_association :accounts, :active
-  include_association :posts, ->(params) { where(state: params[:post_status] }
+  include_association :posts, ->(params) { where(state: params[:post_status]) }
 end
 
 # posts will be cloned only with draft status
-UserCloner.call(user, { post_status: :draft })
+UserCloner.call(user, post_status: :draft)
 # => <#User...
 ```
 

@@ -7,8 +7,8 @@ Basic cloner implementation looks like
 
 ```ruby
 class SomeCloner < Clowne::Cloner
-  adapter Clowne::ActiveRecord::Adapter
-  ...
+  adapter :active_record # or adapter Clowne::ActiveRecord::Adapter
+  # some implementation ...
 end
 ```
 
@@ -23,6 +23,6 @@ and skip adapter declaration
 
 ```ruby
 class SomeCloner < Clowne::Cloner
-  ...
+  # some implementation ...
 end
 ```
