@@ -1,5 +1,5 @@
 require:
- - 'rubocop-md'
+- 'rubocop-md'
 AllCops:
   Exclude:
     - 'bin/**/*'
