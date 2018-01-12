@@ -10,12 +10,12 @@ Simple callback for changing record manually.
 class UserCloner < Clowne::Cloner
   adapter Clowne::ActiveRecord::Adapter
 
-  finalize do |source, record, params|
+  finalize do |_source, record, _params|
     record.name = 'This is copy!'
   end
 
   trait :change_email do
-    finalize do |source, record, params|
+    finalize do |_source, record, params|
       record.email = params[:email]
     end
   end
@@ -30,7 +30,7 @@ clone.email == 'clone@example.com'
 
 # execute both finalizes
 clone2 = UserCloner.call(user, traits: :change_email)
-clone.name
+clone2.name
 # => 'This is copy!'
-clone.email
+clone2.email
 # => 'clone@example.com'
