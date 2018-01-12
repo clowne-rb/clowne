@@ -7,7 +7,6 @@ gem 'pry-byebug'
 gem 'sqlite3'
 gem 'activerecord', '>= 5.0'
 gem 'simplecov'
-gem 'rubocop-md'
 
 local_gemfile = 'Gemfile.local'
 
