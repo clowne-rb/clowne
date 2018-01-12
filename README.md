@@ -81,7 +81,7 @@ end
 and call it
 
 ```ruby
-cloned = UserCloner.call(User.last, { email: "fake@example.com" })
+cloned = UserCloner.call(User.last, email: 'fake@example.com')
 cloned.persisted?
 # => false
 cloned.save!
@@ -155,6 +155,9 @@ Thus it's also possible to clone objects without any cloner classes at all by us
 cloned = Clowne::Cloner.call(user) do
   # anything you want!
 end
+
+cloned
+# => <#User..
 ```
 
 ### <a name="include_association"></a>Include one association
@@ -195,7 +198,7 @@ class User < ActiveRecord::Base
 end
 
 class Account < ActiveRecord::Base
-  scope :active, -> where(active: true)
+  scope :active, -> { where(active: true) }
 end
 
 class Post < ActiveRecord::Base
@@ -206,11 +209,11 @@ class UserCloner < Clowne::Cloner
   adapter Clowne::ActiveRecord::Adapter
 
   include_association :accounts, :active
-  include_association :posts, ->(params) { where(state: params[:post_status] }
+  include_association :posts, ->(params) { where(state: params[:post_status]) }
 end
 
 # posts will be cloned only with draft status
-UserCloner.call(user, { post_status: :draft })
+UserCloner.call(user, post_status: :draft)
 # => <#User...
 ```
 
@@ -358,9 +361,9 @@ clone.surename.nil?
 
 # nullify name and surename
 clone2 = UserCloner.call(user, traits: :nullify_surename)
-clone.name.nil?
+clone2.name.nil?
 # => true
-clone.surename.nil?
+clone2.surename.nil?
 # => true
 ```
 
@@ -372,12 +375,12 @@ Simple callback for changing record manually.
 class UserCloner < Clowne::Cloner
   adapter Clowne::ActiveRecord::Adapter
 
-  finalize do |source, record, params|
+  finalize do |_source, record, _params|
     record.name = 'This is copy!'
   end
 
   trait :change_email do
-    finalize do |source, record, params|
+    finalize do |_source, record, params|
       record.email = params[:email]
     end
   end
@@ -392,9 +395,9 @@ clone.email == 'clone@example.com'
 
 # execute both finalizes
 clone2 = UserCloner.call(user, traits: :change_email)
-clone.name
+clone2.name
 # => 'This is copy!'
-clone.email
+clone2.email
 # => 'clone@example.com'
 ```
 
@@ -445,7 +448,7 @@ To enable this integration you must require `"clowne/adapters/active_record/dsl"
 
 ```ruby
 # config/initializers/clowne.rb
-require "clowne/adapters/active_record/dsl"
+require 'clowne/adapters/active_record/dsl'
 ```
 
 Now you can specify cloning configs in your AR models:
@@ -466,7 +469,8 @@ end
 And then you can clone objects like this:
 
 ```ruby
-cloned_user = user.clowne(traits: my_traits, **params)
+user.clowne(traits: my_traits, **params)
+# => <#User...
 ```
 
 ### <a name="customization"></a>Customization
@@ -519,7 +523,7 @@ class AllAssociations
   #   declaration – declaration object
   #   params – custom params passed to cloner
   def call(source, record, declaration, params:)
-    source.class.reflections.each do |name, reflection|
+    source.class.reflections.each_value do |_name, reflection|
       # Exclude belongs_to associations
       next if reflection.macro == :belongs_to
       # Resolve and apply association cloner

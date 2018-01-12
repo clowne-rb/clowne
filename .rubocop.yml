@@ -7,8 +7,6 @@ AllCops:
     - 'docs/web/**/*'
     - 'vendor/**/*'
     - 'gemfiles/vendor/**/*'
-    - 'CHANGELOG.md'
-    - 'README.md'
   DisplayCopNames: true
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.3
@@ -36,6 +34,7 @@ Style/Documentation:
   Exclude:
     - 'docs/*.md'
     - 'spec/**/*.rb'
+    - 'README.md'
 
 Style/SymbolArray:
   Enabled: false
@@ -47,6 +46,8 @@ Style/FrozenStringLiteralComment:
     - 'Gemfile'
     - 'Rakefile'
     - '*.gemspec'
+    - 'CHANGELOG.md'
+    - 'README.md'
 
 Metrics/BlockLength:
   Exclude:
@@ -61,3 +62,4 @@ Gemspec/OrderedDependencies:
 Lint/Void:
   Exclude:
     - 'docs/*.md'
+    - 'README.md'
