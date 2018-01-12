@@ -20,6 +20,7 @@ const siteConfig = {
   tagline: 'A flexible gem for cloning your models.',
   url: 'https://github.com/palkan/clowne' /* your website url */,
   baseUrl: '/clowne/' /* base url for your project */,
+  customDocsPath: '../docs',
   projectName: 'clowne',
   headerLinks: [
     {doc: 'basic_example', label: 'Docs'},
