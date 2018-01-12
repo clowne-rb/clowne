@@ -1,6 +1,11 @@
 {
   "docs": {
-    "Getting Started": ["installation", "configuration", "basic_example", "alternatives"],
+    "Getting Started": [
+      "installation",
+      "configuration",
+      "basic_example",
+      "alternatives"
+    ],
     "API": [
       "include_association",
       "exclude_association",
