@@ -14,3 +14,12 @@
 
 @media only screen and (min-width: 1500px) {
 }
+
+.projectTitleName{
+  font-weight: bold;
+}
+
+.getStarted {
+  background-color: #7d638e;
+  color: white;
+}

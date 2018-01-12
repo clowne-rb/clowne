@@ -17,15 +17,14 @@ const users = [
 
 const siteConfig = {
   title: 'Clowne' /* title for your website */,
-  tagline: 'A flexible gem for cloning models',
+  tagline: 'A flexible gem for cloning your models.',
   url: 'https://github.com/palkan/clowne' /* your website url */,
   baseUrl: '/clowne/' /* base url for your project */,
   projectName: 'clowne',
   headerLinks: [
-    {doc: 'doc1', label: 'Docs'},
-    {doc: 'doc4', label: 'API'},
-    {page: 'help', label: 'Help'},
+    {doc: 'basic_example', label: 'Docs'},
     {blog: true, label: 'Blog'},
+    {href: 'https://github.com/palkan/clowne', label: 'GitHub'},
   ],
   users: [], /* users, */
   /* path to images for header/footer */
@@ -34,7 +33,7 @@ const siteConfig = {
   favicon: 'img/favicon.png',
   /* colors for website */
   colors: {
-    primaryColor: '#350e4d', /* #2E8555 */
+    primaryColor: '#7d638e', /* #2E8555 */
     secondaryColor: '#205C3B',
   },
   // This copyright info is used in /core/Footer.js and blog rss/atom feeds.
