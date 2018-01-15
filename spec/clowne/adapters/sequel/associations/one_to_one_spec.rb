@@ -79,16 +79,16 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
       it 'pass params to child cloner' do
         expect(subject.account).to be_new
         expect(subject.account.to_hash).to include(
-          created_at: account.created_at,
           post_id: nil,
           title: account.title
         )
+        expect(subject.account.created_at).not_to be_nil
         expect(subject.account.history).to be_new
         expect(subject.account.history.to_hash).to include(
-          created_at: account.history.created_at,
           some_stuff: account.history.some_stuff,
           account_id: nil
         )
+        expect(subject.account.history.created_at).not_to be_nil
       end
     end
 
