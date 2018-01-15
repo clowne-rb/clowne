@@ -1,0 +1,6 @@
+Metrics/LineLength:
+  Max: 100
+
+Lint/Void:
+  Exclude:
+    - '*.md'

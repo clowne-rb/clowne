@@ -23,7 +23,7 @@ class UserCloner < Clowne::Cloner
 end
 
 # execute first finalize
-UserCloner.call(user, traits: [:with_posts, :with_profile, :nullify_name])
+UserCloner.call(user, traits: %i[with_posts with_profile nullify_name])
 # or
 UserCloner.call(user, traits: :nullify_name)
 # or

@@ -32,7 +32,6 @@ Metrics/LineLength:
 
 Style/Documentation:
   Exclude:
-    - 'docs/*.md'
     - 'spec/**/*.rb'
     - 'README.md'
 
@@ -41,7 +40,6 @@ Style/SymbolArray:
 
 Style/FrozenStringLiteralComment:
   Exclude:
-    - 'docs/*.md'
     - 'spec/**/*.rb'
     - 'Gemfile'
     - 'Rakefile'
@@ -61,5 +59,4 @@ Gemspec/OrderedDependencies:
 
 Lint/Void:
   Exclude:
-    - 'docs/*.md'
     - 'README.md'
