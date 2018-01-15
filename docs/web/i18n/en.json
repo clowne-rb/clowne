@@ -22,6 +22,7 @@
     "supported_adapters": "Supported adapters",
     "traits": "Traits",
     "2018-01-08-init-version": "0.1.0.beta1",
+    "2018-01-15-added-sequel": "Added Sequel adapter",
     "HISTORY": "HISTORY",
     "README": "README",
     "readme": "readme",
