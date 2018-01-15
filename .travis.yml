@@ -4,6 +4,9 @@ language: ruby
 notifications:
   email: false
 
+before_install:
+  gem update --system
+
 before_script:
   # Only generate coverage report for the specified job
   - if [ "$CC_REPORT" == "true" ]; then curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter; fi
