@@ -4,7 +4,6 @@
 
 # Clowne
 
-<<<<<<< HEAD
 **NOTE**: this is the documentation for pre-release version **0.1.0.beta1**.
 
 A flexible gem for cloning your models. Clowne focuses on ease of use and provides the ability to connect various ORM adapters (see [supported adapters](#adapters)).
