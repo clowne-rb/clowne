@@ -1,7 +1,9 @@
-describe 'AR adapter', :cleanup, adapter: :active_record do
+describe 'Sequel adapter', :cleanup, adapter: :sequel do
   before(:all) do
-    module AR
+    module Sequel
       class AccCloner < Clowne::Cloner
+        exclude_association :history
+
         trait :with_history do
           include_association :history
         end
@@ -18,7 +20,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record do
       end
 
       class PostCloner < BasePostCloner
-        include_association :account, clone_with: 'AR::AccCloner',
+        include_association :account, clone_with: 'Sequel::AccCloner',
                                       traits: %i[with_history nullify_title]
         include_association :tags, ->(params) { where(value: params[:tags]) }
 
@@ -39,52 +41,54 @@ describe 'AR adapter', :cleanup, adapter: :active_record do
 
   after(:all) do
     %w[AccCloner BasePostCloner PostCloner HistoryCloner].each do |cloner|
-      AR.send(:remove_const, cloner)
+      Sequel.send(:remove_const, cloner)
     end
   end
 
-  let!(:account) { create(:account, title: 'Manager') }
-  let!(:history) { create(:history, some_stuff: 'This is history about my life', account: account) }
-  let!(:post) { create(:post, title: 'TeamCity', account: account) }
+  let!(:post) { create('sequel:post', title: 'TeamCity') }
+  let!(:account) { create('sequel:account', title: 'Manager', post: post) }
+  let!(:history) do
+    create('sequel:history', some_stuff: 'This is history about my life', account: account)
+  end
   let(:topic) { post.topic }
 
   let!(:tags) do
-    %w[CI CD JVM].map { |value| create(:tag, value: value) }.tap do |items|
-      post.tags = items
+    %w[CI CD JVM].map { |value| create('sequel:tag', value: value) }.tap do |items|
+      items.each { |tag| post.add_tag(tag) }
     end
   end
 
   it 'clone all stuff' do
-    expect(AR::Topic.count).to eq(1)
-    expect(AR::Post.count).to eq(1)
-    expect(AR::Tag.count).to eq(3)
-    expect(AR::Account.count).to eq(1)
-    expect(AR::History.count).to eq(1)
+    expect(Sequel::Topic.count).to eq(1)
+    expect(Sequel::Post.count).to eq(1)
+    expect(Sequel::Tag.count).to eq(3)
+    expect(Sequel::Account.count).to eq(1)
+    expect(Sequel::History.count).to eq(1)
 
-    cloned = AR::PostCloner.call(
+    cloned_wrapper = Sequel::PostCloner.call(
       post,
       traits: :mark_as_clone,
       tags: %w[CI CD],
       post_contents: 'THIS IS CLONE! (☉_☉)'
     )
-    cloned.save!
+    cloned = cloned_wrapper.save
 
-    expect(AR::Topic.count).to eq(1)
-    expect(AR::Post.count).to eq(2)
-    expect(AR::Tag.count).to eq(5)
-    expect(AR::Account.count).to eq(2)
-    expect(AR::History.count).to eq(2)
+    expect(Sequel::Topic.count).to eq(1)
+    expect(Sequel::Post.count).to eq(2)
+    expect(Sequel::Tag.count).to eq(5)
+    expect(Sequel::Account.count).to eq(2)
+    expect(Sequel::History.count).to eq(2)
 
     # post
-    expect(cloned).to be_a(AR::Post)
+    expect(cloned).to be_a(Sequel::Post)
     expect(cloned.title).to eq('TeamCity Super!')
     expect(cloned.contents).to eq('THIS IS CLONE! (☉_☉)')
 
     # account
     account_clone = cloned.account
-    expect(account_clone).to be_a(AR::Account)
+    expect(account_clone).to be_a(Sequel::Account)
     expect(account_clone.title).to be_nil
-    expect(account_clone.history).to be_a(AR::History)
+    expect(account_clone.history).to be_a(Sequel::History)
 
     # history
     history_clone = account_clone.history

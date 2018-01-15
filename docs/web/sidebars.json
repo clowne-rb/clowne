@@ -14,7 +14,9 @@
       "traits"
     ],
     "Adapters": [
-      "active_record"
+      "supported_adapters",
+      "active_record",
+      "sequel"
     ],
     "Features": [
       "default_cloner",

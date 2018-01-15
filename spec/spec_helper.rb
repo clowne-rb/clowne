@@ -1,4 +1,12 @@
+if ENV['CC_REPORT']
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter '/spec/'
+  end
+end
+
 require 'active_record'
+require 'sequel'
 require 'clowne'
 require 'factory_bot'
 
@@ -7,9 +15,8 @@ begin
 rescue LoadError # rubocop:disable Lint/HandleExceptions
 end
 
-if ENV['CC_REPORT']
-  require 'simplecov'
-  SimpleCov.start
+%w[active_record sequel].each do |orm|
+  require_relative "./support/#{orm}/initializer.rb"
 end
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
@@ -29,12 +36,21 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   config.include_context 'adapter:active_record', adapter: :active_record
+  config.include_context 'adapter:sequel', adapter: :sequel
 
-  config.after(:each, cleanup: true) do
-    ActiveRecord::Base.subclasses.each do |ar_class|
-      ar_class.delete_all
-      ar_class.remove_instance_variable(:@_clowne_cloner) if
-        ar_class.instance_variable_defined?(:@_clowne_cloner)
+  config.before(:each, cleanup: true) do
+    cleanup(ActiveRecord::Base, &:delete_all)
+
+    cleanup(Sequel::Model) do |sequel_class|
+      sequel_class.dataset.delete
+    end
+  end
+
+  def cleanup(base_class)
+    base_class.subclasses.each do |orm_class|
+      yield(orm_class)
+      orm_class.remove_instance_variable(:@_clowne_cloner) if
+        orm_class.instance_variable_defined?(:@_clowne_cloner)
     end
   end
 
