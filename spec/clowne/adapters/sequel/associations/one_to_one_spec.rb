@@ -78,13 +78,13 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
 
       it 'pass params to child cloner' do
         expect(subject.account).to be_new
-        expect(subject.account.to_hash).to include(
+        expect(subject.account).to have_attributes(
           post_id: nil,
           title: account.title
         )
         expect(subject.account.created_at).not_to be_nil
         expect(subject.account.history).to be_new
-        expect(subject.account.history.to_hash).to include(
+        expect(subject.account.history).to have_attributes(
           some_stuff: account.history.some_stuff,
           account_id: nil
         )
@@ -97,12 +97,12 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
 
       it 'includes traits for self' do
         expect(subject.account).to be_new
-        expect(subject.account.to_hash).to include(
+        expect(subject.account).to have_attributes(
           post_id: nil,
           title: "#{account.title} (Cloned)"
         )
         expect(subject.account.history).to be_new
-        expect(subject.account.history.to_hash).to include(
+        expect(subject.account.history).to have_attributes(
           some_stuff: account.history.some_stuff,
           account_id: nil
         )
@@ -122,7 +122,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
 
       it 'applies custom cloner' do
         expect(subject.account).to be_new
-        expect(subject.account.to_hash).to include(
+        expect(subject.account).to have_attributes(
           post_id: nil,
           title: "Copy of #{account.title}"
         )
