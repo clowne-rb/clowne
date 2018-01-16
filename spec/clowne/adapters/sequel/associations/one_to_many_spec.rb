@@ -61,7 +61,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
       it 'infers nested account cloner' do
         expect(subject.posts.first.account).to be_a(Sequel::Account)
-        expect(subject.posts.first.account.to_hash).to include(
+        expect(subject.posts.first.account).to have_attributes(
           title: accounts.first.title
         )
       end
@@ -77,7 +77,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
       it 'infers nested account cloner' do
         post = subject.posts.first
         expect(post.tags.first).to be_a(Sequel::Tag)
-        expect(post.tags.first.to_hash).to include(
+        expect(post.tags.first).to have_attributes(
           value: tags.first.value
         )
       end
@@ -88,11 +88,11 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
       it 'pass params to child cloner' do
         expect(subject.posts.size).to eq 2
-        expect(subject.posts.first.to_hash).to include(
+        expect(subject.posts.first).to have_attributes(
           owner_id: nil,
           topic_id: 123
         )
-        expect(subject.posts.second.to_hash).to include(
+        expect(subject.posts.second).to have_attributes(
           owner_id: nil,
           topic_id: 123
         )
@@ -106,7 +106,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
         it 'clones scoped children' do
           expect(subject.posts.size).to eq 1
-          expect(subject.posts.first.to_hash).to include(
+          expect(subject.posts.first).to have_attributes(
             owner_id: nil,
             title: source.posts.first.title
           )
@@ -134,7 +134,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
         it 'clones scoped children' do
           expect(subject.posts.size).to eq 1
-          expect(subject.posts.first.to_hash).to include(
+          expect(subject.posts.first).to have_attributes(
             owner_id: nil,
             title: 'Ta-dam'
           )
@@ -147,12 +147,12 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
       it 'pass traits to child cloner' do
         expect(subject.posts.size).to eq 2
-        expect(subject.posts.first.to_hash).to include(
+        expect(subject.posts.first).to have_attributes(
           owner_id: nil,
           topic_id: nil,
           title: "#{source.posts.first.title} (Cloned)"
         )
-        expect(subject.posts.second.to_hash).to include(
+        expect(subject.posts.second).to have_attributes(
           owner_id: nil,
           topic_id: nil,
           title: "#{source.posts.second.title} (Cloned)"
@@ -179,7 +179,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
       it 'applies custom cloner' do
         expect(subject.posts.size).to eq 1
-        expect(subject.posts.first.to_hash).to include(
+        expect(subject.posts.first).to have_attributes(
           owner_id: nil,
           topic_id: source.posts.first.topic_id,
           title: 'Copy of Some post'

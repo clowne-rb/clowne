@@ -31,7 +31,7 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
 
       it 'clones scoped children' do
         expect(subject.tags.size).to eq 1
-        expect(subject.tags.first.to_hash).to include(
+        expect(subject.tags.first).to have_attributes(
           value: source.tags.second.value
         )
       end
@@ -56,7 +56,7 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
 
       it 'applies custom cloner' do
         expect(subject.tags.size).to eq 2
-        expect(subject.tags.first.to_hash).to include(
+        expect(subject.tags.first).to have_attributes(
           value: "#{source.tags.first.value}-2"
         )
       end
@@ -66,7 +66,7 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
 
         it 'pass params to child cloner' do
           expect(subject.tags.size).to eq 2
-          expect(subject.tags.first.to_hash).to include(
+          expect(subject.tags.first).to have_attributes(
             value: "#{source.tags.first.value}-new"
           )
         end
@@ -77,7 +77,7 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
 
         it 'pass traits to child cloner' do
           expect(subject.tags.size).to eq 2
-          expect(subject.tags.first.to_hash).to include(
+          expect(subject.tags.first).to have_attributes(
             value: "#{source.tags.first.value}-2 (Cloned)"
           )
         end
