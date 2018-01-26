@@ -3,7 +3,7 @@ describe Clowne::Adapters::Registry do
 
   it 'works' do
     subject.append :a
-    subject.prepend :b
+    subject.unshift :b
     expect(subject.actions).to eq([:b, :a])
 
     subject.insert_before(:a, :c)
@@ -24,7 +24,7 @@ describe Clowne::Adapters::Registry do
     subject.append :b
     subject.append :c
 
-    subject.prepend :c
+    subject.unshift :c
     expect(subject.actions).to eq([:c, :a, :b])
 
     subject.insert_after :c, :b
