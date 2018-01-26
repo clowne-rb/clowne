@@ -29,7 +29,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
         end
 
         trait :copy do
-          init_with do |source, target:|
+          init_as do |source, target:|
             target.contents = source.contents
             target
           end
