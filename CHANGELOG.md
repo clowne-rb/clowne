@@ -2,6 +2,8 @@
 
 ## master
 
+- Add `init_with` declaration. ([@palkan][])
+
 - Support [Sequel](https://github.com/jeremyevans/sequel). ([@ssnickolay][])
 
 - Support passing a block to `#clowne` for inline configuration. ([@palkan][])
