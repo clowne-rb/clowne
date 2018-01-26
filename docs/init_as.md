@@ -1,5 +1,5 @@
 ---
-id: init_with
+id: init_as
 title: Initiate cloning target
 sidebar_label: Initialization block
 ---
@@ -23,7 +23,7 @@ class UserCloner < Clowne::Cloner
 
   trait :copy_settings do
     # Use a `target` for all the actions
-    init_with { |_source, target:| target }
+    init_as { |_source, target:| target }
   end
 end
 

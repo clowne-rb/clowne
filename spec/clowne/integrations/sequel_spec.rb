@@ -31,7 +31,7 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
         end
 
         trait :copy do
-          init_with do |source, target:|
+          init_as do |source, target:|
             target.contents = source.contents
             target
           end
