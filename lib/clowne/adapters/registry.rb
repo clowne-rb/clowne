@@ -11,7 +11,7 @@ module Clowne
       end
 
       def insert_after(after, action)
-        validate_uniq!(action)
+        actions.delete(action)
 
         after_index = actions.find_index(after)
 
@@ -21,7 +21,7 @@ module Clowne
       end
 
       def insert_before(before, action)
-        validate_uniq!(action)
+        actions.delete(action)
 
         before_index = actions.find_index(before)
 
@@ -31,12 +31,12 @@ module Clowne
       end
 
       def append(action)
-        validate_uniq!(action)
+        actions.delete(action)
         actions.push action
       end
 
       def prepend(action)
-        validate_uniq!(action)
+        actions.delete(action)
         actions.unshift action
       end
 
@@ -50,12 +50,6 @@ module Clowne
       protected
 
       attr_writer :mapping
-
-      private
-
-      def validate_uniq!(action)
-        raise "Plan action already registered: #{action}" if actions.include?(action)
-      end
     end
   end
 end
