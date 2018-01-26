@@ -2,7 +2,7 @@
 
 ## master
 
-- Add `init_with` declaration. ([@palkan][])
+- Add `init_as` declaration. ([@palkan][])
 
 - Support [Sequel](https://github.com/jeremyevans/sequel). ([@ssnickolay][])
 

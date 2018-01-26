@@ -71,6 +71,6 @@ module Clowne
   end
 end
 
-require 'clowne/adapters/base/init_with'
+require 'clowne/adapters/base/init_as'
 require 'clowne/adapters/base/nullify'
 require 'clowne/adapters/base/finalize'
