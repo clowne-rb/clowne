@@ -53,7 +53,6 @@ const SplashContainer = props => (
 
 const Logo = props => (
   <div className="projectLogo">
-    <img src={props.img_src} />
   </div>
 );
 
@@ -77,12 +76,10 @@ class HomeSplash extends React.Component {
     let language = this.props.language || '';
     return (
       <SplashContainer>
-        <Logo img_src={imgUrl('docusaurus.svg')} />
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
-            <Button href="/clowne/docs/installation.html" className="getStarted">Getting Started</Button>
-            <Button href={docUrl('configuration.html', language)}>Configuration</Button>
+            <Button href="/clowne/docs/installation.html">Getting Started</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -107,24 +104,24 @@ const Features = props => (
   <Block layout="twoColumn" padding={['bottom']}>
     {[
       {
-        content: 'Rich DSL and different uses',
+        content: 'Rich DSL out-of-the-box',
         imageAlign: 'top',
         title: 'Powerful',
       },
       {
-        content: 'Now supported ActiveRecord and Sequel',
+        content: 'Supports ActiveRecord and Sequel<br/><small><em>ROM is coming soon!</em></small>',
         imageAlign: 'top',
         title: 'ORM adapters',
       },
       {
-        content: '<p>You have the ability to change</p><p>parts of the behavior</p>',
+        content: 'Easy to extend for your needs',
         imageAlign: 'top',
-        title: 'Customization',
+        title: 'Customizable',
       },
       {
-        content: 'You can use it in any Ruby projects',
+        content: "It's just Ruby without any dependency",
         imageAlign: 'top',
-        title: 'Non Rails',
+        title: 'Rails-free',
       },
     ]}
   </Block>
