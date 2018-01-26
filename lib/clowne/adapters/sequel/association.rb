@@ -5,7 +5,7 @@ module Clowne
     class Sequel
       class Association
         class << self
-          def call(source, record, declaration, params:)
+          def call(source, record, declaration, params:, **_options)
             with_clonable(source, record, declaration) do
               reflection = source.class.association_reflections[declaration.name.to_sym]
 

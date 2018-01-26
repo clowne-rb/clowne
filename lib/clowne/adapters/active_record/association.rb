@@ -7,7 +7,7 @@ module Clowne
 
       class Association
         class << self
-          def call(source, record, declaration, params:)
+          def call(source, record, declaration, params:, **_options)
             reflection = source.class.reflections[declaration.name.to_s]
 
             if reflection.nil?

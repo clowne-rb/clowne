@@ -6,17 +6,8 @@ module Clowne
   module Adapters
     # Cloning adapter for Sequel
     class Sequel < Base
-      # Using a plan make full duplicate of record
-      # +source+:: Instance of cloned object (ex: User.new(posts: posts))
-      # +plan+:: Array of Declarations
-      # +params+:: Custom params hash
-      def clone(source, plan, params: {})
-        declarations = plan.declarations
-        init_record = RecordWrapper.new(dup_source(source))
-
-        declarations.inject(init_record) do |record, (type, declaration)|
-          resolver_for(type).call(source, record, declaration, params: params)
-        end
+      def init_record(source)
+        RecordWrapper.new(source)
       end
 
       def dup_source(source)
