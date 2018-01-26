@@ -19,18 +19,19 @@ describe Clowne::Adapters::Registry do
     expect(subject.actions).to eq([:d, :e, :b, :c, :a, :f])
   end
 
-  it 'raises if action is not unique' do
+  it 'override if not unique' do
     subject.append :a
-
-    expect { subject.prepend :a }.to raise_error(/already registered/)
-
-    expect { subject.append :a }.to raise_error(/already registered/)
-
     subject.append :b
+    subject.append :c
 
-    expect { subject.insert_after :a, :b }.to raise_error(/already registered/)
+    subject.prepend :c
+    expect(subject.actions).to eq([:c, :a, :b])
 
-    expect { subject.insert_before :a, :b }.to raise_error(/already registered/)
+    subject.insert_after :c, :b
+    expect(subject.actions).to eq([:c, :b, :a])
+
+    subject.insert_before :a, :c
+    expect(subject.actions).to eq([:b, :c, :a])
   end
 
   it 'raises if insert position is undefined' do

@@ -19,10 +19,12 @@ module Clowne
           registry.mapping[type] || raise("Uknown resolver #{type} for #{self}")
         end
 
-        def register_resolver(type, resolver, after: nil, before: nil)
+        def register_resolver(type, resolver, after: nil, before: nil, prepend: nil)
           registry.mapping[type] = resolver
 
-          if after
+          if prepend
+            registry.prepend type
+          elsif after
             registry.insert_after after, type
           elsif before
             registry.insert_before before, type
