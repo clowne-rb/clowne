@@ -13,3 +13,4 @@ rubocop.html
 *.gem
 gemfiles/*.lock
 Gemfile.local
+/docs/web/build/
