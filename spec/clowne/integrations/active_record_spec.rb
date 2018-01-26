@@ -13,18 +13,25 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
 
       class BasePostCloner < Clowne::Cloner
         finalize do |_source, record, params|
-          record.contents = params[:post_contents]
+          record.contents = params[:post_contents] if params[:post_contents].present?
         end
       end
 
       class PostCloner < BasePostCloner
         include_association :account, clone_with: 'AR::AccCloner',
                                       traits: %i[with_history nullify_title]
-        include_association :tags, ->(params) { where(value: params[:tags]) }
+        include_association :tags, ->(params) { where(value: params[:tags]) if params[:tags] }
 
         trait :mark_as_clone do
           finalize do |source, record|
             record.title = source.title + ' Super!'
+          end
+        end
+
+        trait :copy do
+          init_with do |source, target:|
+            target.contents = source.contents
+            target
           end
         end
       end
@@ -93,5 +100,44 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     # tags
     tags_clone = cloned.tags
     expect(tags_clone.map(&:value)).to match_array(%w[CI CD])
+  end
+
+  it 'works with existing post' do
+    a_post = create(:post, title: 'Thing').tap do |p|
+      p.tags << create(:tag, value: 'RUM')
+    end
+
+    expect(AR::Topic.count).to eq(2)
+    expect(AR::Post.count).to eq(2)
+    expect(AR::Tag.count).to eq(4)
+    expect(AR::Account.count).to eq(2)
+    expect(AR::History.count).to eq(1)
+
+    cloned = AR::PostCloner.call(
+      post,
+      traits: :copy,
+      target: a_post
+    )
+    cloned.save!
+
+    expect(cloned).to be_eql(a_post)
+
+    expect(AR::Topic.count).to eq(2)
+    expect(AR::Post.count).to eq(2)
+    expect(AR::Tag.count).to eq(7)
+    expect(AR::Account.count).to eq(3)
+    expect(AR::History.count).to eq(2)
+
+    # post
+    expect(a_post.title).to eq('Thing')
+    expect(a_post.contents).to eq(post.contents)
+
+    # history
+    history_clone = a_post.account.history
+    expect(history_clone.some_stuff).to eq('This is history about my life - 2')
+
+    # tags
+    tags_clone = a_post.tags
+    expect(tags_clone.map(&:value)).to match_array(%w[CI CD JVM RUM])
   end
 end
