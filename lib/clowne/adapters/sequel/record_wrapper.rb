@@ -6,31 +6,6 @@ module Clowne
       class RecordWrapper
         attr_reader :record, :association_store
 
-        class << self
-          def to_hash(record_wrapper)
-            if record_wrapper.is_a?(RecordWrapper)
-              init_hash = record_wrapper.record.to_hash
-              record_wrapper.association_store.each_with_object(init_hash) do |(name, value), memo|
-                memo[name] = association_to_model(value)
-              end
-            else
-              record_wrapper.to_hash
-            end
-          end
-
-          private
-
-          def association_to_model(assoc)
-            if assoc.is_a?(Array)
-              assoc.map { |a| RecordWrapper.to_hash(a) }
-            elsif assoc.is_a?(RecordWrapper)
-              RecordWrapper.to_hash(assoc)
-            else
-              assoc.to_hash
-            end
-          end
-        end
-
         def initialize(record)
           @record = record
           @association_store = {}
@@ -45,7 +20,16 @@ module Clowne
         end
 
         def to_model
-          @record.class.new(RecordWrapper.to_hash(self))
+          association_store.each_with_object(record) do |(name, value), acc|
+            acc.send("#{name}=", association_to_model(value))
+          end
+        end
+
+        def to_hash
+          init_hash = record.to_hash
+          association_store.each_with_object(init_hash) do |(name, value), acc|
+            acc[name] = association_to_model(value)
+          end
         end
 
         def respond_to_missing?(method_name, include_private = false)
@@ -57,6 +41,16 @@ module Clowne
             record.public_send(method_name, *args, &block)
           else
             super
+          end
+        end
+
+        private
+
+        def association_to_model(assoc)
+          if assoc.is_a?(Array)
+            assoc.map(&:to_hash)
+          else
+            assoc.to_hash
           end
         end
       end
