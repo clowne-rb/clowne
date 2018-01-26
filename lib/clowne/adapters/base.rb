@@ -23,7 +23,7 @@ module Clowne
           registry.mapping[type] = resolver
 
           if prepend
-            registry.prepend type
+            registry.unshift type
           elsif after
             registry.insert_after after, type
           elsif before
