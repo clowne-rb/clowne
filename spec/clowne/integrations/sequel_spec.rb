@@ -1,4 +1,4 @@
-describe 'Sequel adapter', :cleanup, adapter: :sequel do
+describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
   before(:all) do
     module Sequel
       class AccCloner < Clowne::Cloner

@@ -1,4 +1,4 @@
-describe 'AR adapter', :cleanup, adapter: :active_record do
+describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
       class AccCloner < Clowne::Cloner
