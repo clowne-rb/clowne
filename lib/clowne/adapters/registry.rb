@@ -35,7 +35,7 @@ module Clowne
         actions.push action
       end
 
-      def prepend(action)
+      def unshift(action)
         actions.delete(action)
         actions.unshift action
       end
