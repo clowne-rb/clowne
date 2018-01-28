@@ -62,6 +62,18 @@ header h2 {
   font-weight: bold;
 }
 
+.mainContainer .wrapper a {
+  text-decoration: underline;
+}
+
+.mainContainer .wrapper a:hover {
+  text-decoration: none;
+}
+
+.mainContainer .wrapper .post h3 {
+  font-weight: bold;
+}
+
 small {
   font-size: 80%;
 }

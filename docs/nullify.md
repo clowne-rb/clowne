@@ -1,9 +1,10 @@
 ---
 id: nullify
-title: Nullify attributes
+title: Nullify Attributes
+sidebar_label: Nullify
 ---
 
-Nullify attributes of your record
+To set a bunch of attributes to `nil` you can use the `nullify` declaration:
 
 ```ruby
 class User < ActiveRecord::Base
@@ -13,8 +14,6 @@ class User < ActiveRecord::Base
 end
 
 class UserCloner < Clowne::Cloner
-  adapter Clowne::ActiveRecord::Adapter
-
   nullify :name, :email
 
   trait :nullify_surname do
@@ -22,7 +21,6 @@ class UserCloner < Clowne::Cloner
   end
 end
 
-# nullify only name
 clone = UserCloner.call(user)
 clone.name.nil?
 # => true
@@ -31,7 +29,6 @@ clone.email.nil?
 clone.surname.nil?
 # => false
 
-# nullify name and surname
 clone2 = UserCloner.call(user, traits: :nullify_surname)
 clone2.name.nil?
 # => true

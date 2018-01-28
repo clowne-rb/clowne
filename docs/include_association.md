@@ -1,9 +1,9 @@
 ---
 id: include_association
-title: Include association
+title: Include Association
 ---
 
-Powerful declaration for including model's association.
+Use this declaration to clone model's associations:
 
 ```ruby
 class User < ActiveRecord::Base
@@ -11,13 +11,13 @@ class User < ActiveRecord::Base
 end
 
 class UserCloner < Clowne::Cloner
-  adapter Clowne::ActiveRecord::Adapter
-
   include_association :profile
 end
 ```
 
-But it's not all! :) The DSL looks like
+Looks pretty simple, right? But that's not all we may offer you! :)
+
+The declaration supports additional arguments:
 
 ```ruby
 include_association name, scope, options
@@ -26,10 +26,8 @@ include_association name, scope, options
 ## Scope
 
 Scope can be a:
-
-`Symbol` - named scope.
-
-`Proc` - custom scope (supports parameter passing).
+- `Symbol` - named scope
+- `Proc` - custom scope (supports parameters).
 
 Example:
 
@@ -48,24 +46,22 @@ class Post < ActiveRecord::Base
 end
 
 class UserCloner < Clowne::Cloner
-  adapter Clowne::ActiveRecord::Adapter
-
   include_association :accounts, :active
-  include_association :posts, ->(params) { where(state: params[:post_status]) }
+  include_association :posts, ->(params) { where(state: params[:status]) if params[:status] }
 end
 
-# posts will be cloned only with draft status
-UserCloner.call(user, post_status: :draft)
+# Clone only draft posts
+UserCloner.call(user, status: :draft)
 # => <#User...
 ```
 
 ## Options
 
-Options keys can be a:
+The following options are available:
+- `:clone_with` - use custom cloner\*
+- `:traits` - define special traits.
 
-`:clone_with` - use custom cloner for all children.
-
-`:traits` - define special traits.
+\* **NOTE:** the same cloner class would be used for **all children**
 
 Example:
 
@@ -82,8 +78,6 @@ end
 
 ```ruby
 class PostSpecialCloner < Clowne::Cloner
-  adapter :active_record
-
   nullify :title
 
   trait :with_tags do
@@ -103,11 +97,11 @@ UserCloner.call(user)
 # => <#User...
 ```
 
-**Notice: if custom cloner is not defined, clowne tries to find default cloner and use it. (PostCloner for previous example)**
+**NOTE**: if custom cloner is not defined, Clowne tries to infer the [implicit cloner](implicit_cloner.md).
 
-## Include multiple association
+## Include multiple associations
 
-It's possible to include multiple associations at once with default options and scope
+You can include multiple associations at once too:
 
 ```ruby
 class User < ActiveRecord::Base
@@ -121,3 +115,5 @@ class UserCloner < Clowne::Cloner
   include_associations :accounts, :posts
 end
 ```
+
+**NOTE:** in that case, it's not possible to provide custom scopes and options.

@@ -2,8 +2,8 @@
   "docs": {
     "Getting Started": [
       "installation",
-      "configuration",
       "basic_example",
+      "configuration",
       "alternatives"
     ],
     "API": [
@@ -12,7 +12,8 @@
       "nullify",
       "finalize",
       "init_as",
-      "traits"
+      "traits",
+      "execution_order"
     ],
     "Adapters": [
       "supported_adapters",
@@ -20,8 +21,7 @@
       "sequel"
     ],
     "Features": [
-      "default_cloner",
-      "execution_order",
+      "implicit_cloner",
       "inline_configuration",
       "customization"
     ]

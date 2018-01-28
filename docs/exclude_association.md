@@ -1,14 +1,16 @@
 ---
 id: exclude_association
-title: Exclude association
+title: Exclude Association
 ---
 
-Exclude association from copying
+Clowne doesn't include any association by default and doesn't provide _magic_ `include_all` declaration (although you can [add one by yourself](customization.md)).
+
+Nevertheless, sometimes you might want to exclude already added associations (when inheriting a cloner or using [traits](traits.md)).
+
+Consider an example:
 
 ```ruby
 class UserCloner < Clowne::Cloner
-  adapter Clowne::ActiveRecord::Adapter
-
   include_association :posts
 
   trait :without_posts do
@@ -43,9 +45,19 @@ clone = UserCloner.call(user, traits: :with_comments)
 clone.comments.empty? #=> true
 ```
 
-Why so? That allows to have deterministic cloning plans when combining multiple traits
+Why so? That allows us to have a deterministic cloning plan when combining multiple traits
 (or inheriting cloners).
 
-## Exclude multiple association
+## Exclude multiple associations
 
-It's possible to exclude multiple associations the same way as `include_associations` but with `exclude_associations`
+It's possible to exclude multiple associations at once the same way as [`include_associations`](include_association.md):
+
+```ruby
+class UserCloner < Clowne::Cloner
+  include_associations :accounts, :posts, :comments
+
+  trait :without_posts do
+    exclude_associations :posts, :comments
+  end
+end
+```

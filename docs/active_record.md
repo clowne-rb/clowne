@@ -3,9 +3,9 @@ id: active_record
 title: Active Record
 ---
 
-Clowne provides an optional ActiveRecord integration which allows you to configure cloners in your models and adds a shortcut to invoke cloners (`#clowne` method). (Note: that's exactly the way [`amoeba`](https://github.com/amoeba-rb/amoeba) works).
+Clowne provides an optional ActiveRecord integration which allows you to configure cloners in your models and adds a shortcut to invoke cloners (`#clowne` method).
 
-To enable this integration you must require `"clowne/adapters/active_record/dsl"` somewhere in your app, e.g. in initializer:
+To enable this integration, you must require `"clowne/adapters/active_record/dsl"` somewhere in your app, e.g., in the initializer:
 
 ```ruby
 # config/initializers/clowne.rb
