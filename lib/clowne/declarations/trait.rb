@@ -16,6 +16,8 @@ module Clowne
         @compiled = compile
       end
 
+      alias declarations compiled
+
       def dup
         self.class.new.tap do |duped|
           blocks.each { |b| duped.extend_with(b) }
