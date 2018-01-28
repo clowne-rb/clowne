@@ -4,3 +4,9 @@ Metrics/LineLength:
 Lint/Void:
   Exclude:
     - '*.md'
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false

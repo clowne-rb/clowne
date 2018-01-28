@@ -113,9 +113,9 @@ For example, you can override `:nullify` resolver to handle associations:
 
 ```ruby
 module NullifyWithAssociation
-  def self.call(source, record, declaration, params)
+  def self.call(source, record, declaration, _params)
     reflection = source.class.reflections[declaration.name.to_s]
-    
+
     # fallback to built-in nullify
     if reflection.nil?
       Clowne::Adapters::Base::Nullify.call(source, record, declaration)
