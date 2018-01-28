@@ -39,7 +39,7 @@ class Footer extends React.Component {
               </a>
             </div>
           </div>
-          <div className="footer--block">
+          {/* <div className="footer--block">
             <h5>Community</h5>
               <div className="footer--list--item">
                 <a href="https://discordapp.com/" target="_blank">Project Chat</a>
@@ -60,7 +60,7 @@ class Footer extends React.Component {
                   Talk Slides
                 </a>
               </div>
-          </div>
+          </div> */}
           <div className="footer--block legals">
             <p className="footer--copy">
               <span className="copy">{yearLabel}</span>&nbsp;
