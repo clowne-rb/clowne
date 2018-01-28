@@ -22,7 +22,7 @@ const siteConfig = {
   favicon: 'img/favicon/favicon.ico',
   /* colors for website */
   colors: {
-    primaryColor: '#ff5e5e', /* #2E8555 */
+    primaryColor: '#111111', // '#ff5e5e'
     secondaryColor: '#e3e3e3',
   },
   // This copyright info is used in /core/Footer.js and blog rss/atom feeds.

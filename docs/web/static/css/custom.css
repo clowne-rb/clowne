@@ -47,16 +47,25 @@ footer .sitemap div {
 }
 
 .fixedHeaderContainer a {
-  color: #ff5e5e;
+  color: #111; /* #ff5e5e; */
 }
 
 header h2 {
-  color: #ff5e5e;
+  color: #111; /* #ff5e5e; */
   text-transform: uppercase;
 }
 
+.container .wrapper h2 {
+  color: #111; /* #ff5e5e; */
+  font-weight: bold;
+}
+
+small {
+  font-size: 80%;
+}
+
 .navigationSlider .slidingNav ul li a {
-  color: #ff5e5e;
+  color: #111; /* #ff5e5e; */
 }
 
 nav.toc .toggleNav .navGroup.navGroupActive {
@@ -66,6 +75,11 @@ nav.toc .toggleNav .navGroup.navGroupActive {
 
 .mainContainer .wrapper .post .postHeader h1 {
   margin-bottom: 30px;
+}
+
+/* Make ascetic theme comments a little bit darker */
+.hljs-comment, .hljs-quote, .hljs-meta, .hljs-deletion {
+  color: #a7a7a7;
 }
 
 @keyframes humanoids-blink{
