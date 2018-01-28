@@ -3,7 +3,7 @@ id: basic_example
 title: Basic Example
 ---
 
-At first, define your cloneable model
+Assume that you have the following model:
 
 ```ruby
 class User < ActiveRecord::Base
@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
 end
 ```
 
-The next step is to declare cloner
+Let's declare our cloners first:
 
 ```ruby
 class UserCloner < Clowne::Cloner
@@ -29,7 +29,7 @@ class UserCloner < Clowne::Cloner
 
   nullify :login
 
-  # params here is an arbitrary hash passed into cloner
+  # params here is an arbitrary Hash passed into cloner
   finalize do |_source, record, params|
     record.email = params[:email]
   end
@@ -42,12 +42,16 @@ class SpecialProfileCloner < Clowne::Cloner
 end
 ```
 
-and call it
+Now you can use `UserCloner` to clone existing records:
 
 ```ruby
-cloned = UserCloner.call(User.last, email: 'fake@example.com')
+user = User.last
+#=> <#User(login: 'clown', email: 'clown@circus.example.com')>
+
+cloned = UserCloner.call(user, email: 'fake@example.com')
 cloned.persisted?
 # => false
+
 cloned.save!
 cloned.login
 # => nil
@@ -55,7 +59,7 @@ cloned.email
 # => "fake@example.com"
 
 # associations:
-cloned.posts.count == User.last.posts.count
+cloned.posts.count == user.posts.count
 # => true
 cloned.profile.name
 # => nil

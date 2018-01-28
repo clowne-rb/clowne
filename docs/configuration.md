@@ -26,3 +26,4 @@ class SomeCloner < Clowne::Cloner
   # some implementation ...
 end
 ```
+See the list of [available adapters](supported_adapters.md).

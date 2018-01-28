@@ -7,7 +7,7 @@ Clowne is built with extensibility in mind. You can create your own DSL commands
 
 Let's consider an example.
 
-Suppose that you want to add `include_all` declaration to automagically include all associations (for ActiveRecord).
+Suppose that you want to add the `include_all` declaration to automagically include all associations (for ActiveRecord).
 
 First, you should add a custom declaration:
 

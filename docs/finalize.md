@@ -1,15 +1,13 @@
 ---
 id: finalize
-title: Execute finalize block
-sidebar_label: Finalize block
+title: Finalization
+sidebar_label: Finalize
 ---
 
-Simple callback for changing record manually.
+To apply custom transformations to the cloned record, you can use the `finalize` declaration:
 
 ```ruby
 class UserCloner < Clowne::Cloner
-  adapter Clowne::ActiveRecord::Adapter
-
   finalize do |_source, record, _params|
     record.name = 'This is copy!'
   end
@@ -21,16 +19,17 @@ class UserCloner < Clowne::Cloner
   end
 end
 
-# execute first finalize
 clone = UserCloner.call(user)
 clone.name
 # => 'This is copy!'
 clone.email == 'clone@example.com'
 # => false
 
-# execute both finalizes
 clone2 = UserCloner.call(user, traits: :change_email)
 clone2.name
 # => 'This is copy!'
 clone2.email
 # => 'clone@example.com'
+```
+
+Finalization blocks are called at the end of the [cloning process](execution_order.md).

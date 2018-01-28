@@ -1,9 +1,9 @@
 ---
 id: inline_configuration
-title: Inline configuration
+title: Inline Configuration
 ---
 
-You can also enhance the cloner configuration inline (i.e. add dynamic declarations):
+You can also enhance the cloner configuration inline (i.e., add declarations dynamically):
 
 ```ruby
 cloned = UserCloner.call(User.last) do
@@ -24,7 +24,7 @@ cloned.profile
 # => nil
 ```
 
-Inline enhancement doesn't affect the _global_ configuration, so you can use it without any fear.
+Inline enhancement doesn't affect the _global_ configuration so that you can use it without any fear.
 
 Thus it's also possible to clone objects without any cloner classes at all by using `Clowne::Cloner`:
 
