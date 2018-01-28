@@ -172,7 +172,7 @@ footer h5{
 }
 .footer--humanoids{
   position: absolute;
-  bottom: -70px;
+  bottom: -10px;
   margin-left: 50%;
   left: -60px;
 }
@@ -188,6 +188,9 @@ footer h5{
 }
 
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+  .footer--block:not(:first-child) {
+    margin-top: 2em;
+  }
 }
 
 @media only screen and (min-width: 1024px) {
