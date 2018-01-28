@@ -23,6 +23,7 @@
     "Features": [
       "implicit_cloner",
       "inline_configuration",
+      "architecture",
       "customization"
     ]
   }

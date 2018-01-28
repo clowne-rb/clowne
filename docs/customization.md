@@ -16,21 +16,6 @@ class IncludeAll # :nodoc: all
   def compile(plan)
     # Just add all_associations object to plan
     plan.set(:all_associations, self)
-    # Plan supports 3 types of registers:
-    #
-    # 1) Scalar
-    #
-    # plan.set(key, value)
-    # plan.remove(key)
-    #
-    # 2) Append-only lists
-    #
-    # plan.add(key, value)
-    #
-    # 3) Two-phase set (2P-Set) (see below)
-    #
-    # plan.add_to(type, key, value)
-    # plan.remove_from(type, key)
   end
 end
 
@@ -38,7 +23,7 @@ end
 Clowne::Declarations.add :include_all, Clowne::Declarations::IncludeAll
 ```
 
-\* Operations over [2P-Set](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type#2P-Set_(Two-Phase_Set)) (adding/removing) do not depend on the order of execution; we use "remove-wins" semantics, i.e. when a key has been removed, it cannot be re-added.
+See more on `plan` in [architecture overview](architecture.md).
 
 Secondly, register a resolver:
 
