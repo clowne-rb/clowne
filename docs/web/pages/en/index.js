@@ -60,6 +60,9 @@ const ProjectTitle = props => (
   <h2 className="projectTitle">
     <span className="projectTitleName">{siteConfig.title}</span>
     <small>{siteConfig.tagline}</small>
+    <p>
+      <a href="https://badge.fury.io/rb/clowne"><image title="Gem Version" src="https://badge.fury.io/rb/clowne.svg" /></a>
+    </p>
   </h2>
 );
 
