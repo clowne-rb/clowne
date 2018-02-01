@@ -1,6 +1,6 @@
 # Change log
 
-## master
+## 0.1.0 (2018-02-01)
 
 - Add `init_as` declaration. ([@palkan][])
 
