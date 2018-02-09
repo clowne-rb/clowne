@@ -2,6 +2,7 @@
 
 require 'clowne/planner'
 require 'clowne/dsl'
+require 'clowne/params'
 
 module Clowne # :nodoc: all
   class UnprocessableSourceError < StandardError; end

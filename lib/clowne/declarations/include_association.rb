@@ -19,6 +19,10 @@ module Clowne
         plan.add_to(:association, name, self)
       end
 
+      def params_resolver
+        @_params_resolver ||= Clowne::Params.new(options[:params])
+      end
+
       def clone_with
         return @clone_with if instance_variable_defined?(:@clone_with)
         @clone_with =
