@@ -74,7 +74,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       traits: :mark_as_clone,
       tags: %w[CI CD],
       post_contents: 'THIS IS CLONE! (☉_☉)',
-      history: { suffix: ' - 2'}
+      history: { suffix: ' - 2' }
     )
     cloned.save!
 
@@ -119,7 +119,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       post,
       traits: :copy,
       target: a_post,
-      history: { suffix: ' - 3'}
+      history: { suffix: ' - 3' }
     )
     cloned.save!
 

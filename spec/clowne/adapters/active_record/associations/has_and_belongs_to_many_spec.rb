@@ -61,6 +61,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HABTM, :cleanup, adapter:
       end
 
       context 'with params' do
+        let(:declaration_params) { { clone_with: tag_cloner, params: true } }
         let(:params) { { suffix: '-new' } }
 
         it 'pass params to child cloner' do

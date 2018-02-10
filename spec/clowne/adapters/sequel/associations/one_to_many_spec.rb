@@ -84,6 +84,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
     end
 
     context 'with params' do
+      let(:declaration_params) { { params: true } }
       let(:params) { { topic_id: 123 } }
 
       it 'pass params to child cloner' do
