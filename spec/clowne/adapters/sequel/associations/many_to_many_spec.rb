@@ -62,6 +62,7 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
       end
 
       context 'with params' do
+        let(:declaration_params) { { clone_with: tag_cloner, params: true } }
         let(:params) { { suffix: '-new' } }
 
         it 'pass params to child cloner' do

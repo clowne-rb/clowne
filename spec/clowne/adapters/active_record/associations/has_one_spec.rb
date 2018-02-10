@@ -22,7 +22,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter
 
         nullify :updated_at, :created_at
 
-        include_association :history
+        include_association :history, params: true
 
         trait :mark_as_clone do
           finalize do |source, record|
@@ -73,6 +73,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter
     end
 
     context 'with params' do
+      let(:declaration_params) { { params: true } }
       let(:params) { { include_timestamps: true } }
 
       it 'pass params to child cloner' do

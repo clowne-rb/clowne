@@ -9,7 +9,7 @@ module Clowne
         @options = options
       end
 
-      def permit(params)
+      def permit(_params)
         raise NotImplementedError
       end
     end

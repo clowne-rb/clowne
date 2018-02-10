@@ -65,7 +65,7 @@ describe Clowne::Params do
       it { is_expected.to be_a(Clowne::Params::ByKeyFilter) }
 
       it 'raise exception' do
-        expect{ permitted_params }.to raise_error(KeyError)
+        expect { permitted_params }.to raise_error(KeyError)
       end
     end
   end
