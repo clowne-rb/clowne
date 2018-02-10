@@ -17,7 +17,7 @@ module Clowne
           @params = params
           @association_name = declaration.name.to_s
           @reflection = reflection
-          @cloner_options = params
+          @cloner_options = declaration.params_filter.permit(params)
           @cloner_options.merge!(traits: declaration.traits) if declaration.traits
         end
 
