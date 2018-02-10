@@ -19,8 +19,8 @@ module Clowne
         plan.add_to(:association, name, self)
       end
 
-      def params_resolver
-        @_params_resolver ||= Clowne::Params.new(options[:params])
+      def params_filter
+        @_params_filter ||= Clowne::Params.filter(options[:params])
       end
 
       def clone_with

@@ -3,7 +3,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     module AR
       class AccCloner < Clowne::Cloner
         trait :with_history do
-          include_association :history
+          include_association :history, params: :history
         end
 
         trait :nullify_title do
@@ -19,7 +19,8 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
 
       class PostCloner < BasePostCloner
         include_association :account, clone_with: 'AR::AccCloner',
-                                      traits: %i[with_history nullify_title]
+                                      traits: %i[with_history nullify_title],
+                                      params: true
         include_association :tags, ->(params) { where(value: params[:tags]) if params[:tags] }
 
         trait :mark_as_clone do
@@ -29,7 +30,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
         end
 
         trait :copy do
-          init_as do |source, target:|
+          init_as do |source, target:, **|
             target.contents = source.contents
             target
           end
@@ -37,8 +38,8 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       end
 
       class HistoryCloner < Clowne::Cloner
-        finalize do |_source, record|
-          record.some_stuff = record.some_stuff + ' - 2'
+        finalize do |_source, record, suffix:|
+          record.some_stuff = record.some_stuff + suffix
         end
       end
     end
@@ -72,7 +73,8 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       post,
       traits: :mark_as_clone,
       tags: %w[CI CD],
-      post_contents: 'THIS IS CLONE! (☉_☉)'
+      post_contents: 'THIS IS CLONE! (☉_☉)',
+      history: { suffix: ' - 2'}
     )
     cloned.save!
 
@@ -116,7 +118,8 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     cloned = AR::PostCloner.call(
       post,
       traits: :copy,
-      target: a_post
+      target: a_post,
+      history: { suffix: ' - 3'}
     )
     cloned.save!
 
@@ -134,7 +137,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
 
     # history
     history_clone = a_post.account.history
-    expect(history_clone.some_stuff).to eq('This is history about my life - 2')
+    expect(history_clone.some_stuff).to eq('This is history about my life - 3')
 
     # tags
     tags_clone = a_post.tags

@@ -2,7 +2,7 @@
 
 module Clowne
   class Params # :nodoc: all
-    class BaseParams
+    class BaseFilter
       attr_reader :options
 
       def initialize(options)
@@ -14,40 +14,40 @@ module Clowne
       end
     end
 
-    class AllowParams < BaseParams
+    class AllowFilter < BaseFilter
       def permit(params)
         params
       end
     end
 
-    class DenyParams < BaseParams
+    class DenyFilter < BaseFilter
       def permit(_params)
         {}
       end
     end
 
-    class ByBlockParams < BaseParams
+    class ByBlockFilter < BaseFilter
       def permit(params)
         params.instance_eval(&options)
       end
     end
 
-    class ByKeyParams < BaseParams
+    class ByKeyFilter < BaseFilter
       def permit(params)
         params.fetch(options)
       end
     end
 
     class << self
-      def build(options)
+      def filter(options)
         if options == true
-          AllowParams
+          AllowFilter
         elsif options.nil? || options == false
-          DenyParams
+          DenyFilter
         elsif options.is_a?(Proc)
-          ByBlockParams
+          ByBlockFilter
         else
-          ByKeyParams
+          ByKeyFilter
         end.new(options)
       end
     end
