@@ -19,8 +19,8 @@ module Clowne
         plan.add_to(:association, name, self)
       end
 
-      def params_filter
-        @_params_filter ||= Clowne::Params.filter(options[:params])
+      def params_proxy
+        @_params_proxy ||= Clowne::Params.proxy(options[:params])
       end
 
       def clone_with
