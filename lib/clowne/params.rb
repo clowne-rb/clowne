@@ -2,7 +2,7 @@
 
 module Clowne
   class Params # :nodoc: all
-    class BaseFilter
+    class BaseProxy
       attr_reader :options
 
       def initialize(options)
@@ -14,40 +14,40 @@ module Clowne
       end
     end
 
-    class AllowFilter < BaseFilter
+    class PassProxy < BaseProxy
       def permit(params)
         params
       end
     end
 
-    class DenyFilter < BaseFilter
+    class NullProxy < BaseProxy
       def permit(_params)
         {}
       end
     end
 
-    class ByBlockFilter < BaseFilter
+    class BlockProxy < BaseProxy
       def permit(params)
         params.instance_eval(&options)
       end
     end
 
-    class ByKeyFilter < BaseFilter
+    class KeyProxy < BaseProxy
       def permit(params)
         params.fetch(options)
       end
     end
 
     class << self
-      def filter(options)
+      def proxy(options)
         if options == true
-          AllowFilter
+          PassProxy
         elsif options.nil? || options == false
-          DenyFilter
+          NullProxy
         elsif options.is_a?(Proc)
-          ByBlockFilter
+          BlockProxy
         else
-          ByKeyFilter
+          KeyProxy
         end.new(options)
       end
     end
