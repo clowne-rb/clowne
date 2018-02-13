@@ -26,7 +26,7 @@ include_association name, scope, options
 ## Scope
 
 Scope can be a:
-- `Symbol` - named scope
+- `Symbol` - named scope.
 - `Proc` - custom scope (supports parameters).
 
 Example:
@@ -47,11 +47,11 @@ end
 
 class UserCloner < Clowne::Cloner
   include_association :accounts, :active
-  include_association :posts, ->(params) { where(state: params[:status]) if params[:status] }
+  include_association :posts, ->(params) { where(state: params[:state]) if params[:state] }
 end
 
 # Clone only draft posts
-UserCloner.call(user, status: :draft)
+UserCloner.call(user, state: :draft)
 # => <#User...
 ```
 
@@ -98,6 +98,10 @@ UserCloner.call(user)
 ```
 
 **NOTE**: if custom cloner is not defined, Clowne tries to infer the [implicit cloner](implicit_cloner.md).
+
+## Nested parameters
+
+Follow to [documentation page](parameters.md).
 
 ## Include multiple associations
 
