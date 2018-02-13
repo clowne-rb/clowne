@@ -13,6 +13,7 @@
       "finalize",
       "init_as",
       "traits",
+      "parameters",
       "execution_order"
     ],
     "Adapters": [
