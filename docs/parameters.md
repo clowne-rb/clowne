@@ -61,24 +61,23 @@ class UserCloner < Clowne::Cloner
   end
 
   trait :by_block do
-    include_association :profile, ->(params) {
-      params[:profile].map {|k, v| [k, v.upcase] }.to_h
-    }
+    include_association :profile, params: lambda do |params|
+      params[:profile].map { |k, v| [k, v.upcase] }.to_h
+    end
   end
 end
 
 class ProfileCloner < Clowne::Cloner
-  finalize |_source, record, params| do
+  finalize do |_source, record, params|
     record.jsonb_field = params
   end
 end
 
 # Execute:
 
-params = { profile: { name: 'John', surname: 'Cena' } }
-
 def get_profile_jsonb(user, trait)
-  cloned = UserCloner.call(user, traits: trait, params)
+  params = { profile: { name: 'John', surname: 'Cena' } }
+  cloned = UserCloner.call(user, traits: trait, **params)
   cloned.profile.jsonb_field
 end
 
