@@ -3,10 +3,10 @@
 module Clowne
   class Params # :nodoc: all
     class BaseProxy
-      attr_reader :options
+      attr_reader :value
 
-      def initialize(options)
-        @options = options
+      def initialize(value)
+        @value = value
       end
 
       def permit(_params)
@@ -28,27 +28,27 @@ module Clowne
 
     class BlockProxy < BaseProxy
       def permit(params)
-        params.instance_eval(&options)
+        value.call(params)
       end
     end
 
     class KeyProxy < BaseProxy
       def permit(params)
-        params.fetch(options)
+        params.fetch(value)
       end
     end
 
     class << self
-      def proxy(options)
-        if options == true
+      def proxy(value)
+        if value == true
           PassProxy
-        elsif options.nil? || options == false
+        elsif value.nil? || value == false
           NullProxy
-        elsif options.is_a?(Proc)
+        elsif value.is_a?(Proc)
           BlockProxy
         else
           KeyProxy
-        end.new(options)
+        end.new(value)
       end
     end
   end
