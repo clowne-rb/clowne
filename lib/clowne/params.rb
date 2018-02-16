@@ -34,7 +34,10 @@ module Clowne
 
     class KeyProxy < BaseProxy
       def permit(params)
-        params.fetch(value)
+        nested_params = params.fetch(value)
+        return nested_params if nested_params.is_a?(Hash)
+
+        raise KeyError, "value by key '#{value}' must be a Hash"
       end
     end
 

@@ -2,15 +2,16 @@ describe Clowne::Params do
   describe 'build proxy' do
     let(:params) do
       {
-        profile: { data: { name: 'Robin' } }
+        profile: { data: { name: 'Robin' } },
+        rating: 10
       }
     end
     let(:permitted_params) { subject.permit(params) }
 
-    subject { described_class.proxy(options) }
+    subject { described_class.proxy(value) }
 
-    context 'when options is true' do
-      let(:options) { true }
+    context 'when value is true' do
+      let(:value) { true }
 
       it { is_expected.to be_a(Clowne::Params::PassProxy) }
 
@@ -19,8 +20,8 @@ describe Clowne::Params do
       end
     end
 
-    context 'when options is false' do
-      let(:options) { false }
+    context 'when value is false' do
+      let(:value) { false }
 
       it { is_expected.to be_a(Clowne::Params::NullProxy) }
 
@@ -29,8 +30,8 @@ describe Clowne::Params do
       end
     end
 
-    context 'when options is false' do
-      let(:options) { nil }
+    context 'when value is false' do
+      let(:value) { nil }
 
       it { is_expected.to be_a(Clowne::Params::NullProxy) }
 
@@ -39,33 +40,41 @@ describe Clowne::Params do
       end
     end
 
-    context 'when options is a Proc' do
-      let(:options) { proc { |p| p[:profile][:data] } }
+    context 'when value is a Proc' do
+      let(:value) { proc { |p| p[:profile][:data] } }
 
       it { is_expected.to be_a(Clowne::Params::BlockProxy) }
 
-      it 'return empty hash' do
+      it 'return nested hash' do
         expect(permitted_params).to eq(name: 'Robin')
       end
     end
 
-    context 'when options is a Symbol' do
-      let(:options) { :profile }
+    context 'when value is a key' do
+      let(:value) { :profile }
 
       it { is_expected.to be_a(Clowne::Params::KeyProxy) }
 
-      it 'return empty hash' do
+      it 'return nested hash' do
         expect(permitted_params).to eq(data: { name: 'Robin' })
       end
     end
 
-    context 'when options is undefined' do
-      let(:options) { 1 }
+    context 'when value is a key but nested values is not a Hash' do
+      let(:value) { :rating }
 
       it { is_expected.to be_a(Clowne::Params::KeyProxy) }
 
-      it 'raise exception' do
-        expect { permitted_params }.to raise_error(KeyError)
+      it 'raise KeyError' do
+        expect { permitted_params }.to raise_error(KeyError, "value by key 'rating' must be a Hash")
+      end
+    end
+
+    context 'when value is undefined' do
+      let(:value) { :blah }
+
+      it 'raise KeyError' do
+        expect { permitted_params }.to raise_error(KeyError, 'key not found: :blah')
       end
     end
   end
