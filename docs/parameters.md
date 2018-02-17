@@ -47,22 +47,38 @@ Let's explain what the difference:
 
 ```ruby
 class UserCloner < Clowne::Cloner
+  # Don't pass parameters to associations
   trait :default do
     include_association :profile
     # equal to include_association :profile, params: false
   end
 
+  # Pass all parameters to associations
   trait :params_true do
     include_association :profile, params: true
   end
+
+  # Filter parameters by key.
+  # Notice: value by key must be a Hash.
 
   trait :by_key do
     include_association :profile, params: :profile
   end
 
+  # Execute custom block with params as argument
   trait :by_block do
-    include_association :profile, params: lambda do |params|
+    include_association :profile, params: Proc.new do |params|
       params[:profile].map { |k, v| [k, v.upcase] }.to_h
+    end
+  end
+
+  # Execute custom block with params and parent record as arguments
+  trait :by_block_with_parent do
+    include_association :profile, params: Proc.new do |params, user|
+      {
+        name: params[:profile][:name],
+        email: user.email
+      }
     end
   end
 end
@@ -92,4 +108,7 @@ get_profile_jsonb(user, :by_key)
 
 get_profile_jsonb(user, :by_block)
 # => { name: 'JOHN', surname: 'CENA' }
+
+get_profile_jsonb(user, :by_block_with_parent)
+# => { name: 'JOHN', email: user.email }
 ```

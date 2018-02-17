@@ -47,7 +47,7 @@ end
 
 class UserCloner < Clowne::Cloner
   include_association :accounts, :active
-  include_association :posts, ->(params) { where(state: params[:state]) if params[:state] }
+  include_association :posts, ->(params) { where(state: params[:state]) }
 end
 
 # Clone only draft posts

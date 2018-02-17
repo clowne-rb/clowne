@@ -43,7 +43,7 @@ describe Clowne::Adapters::Base::Association do
       end
     end
 
-    context 'when params option is key' do
+    context 'when params option is a key' do
       let(:custom_declaration_params) { { params: :post } }
 
       it 'clone nested params' do
@@ -53,8 +53,8 @@ describe Clowne::Adapters::Base::Association do
       end
     end
 
-    context 'when params option is block' do
-      let(:custom_declaration_params) { { params: proc { |p| p.merge(some_stuff: 'ಠᴗಠ') } } }
+    context 'when params option is a block' do
+      let(:custom_declaration_params) { { params: ->(p) { p.merge(some_stuff: 'ಠᴗಠ') } } }
 
       it 'clone nested params' do
         expect(child_cloner).to receive(:call).with(
@@ -64,6 +64,25 @@ describe Clowne::Adapters::Base::Association do
         )
 
         subject
+      end
+
+      context 'with record' do
+        let(:custom_declaration_params) do
+          {
+            params: ->(params, parent) { params.merge(some_stuff: 'ಠᴗಠ', parent: parent) }
+          }
+        end
+
+        it 'clone nested params' do
+          expect(child_cloner).to receive(:call).with(
+            child,
+            post: { title: 'New post!' },
+            some_stuff: 'ಠᴗಠ',
+            parent: source
+          )
+
+          subject
+        end
       end
     end
   end

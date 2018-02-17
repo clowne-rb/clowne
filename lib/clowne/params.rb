@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'clowne/ext/lambda_as_proc'
+
 module Clowne
   class Params # :nodoc: all
     class BaseProxy
@@ -15,7 +17,7 @@ module Clowne
     end
 
     class PassProxy < BaseProxy
-      def permit(params)
+      def permit(params:, **)
         params
       end
     end
@@ -27,13 +29,15 @@ module Clowne
     end
 
     class BlockProxy < BaseProxy
-      def permit(params)
-        value.call(params)
+      using Clowne::Ext::LambdaAsProc
+
+      def permit(params:, parent:)
+        value.to_proc.call(params, parent)
       end
     end
 
     class KeyProxy < BaseProxy
-      def permit(params)
+      def permit(params:, **)
         nested_params = params.fetch(value)
         return nested_params if nested_params.is_a?(Hash)
 
