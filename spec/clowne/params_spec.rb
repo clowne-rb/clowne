@@ -6,7 +6,7 @@ describe Clowne::Params do
         rating: 10
       }
     end
-    let(:permitted_params) { subject.permit(params) }
+    let(:permitted_params) { subject.permit(params: params) }
 
     subject { described_class.proxy(value) }
 
@@ -40,13 +40,28 @@ describe Clowne::Params do
       end
     end
 
-    context 'when value is a Proc' do
-      let(:value) { proc { |p| p[:profile][:data] } }
+    context 'when value is a block' do
+      let(:parent) { double }
+      let(:permitted_params) { subject.permit(params: params, parent: parent) }
 
-      it { is_expected.to be_a(Clowne::Params::BlockProxy) }
+      context 'with 1 args' do
+        let(:value) { ->(p) { p[:profile][:data] } }
 
-      it 'return nested hash' do
-        expect(permitted_params).to eq(name: 'Robin')
+        it { is_expected.to be_a(Clowne::Params::BlockProxy) }
+
+        it 'return nested hash' do
+          expect(permitted_params).to eq(name: 'Robin')
+        end
+      end
+
+      context 'with 2 args' do
+        let(:value) { ->(p, parent) { p[:profile][:data].merge(parent: parent) } }
+
+        it { is_expected.to be_a(Clowne::Params::BlockProxy) }
+
+        it 'return nested hash with record' do
+          expect(permitted_params).to eq(name: 'Robin', parent: parent)
+        end
       end
     end
 
