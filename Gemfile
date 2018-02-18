@@ -3,8 +3,12 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in clowne.gemspec
 gemspec
 
-gem 'pry-byebug'
-gem 'sqlite3'
+gem 'pry-byebug', platform: :mri
+
+gem 'sqlite3', platform: :mri
+gem 'activerecord-jdbcsqlite3-adapter', '~> 50.0', platform: :jruby
+gem 'jdbc-sqlite3', platform: :jruby
+
 gem 'activerecord', '>= 5.0'
 gem 'sequel', '>= 5.0'
 gem 'simplecov'
