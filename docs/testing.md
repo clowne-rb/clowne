@@ -47,7 +47,7 @@ class UserCloner < Clowne::Cloner
   end
 
   trait :with_posts do
-    include_association :posts, :draft
+    include_association :posts, :draft, traits: :mark_as_copy
   end
 
   trait :with_popular_posts do
@@ -60,6 +60,10 @@ end
 # app/cloners/post_cloner.rb
 class PostCloner < Clowne::Cloner
   include_association :comments
+
+  trait :mark_as_copy do |_, record|
+    record.title += " (copy)"
+  end
 end
 ```
 
@@ -116,14 +120,17 @@ RSpec.describe UserCloner, type: :cloner do
     is_expected.to clone_association(:profile)
 
     # check options
-    is_expected.to clone_association(:profile)
-      .with_cloner(described_class::PostCloner)
+    is_expected.to clone_association(
+      :profile,
+      clone_with: described_class::ProfileCloner
+    )
 
-    # with traits, scope and implicit cloner
-    is_expected.to clone_association(:posts)
-      .with_traits(:with_posts)
-      .with_cloner(::PostCloner)
-      .with_scope(:draft)
+    # with traits, scope and activated trait
+    is_expected.to clone_association(
+      :posts,
+      traits: :mark_as_copy,
+      scope: :draft
+    ).with_traits(:with_posts)
   end
 end
 ```
