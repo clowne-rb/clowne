@@ -47,7 +47,7 @@ class UserCloner < Clowne::Cloner
   end
 
   trait :with_posts do
-    include_association :posts, scope: :draft
+    include_association :posts, :draft
   end
 
   trait :with_popular_posts do
@@ -77,7 +77,7 @@ require 'clowne/rspec'
 
 There are several matchers that allow you to verify the cloner configuration.
 
-### `have_included_associations`
+### `clone_associations`
 
 This matcher vefifies that your cloner includes the specified associations:
 
@@ -88,21 +88,21 @@ RSpec.describe UserCloner, type: :cloner do
 
   specify do
     # checks that only the specified associations is included
-    is_expected.to have_included_associations(:profile)
+    is_expected.to clone_associations(:profile)
 
     # with traits
-    is_expected.to have_included_associations(:profile, :posts)
+    is_expected.to clone_associations(:profile, :posts)
       .with_traits(:with_posts)
 
     # raises when there are some unspecified associations
-    is_expected.to have_included_associations(:profile)
+    is_expected.to clone_associations(:profile)
       .with_traits(:with_posts)
     #=> raises RSpec::Expectations::ExpectationNotMetError
   end
 end
 ```
 
-### `have_included_association`
+### `clone_association`
 
 This matcher allows to verify the specified association options:
 
@@ -113,14 +113,14 @@ RSpec.describe UserCloner, type: :cloner do
 
   specify do
     # simply check that association is included
-    is_expected.to have_included_association(:profile)
+    is_expected.to clone_association(:profile)
 
     # check options
-    is_expected.to have_included_association(:profile)
+    is_expected.to clone_association(:profile)
       .with_cloner(described_class::PostCloner)
 
     # with traits, scope and implicit cloner
-    is_expected.to have_included_association(:posts)
+    is_expected.to clone_association(:posts)
       .with_traits(:with_posts)
       .with_cloner(::PostCloner)
       .with_scope(:draft)
@@ -142,18 +142,15 @@ RSpec.describe UserCloner, type: :cloner do
   subject(:user) { create :user, name: 'Bombon' }
 
   specify 'simple case' do
-    plan = clowne_plan(described_class, user)
     # apply only the specified part of the plan
-    cloned_user = plan.apply(:nullify)
+    cloned_user = described_class.apply_only(:nullify, user)
     expect(cloned_user.email).to be_nil
     # finalize wasn't applied
     expect(cloned_user.name).to eq 'Bombon'
   end
 
   specify 'with params' do
-    plan = clowne_plan(described_class, user, name: 'new name')
-
-    cloned_user = plan.apply(:finalize)
+    cloned_user = described_class.apply_only(:finalize, user, name: 'new name')
     # nullify actions were not applied!
     expect(cloned_user.email).to eq user.email
     # finalize was applied
@@ -162,8 +159,7 @@ RSpec.describe UserCloner, type: :cloner do
 
   specify 'with traits' do
     a_user = create(:user, name: 'Dindon')
-    plan = clowne_plan(described_class, user, traits: :copy, target: a_user)
-    cloned_user = plan.apply(:init_as)
+    cloned_user = described_class.apply_only(:init_as, user, traits: :copy, target: a_user)
     # returned user is the same as target
     expect(cloned_user).to be_eql(a_user)
     expect(cloned_user.name).to eq 'Bombon'
@@ -173,17 +169,14 @@ RSpec.describe UserCloner, type: :cloner do
     create(:post, user: user, rating: 1, text: 'Boom Boom')
     create(:post, user: user, rating: 2, text: 'Flying Dumplings')
 
-    plan = clowne_plan(described_class,
-                       user, traits: :with_popular_posts, min_rating: 1)
     # you can specify which associations to include (you can use array)
     # to apply all associations write:
     #   plan.apply(:association)
-    cloned_user = plan.apply(association: :posts)
+    cloned_user = described_class.apply(
+      association: :posts, user, traits: :with_popular_posts, min_rating: 1
+    )
     expect(cloned_user.posts.size).to eq 1
     expect(cloned_user.posts.first.text).to eq 'Flying Dumplings'
   end
 end
 ```
-
-**NOTE:** `clowne_plan` method is only available in groups marked with `type: :cloner` tag.
-Clowne automaticaly marks all specs in `spec/cloners` folder with `type: :cloner`. Otherwise you have to add this tag yourself.
