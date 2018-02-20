@@ -135,6 +135,11 @@ RSpec.describe UserCloner, type: :cloner do
 end
 ```
 
+**NOTE:** `clone_associations`/`clone_association` matchers are only available in groups marked with `type: :cloner` tag.
+
+Clowne automaticaly marks all specs in `spec/cloners` folder with `type: :cloner`. Otherwise you have to add this tag you.
+
+
 ## Clone actions matchers
 
 Under the hood, Clowne builds a [compilation plan](architecture.md) which is used to clone the record.
@@ -150,14 +155,14 @@ RSpec.describe UserCloner, type: :cloner do
 
   specify 'simple case' do
     # apply only the specified part of the plan
-    cloned_user = described_class.apply_only(:nullify, user)
+    cloned_user = described_class.partial_apply(:nullify, user)
     expect(cloned_user.email).to be_nil
     # finalize wasn't applied
     expect(cloned_user.name).to eq 'Bombon'
   end
 
   specify 'with params' do
-    cloned_user = described_class.apply_only(:finalize, user, name: 'new name')
+    cloned_user = described_class.partial_apply(:finalize, user, name: 'new name')
     # nullify actions were not applied!
     expect(cloned_user.email).to eq user.email
     # finalize was applied
@@ -166,7 +171,7 @@ RSpec.describe UserCloner, type: :cloner do
 
   specify 'with traits' do
     a_user = create(:user, name: 'Dindon')
-    cloned_user = described_class.apply_only(:init_as, user, traits: :copy, target: a_user)
+    cloned_user = described_class.partial_apply(:init_as, user, traits: :copy, target: a_user)
     # returned user is the same as target
     expect(cloned_user).to be_eql(a_user)
     expect(cloned_user.name).to eq 'Bombon'

@@ -59,7 +59,7 @@ describe "RSpec matchers and helpers", adapter: :active_record do
     end
   end
 
-  fdescribe "#clone_associations" do
+  describe "#clone_associations", type: :cloner do
     subject { RSpecTest::PostCloner }
 
     it "asserts when all associations specified" do
@@ -92,7 +92,7 @@ describe "RSpec matchers and helpers", adapter: :active_record do
     end
   end
 
-  describe "#clone_association" do
+  describe "#clone_association", type: :cloner do
     subject { RSpecTest::PostCloner }
 
     it "asserts when association is included" do
@@ -117,7 +117,7 @@ describe "RSpec matchers and helpers", adapter: :active_record do
         expect do
           expect(subject).to clone_association(
             :account,
-            clone_with: RSpecTest::TagCloner
+            clone_with: RSpecTest::HistoryCloner
           )
         end.to raise_error(RSpec::Expectations::ExpectationNotMetError)
       end
@@ -168,6 +168,26 @@ describe "RSpec matchers and helpers", adapter: :active_record do
             :tags,
             scope: ->(params) { where(value: params[:tags]) if params[:tags] }
           )
+        end.to raise_error(ArgumentError)
+      end
+    end
+
+    context "params" do
+      subject { RSpecTest::AccountCloner }
+
+      it "asserts when correct" do
+        expect(subject).to clone_association(
+          :history,
+          params: :history
+        ).with_traits(:with_history)
+      end
+
+      it "refutes whenincorrect" do
+        expect do
+          expect(subject).to clone_association(
+            :history,
+            params: nil
+          ).with_traits(:with_history)
         end.to raise_error(RSpec::Expectations::ExpectationNotMetError)
       end
     end
