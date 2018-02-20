@@ -48,11 +48,9 @@ module Clowne
       # +source+:: Instance of cloned object (ex: User.new(posts: posts))
       # +plan+:: Array of Declarations
       # +params+:: Custom params hash
-      # +only+:: Declarations filter (a Hash with type as a key and type-specific value)
-      def clone(source, plan, params: {}, only: nil)
+      def clone(source, plan, params: {})
         declarations = plan.declarations
         declarations.inject(init_record(dup_source(source))) do |record, (type, declaration)|
-          next record if only && (!only.key?(type) || !declaration.matches?(only[type]))
           resolver_for(type).call(source, record, declaration, params: params, adapter: self)
         end
       end

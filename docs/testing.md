@@ -34,12 +34,12 @@ class UserCloner < Clowne::Cloner
 
   nullify :email
 
-  finalize do |_, record, name: nil|
+  finalize do |_, record, name: nil, **|
     record.name = name unless name.nil?
   end
 
   trait :copy do
-    init_as do |user, target:|
+    init_as do |user, target:, **|
       # copy name
       target.name = user.name
       target
