@@ -23,6 +23,10 @@ module Clowne
         @_params_proxy ||= Clowne::Params.proxy(options[:params])
       end
 
+      def params
+        options[:params]
+      end
+
       def clone_with
         return @clone_with if instance_variable_defined?(:@clone_with)
         @clone_with =
