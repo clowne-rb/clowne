@@ -13,8 +13,14 @@ module Clowne
           # Remove the first blank element in case of '::ClassName' notation.
           names.shift if names.size > 1 && names.first.empty?
 
-          names.inject(Object) do |constant, name|
-            constant.const_get(name) if constant.const_defined?(name)
+          begin
+            names.inject(Object) do |constant, name|
+              constant.const_get(name)
+            end
+          # rescue instead of const_defined? allow us to use
+          # Rails const autoloading (aka patched const_get)
+          rescue NameError
+            nil
           end
         end
       end
