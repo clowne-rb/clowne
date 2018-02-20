@@ -61,7 +61,7 @@ module Clowne # :nodoc: all
 
         plan = Clowne::Planner.enhance(plan, Proc.new) if block_given?
 
-        plan = Clowne::Planner.filter_declarations(plan, only) if only
+        plan = Clowne::Planner.filter_declarations(plan, only)
 
         adapter.clone(object, plan, params: options)
       end
