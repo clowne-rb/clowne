@@ -26,6 +26,16 @@ module Clowne
         end
       end
 
+      def filter_declarations(plan, only)
+        return if only.nil?
+
+        plan.dup.tap do |new_plan|
+          new_plan.declarations.reject! do |(type, declaration)|
+            !only.key?(type) || !declaration.matches?(only[type])
+          end
+        end
+      end
+
       private
 
       def compile_traits(cloner, traits)

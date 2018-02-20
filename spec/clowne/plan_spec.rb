@@ -30,7 +30,18 @@ describe Clowne::Plan do
       subject.remove(:c)
       subject.remove_from(:a, :key_1)
 
+      # return the same cached version
       expect(subject.declarations).to eq(
+        [
+          [:a, 'value_1'],
+          [:a, 'value_2'],
+          [:b, 'item_1'],
+          [:b, 'item_2'],
+          [:c, 'scalar_1']
+        ]
+      )
+
+      expect(subject.declarations(true)).to eq(
         [
           [:a, 'value_2'],
           [:b, 'item_1'],
@@ -40,7 +51,7 @@ describe Clowne::Plan do
 
       subject.add_to(:a, :key_1, 'new_item')
 
-      expect(subject.declarations).to eq(
+      expect(subject.declarations(true)).to eq(
         [
           [:a, 'value_2'],
           [:b, 'item_1'],

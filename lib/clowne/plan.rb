@@ -56,14 +56,16 @@ module Clowne
       data[type].delete(id)
     end
 
-    def declarations
-      registry.actions.flat_map do |type|
-        value = data[type]
-        next if value.nil?
-        value = value.values if value.is_a?(TwoPhaseSet)
-        value = Array(value)
-        value.map { |v| [type, v] }
-      end.compact
+    def declarations(reload = false)
+      return @declarations if !reload && instance_variable_defined?(:@declarations)
+      @declarations =
+        registry.actions.flat_map do |type|
+          value = data[type]
+          next if value.nil?
+          value = value.values if value.is_a?(TwoPhaseSet)
+          value = Array(value)
+          value.map { |v| [type, v] }
+        end.compact
     end
 
     def dup

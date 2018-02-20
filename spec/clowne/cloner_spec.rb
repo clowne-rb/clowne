@@ -154,7 +154,7 @@ describe Clowne::Cloner do
     end
   end
 
-  describe '.partial_apply' do
+  describe '.partial_apply', :aggregate_failures do
     let(:cloner) do
       Class.new(Clowne::Cloner) do
         adapter :active_record
@@ -177,28 +177,28 @@ describe Clowne::Cloner do
 
     let(:source) { source_class.new('John', 28, 99) }
 
-    specify 'one action', :aggregate_failures do
+    specify 'one action' do
       cloned = cloner.partial_apply(:nullify, source)
       expect(cloned.age).to eq 28
       expect(cloned.rating).to be_nil
       expect(cloned.name).to eq 'John'
     end
 
-    specify 'with traits', :aggregate_failures do
+    specify 'with traits' do
       cloned = cloner.partial_apply(:nullify, source, traits: :without_name)
       expect(cloned.age).to eq 28
       expect(cloned.rating).to be_nil
       expect(cloned.name).to be_nil
     end
 
-    specify 'with params', :aggregate_failures do
+    specify 'with params' do
       cloned = cloner.partial_apply(:finalize, source, coef: 3)
       expect(cloned.age).to eq 84
       expect(cloned.rating).to eq 99
       expect(cloned.name).to eq 'John'
     end
 
-    specify 'multiple actions', :aggregate_failures do
+    specify 'multiple actions' do
       another = source_class.new('Jack', 33, 1)
       cloned = cloner.partial_apply(
         [:init_as, :finalize], source,
