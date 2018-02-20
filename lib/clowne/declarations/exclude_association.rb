@@ -2,7 +2,7 @@
 
 module Clowne
   module Declarations
-    class ExcludeAssociation # :nodoc: all
+    class ExcludeAssociation < Base # :nodoc: all
       attr_accessor :name
 
       def initialize(name)

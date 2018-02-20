@@ -1,5 +1,11 @@
 # Change log
 
+## master
+
+- Add `Cloner#partial_apply` method. ([@palkan][])
+
+- Add RSpec matchers `clone_association` / `clone_associations`. ([@palkan][])
+
 ## 0.1.0 (2018-02-01)
 
 - Add `init_as` declaration. ([@palkan][])

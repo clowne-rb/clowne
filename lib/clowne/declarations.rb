@@ -23,6 +23,7 @@ module Clowne
   end
 end
 
+require 'clowne/declarations/base'
 require 'clowne/declarations/init_as'
 require 'clowne/declarations/exclude_association'
 require 'clowne/declarations/finalize'

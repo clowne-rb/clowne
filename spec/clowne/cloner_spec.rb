@@ -153,4 +153,62 @@ describe Clowne::Cloner do
       end
     end
   end
+
+  describe '.partial_apply' do
+    let(:cloner) do
+      Class.new(Clowne::Cloner) do
+        adapter :active_record
+
+        nullify :rating
+
+        trait :without_name do
+          nullify :name
+        end
+
+        trait :copy do
+          init_as { |_, target:, **| target }
+        end
+
+        finalize { |_, record, coef: 2, **| record.age *= coef }
+      end
+    end
+
+    let(:source_class) { Struct.new(:name, :age, :rating) }
+
+    let(:source) { source_class.new('John', 28, 99) }
+
+    specify 'one action', :aggregate_failures do
+      cloned = cloner.partial_apply(:nullify, source)
+      expect(cloned.age).to eq 28
+      expect(cloned.rating).to be_nil
+      expect(cloned.name).to eq 'John'
+    end
+
+    specify 'with traits', :aggregate_failures do
+      cloned = cloner.partial_apply(:nullify, source, traits: :without_name)
+      expect(cloned.age).to eq 28
+      expect(cloned.rating).to be_nil
+      expect(cloned.name).to be_nil
+    end
+
+    specify 'with params', :aggregate_failures do
+      cloned = cloner.partial_apply(:finalize, source, coef: 3)
+      expect(cloned.age).to eq 84
+      expect(cloned.rating).to eq 99
+      expect(cloned.name).to eq 'John'
+    end
+
+    specify 'multiple actions', :aggregate_failures do
+      another = source_class.new('Jack', 33, 1)
+      cloned = cloner.partial_apply(
+        [:init_as, :finalize], source,
+        traits: :copy, coef: 0.5, target: another
+      )
+
+      expect(cloned).to be_eql(another)
+      expect(cloned.age).to eq 16.5
+      expect(cloned.rating).to eq 1
+      expect(cloned.name).to eq 'Jack'
+    end
+  end
 end
