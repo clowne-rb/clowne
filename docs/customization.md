@@ -12,9 +12,10 @@ Suppose that you want to add the `include_all` declaration to automagically incl
 First, you should add a custom declaration:
 
 ```ruby
-class IncludeAll # :nodoc: all
+# Extend from Base declaration
+class IncludeAll < Clowne::Declarations::Base # :nodoc: all
   def compile(plan)
-    # Just add all_associations object to plan
+    # Just add all_associations declaration (self) to plan
     plan.set(:all_associations, self)
   end
 end
