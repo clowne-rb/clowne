@@ -4,7 +4,7 @@ require 'clowne/ext/string_constantize'
 
 module Clowne
   module Declarations
-    class IncludeAssociation # :nodoc: all
+    class IncludeAssociation < Base # :nodoc: all
       using Clowne::Ext::StringConstantize
 
       attr_accessor :name, :scope, :options
@@ -17,6 +17,11 @@ module Clowne
 
       def compile(plan)
         plan.add_to(:association, name, self)
+      end
+
+      def matches?(names)
+        names = Array(names)
+        names.include?(name)
       end
 
       def params_proxy

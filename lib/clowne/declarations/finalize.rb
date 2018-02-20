@@ -2,7 +2,7 @@
 
 module Clowne
   module Declarations
-    class Finalize # :nodoc: all
+    class Finalize < Base # :nodoc: all
       attr_reader :block
 
       def initialize

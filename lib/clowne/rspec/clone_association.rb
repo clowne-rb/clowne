@@ -2,7 +2,7 @@
 
 module Clowne
   module RSpec
-    module Matchers
+    module Matchers # :nodoc: all
       class CloneAssociation < ::RSpec::Matchers::BuiltIn::BaseMatcher
         include Clowne::RSpec::Helpers
 
@@ -20,9 +20,10 @@ module Clowne
           extract_options! options
         end
 
+        # rubocop: disable Metrics/AbcSize
         def match(expected, _actual)
           @actual = plan.declarations
-            .find { |key, decl| key == :association && decl.name == expected }
+                        .find { |key, decl| key == :association && decl.name == expected }
 
           return false if @actual.nil?
 
@@ -36,6 +37,7 @@ module Clowne
 
           true
         end
+        # rubocop: enable Metrics/AbcSize
 
         def does_not_match?(*)
           raise "This matcher doesn't support negation"
@@ -58,10 +60,10 @@ module Clowne
             expected_params[param] = options.fetch(param, UNDEFINED)
           end
 
-          raise ArgumentError, "Lambda scope is not supported" if
+          raise ArgumentError, 'Lambda scope is not supported' if
             expected_params[:scope].is_a?(Proc)
 
-          raise ArgumentError, "Lambda params is not supported" if
+          raise ArgumentError, 'Lambda params is not supported' if
             expected_params[:params].is_a?(Proc)
         end
 
