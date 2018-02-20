@@ -27,7 +27,7 @@ module Clowne
       end
 
       def filter_declarations(plan, only)
-        return if only.nil?
+        return plan if only.nil?
 
         plan.dup.tap do |new_plan|
           new_plan.declarations.reject! do |(type, declaration)|
