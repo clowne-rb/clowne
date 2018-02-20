@@ -143,4 +143,26 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     tags_clone = a_post.tags
     expect(tags_clone.map(&:value)).to match_array(%w[CI CD JVM RUM])
   end
+
+  it 'works with partial clone' do
+    cloned = AR::PostCloner.partial_apply(
+      { association: :tags },
+      post,
+      traits: :mark_as_clone,
+      tags: %w[CI CD]
+    )
+
+    cloned.save!
+    cloned.reload
+
+    # title
+    expect(cloned.title).to eq post.title
+
+    # account
+    expect(cloned.account).to be_nil
+
+    # tags
+    tags_clone = cloned.tags
+    expect(tags_clone.map(&:value)).to match_array(%w[CI CD])
+  end
 end

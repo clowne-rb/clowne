@@ -48,6 +48,8 @@ module Clowne # :nodoc: all
 
         traits = options.delete(:traits)
 
+        only = options.delete(:clowne_only_actions)
+
         traits = Array(traits) unless traits.nil?
 
         plan =
@@ -59,7 +61,11 @@ module Clowne # :nodoc: all
 
         plan = Clowne::Planner.enhance(plan, Proc.new) if block_given?
 
-        adapter.clone(object, plan, params: options)
+        adapter.clone(object, plan, params: options, only: only)
+      end
+
+      def partial_apply(only, *args, **hargs)
+        call(*args, **hargs, clowne_only_actions: prepare_only(only))
       end
 
       # rubocop: enable Metrics/AbcSize, Metrics/MethodLength
@@ -88,6 +94,18 @@ module Clowne # :nodoc: all
       def traits_plans
         return @traits_plans if instance_variable_defined?(:@traits_plans)
         @traits_plans = {}
+      end
+
+      def prepare_only(val)
+        val = Array.wrap(val)
+        val.each_with_object({}) do |type, acc|
+          # type is a Symbol or Hash
+          if type.is_a?(Hash)
+            acc.merge!(type)
+          elsif type.is_a?(Symbol)
+            acc[type] = nil
+          end
+        end
       end
     end
   end

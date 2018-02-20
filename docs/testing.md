@@ -62,7 +62,7 @@ class PostCloner < Clowne::Cloner
   include_association :comments
 
   trait :mark_as_copy do |_, record|
-    record.title += " (copy)"
+    record.title += ' (copy)'
   end
 end
 ```
@@ -184,9 +184,10 @@ RSpec.describe UserCloner, type: :cloner do
     # you can specify which associations to include (you can use array)
     # to apply all associations write:
     #   plan.apply(:association)
-    cloned_user = described_class.apply(
-      association: :posts, user, traits: :with_popular_posts, min_rating: 1
+    cloned_user = described_class.partial_apply(
+      'association.posts', user, traits: :with_popular_posts, min_rating: 1
     )
+
     expect(cloned_user.posts.size).to eq 1
     expect(cloned_user.posts.first.text).to eq 'Flying Dumplings'
   end

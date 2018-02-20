@@ -2,15 +2,15 @@
 
 module Clowne
   module RSpec
-    module Matchers
+    module Matchers # :nodoc: all
       # `clone_associations` matcher is just an extension of `contain_exactly` matcher
       class CloneAssociations < ::RSpec::Matchers::BuiltIn::ContainExactly
         include Clowne::RSpec::Helpers
 
         def convert_actual_to_an_array
           @actual = plan.declarations
-            .select { |key, _| key == :association }
-            .map { |_, decl| decl.name }
+                        .select { |key, _| key == :association }
+                        .map { |_, decl| decl.name }
         end
       end
     end

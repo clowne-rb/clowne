@@ -2,7 +2,7 @@
 
 module Clowne
   module Declarations
-    class Nullify # :nodoc: all
+    class Nullify < Base # :nodoc: all
       attr_reader :attributes
 
       def initialize(*attributes)

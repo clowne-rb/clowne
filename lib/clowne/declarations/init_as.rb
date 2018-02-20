@@ -2,7 +2,7 @@
 
 module Clowne
   module Declarations
-    class InitAs # :nodoc: all
+    class InitAs < Base # :nodoc: all
       attr_reader :block
 
       def initialize
