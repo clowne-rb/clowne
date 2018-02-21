@@ -1,7 +1,7 @@
 [![Gem Version](https://badge.fury.io/rb/clowne.svg)](https://badge.fury.io/rb/clowne)
 [![Build Status](https://travis-ci.org/palkan/clowne.svg?branch=master)](https://travis-ci.org/palkan/clowne)
 [![Test Coverage](https://codeclimate.com/github/palkan/clowne/badges/coverage.svg)](https://codeclimate.com/github/palkan/clowne/coverage)
-[![Docs](https://img.shields.io/readthedocs/pip.svg)](https://palkan.github.io/clowne)
+[![Docs](https://img.shields.io/readthedocs/pip.svg)](http://clowne.evilmartians.io)
 
 # Clowne
 
@@ -89,14 +89,14 @@ cloned.profile.name
 # => nil
 ```
 
-Take a look at our [documentation](https://palkan.github.io/clowne) for more information!
+Take a look at our [documentation](http://clowne.evilmartians.io/clowne) for more info!
 
 ### Supported ORM adapters
 
 Adapter                                   |1:1         | 1:M         | M:M                     |
 ------------------------------------------|------------|-------------|-------------------------|
-[Active Record](https://palkan.github.io/clowne/docs/active_record.html)  | has_one    | has_many    | has_and_belongs_to_many |
-[Sequel](https://palkan.github.io/clowne/docs/sequel.html)           | one_to_one | one_to_many | many_to_many            |
+[Active Record](http://clowne.evilmartians.io/clowne/docs/active_record.html)  | has_one    | has_many    | has_and_belongs_t|
+[Sequel](http://clowne.evilmartians.io/clowne/docs/sequel.html)           | one_to_one | one_to_many | many_to_many     |
 
 ## Maintainers
 

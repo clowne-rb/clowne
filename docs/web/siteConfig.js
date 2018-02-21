@@ -8,8 +8,9 @@
 const siteConfig = {
   title: 'Clowne' /* title for your website */,
   tagline: 'A flexible gem for cloning your models',
-  url: 'https://github.com/palkan/clowne' /* your website url */,
-  baseUrl: '/clowne/' /* base url for your project */,
+  url: 'http://clowne.evilmartians.io' /* your website url */,
+  cname: 'clowne.evilmartians.io',
+  baseUrl: '/' /* base url for your project */,
   customDocsPath: '../docs',
   projectName: 'clowne',
   headerLinks: [
