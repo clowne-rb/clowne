@@ -25,6 +25,7 @@
       "implicit_cloner",
       "inline_configuration",
       "architecture",
+      "testing",
       "customization"
     ]
   }
