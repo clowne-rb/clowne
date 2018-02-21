@@ -40,6 +40,7 @@ const siteConfig = {
   // You may provide arbitrary config keys to be used as needed by your template.
   repoUrl: 'https://github.com/palkan/clowne',
   gemUrl: 'https://rubygems.org/gems/clowne',
+  gaTrackingId: 'UA-104346673-2',
 };
 
 module.exports = siteConfig;

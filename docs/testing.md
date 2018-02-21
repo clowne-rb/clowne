@@ -140,7 +140,7 @@ end
 Clowne automaticaly marks all specs in `spec/cloners` folder with `type: :cloner`. Otherwise you have to add this tag you.
 
 
-## Clone actions matchers
+## Using partial cloning
 
 Under the hood, Clowne builds a [compilation plan](architecture.md) which is used to clone the record.
 
