@@ -1,6 +1,6 @@
 # Change log
 
-## master
+## 0.2.0 (2018-02-21)
 
 - Add `Cloner#partial_apply` method. ([@palkan][])
 
