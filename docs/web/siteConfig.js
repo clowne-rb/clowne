@@ -23,7 +23,7 @@ const siteConfig = {
   favicon: 'img/favicon/favicon.ico',
   /* colors for website */
   colors: {
-    primaryColor: '#111111', // '#ff5e5e'
+    primaryColor: '#9FA628', // '#ff5e5e'
     secondaryColor: '#e3e3e3',
   },
   // This copyright info is used in /core/Footer.js and blog rss/atom feeds.
@@ -34,7 +34,7 @@ const siteConfig = {
   // organizationName: 'deltice', // or set an env variable ORGANIZATION_NAME
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks
-    theme: 'ascetic',    
+    theme: 'atom-one-light',
   },
   scripts: ['https://buttons.github.io/buttons.js'],
   // You may provide arbitrary config keys to be used as needed by your template.

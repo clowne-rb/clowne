@@ -49,21 +49,28 @@ footer .sitemap div {
 }
 
 .fixedHeaderContainer a {
-  color: #111; /* #ff5e5e; */
+  color: #9FA628;
 }
 
 header h2 {
-  color: #111; /* #ff5e5e; */
+  color: #9FA628;
   text-transform: uppercase;
 }
 
 .container .wrapper h2 {
-  color: #111; /* #ff5e5e; */
   font-weight: bold;
 }
 
 .mainContainer .wrapper a {
   text-decoration: underline;
+}
+
+.projectTitle {
+  color: #111;
+}
+
+.projectTitleName {
+  color: #9FA628;
 }
 
 .mainContainer .wrapper a:hover {
@@ -79,7 +86,7 @@ small {
 }
 
 .navigationSlider .slidingNav ul li a {
-  color: #111; /* #ff5e5e; */
+  color: #9FA628;
 }
 
 nav.toc .toggleNav .navGroup.navGroupActive {
@@ -91,9 +98,8 @@ nav.toc .toggleNav .navGroup.navGroupActive {
   margin-bottom: 30px;
 }
 
-/* Make ascetic theme comments a little bit darker */
-.hljs-comment, .hljs-quote, .hljs-meta, .hljs-deletion {
-  color: #a7a7a7;
+.hljs-doctag {
+  color: #a0a1a7;
 }
 
 @keyframes humanoids-blink{
