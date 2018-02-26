@@ -7,6 +7,8 @@
 
 A flexible gem for cloning your models. Clowne focuses on ease of use and provides the ability to connect various ORM adapters.
 
+📑 [Documentation](http://clowne.evilmartians.io)
+
 <a href="https://evilmartians.com/">
 <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54"></a>
 
@@ -89,13 +91,13 @@ cloned.profile.name
 # => nil
 ```
 
-Take a look at our [documentation](http://clowne.evilmartians.io/clowne) for more info!
+Take a look at our [documentation](http://clowne.evilmartians.io) for more info!
 
 ### Supported ORM adapters
 
 Adapter                                   |1:1         | 1:M         | M:M                     |
 ------------------------------------------|------------|-------------|-------------------------|
-[Active Record](http://clowne.evilmartians.io/clowne/docs/active_record.html)  | has_one    | has_many    | has_and_belongs_t|
+[Active Record](http://clowne.evilmartians.io/clowne/docs/active_record.html)  | has_one    | has_many    | has_and_belongs_to|
 [Sequel](http://clowne.evilmartians.io/clowne/docs/sequel.html)           | one_to_one | one_to_many | many_to_many     |
 
 ## Maintainers
