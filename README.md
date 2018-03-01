@@ -7,6 +7,8 @@
 
 A flexible gem for cloning your models. Clowne focuses on ease of use and provides the ability to connect various ORM adapters.
 
+📖 Read [Evil Martians Chronicles](https://evilmartians.com/chronicles/clowne-clone-ruby-models-with-a-smile) to learn about possible use cases.
+
 📑 [Documentation](http://clowne.evilmartians.io)
 
 <a href="https://evilmartians.com/">
