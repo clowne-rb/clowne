@@ -50,17 +50,13 @@ class Footer extends React.Component {
                 </a>
               </div>
           </div>
+          */}
           <div className="footer--block">
             <h5>Resources</h5>
               <div className="footer--list--item">
-                <a href="#" target="_blank">Super puper chronicles post</a>
+                <a href="https://evilmartians.com/chronicles/clowne-clone-ruby-models-with-a-smile" target="_blank">Clowne: clone Ruby models with a smile</a>
               </div>
-              <div className="footer--list--item">
-                <a href="#" target="_blank">
-                  Talk Slides
-                </a>
-              </div>
-          </div> */}
+          </div>
           <div className="footer--block legals">
             <p className="footer--copy">
               <span className="copy">{yearLabel}</span>&nbsp;
