@@ -24,6 +24,12 @@ Naming/ClassAndModuleCamelCase:
   Exclude:
     - 'spec/**/*.rb'
 
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
 Style/TrivialAccessors:
   Enabled: false
 
