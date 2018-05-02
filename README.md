@@ -1,7 +1,7 @@
 [![Gem Version](https://badge.fury.io/rb/clowne.svg)](https://badge.fury.io/rb/clowne)
 [![Build Status](https://travis-ci.org/palkan/clowne.svg?branch=master)](https://travis-ci.org/palkan/clowne)
 [![Test Coverage](https://codeclimate.com/github/palkan/clowne/badges/coverage.svg)](https://codeclimate.com/github/palkan/clowne/coverage)
-[![Docs](https://img.shields.io/badge/docs-link-brightgreen.svg)](http://clowne.evilmartians.io)
+[![Docs](https://img.shields.io/badge/docs-link-brightgreen.svg)](https://clowne.evilmartians.io)
 
 # Clowne
 
@@ -9,7 +9,7 @@ A flexible gem for cloning your models. Clowne focuses on ease of use and provid
 
 📖 Read [Evil Martians Chronicles](https://evilmartians.com/chronicles/clowne-clone-ruby-models-with-a-smile) to learn about possible use cases.
 
-📑 [Documentation](http://clowne.evilmartians.io)
+📑 [Documentation](https://clowne.evilmartians.io)
 
 <a href="https://evilmartians.com/">
 <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54"></a>
@@ -93,14 +93,14 @@ cloned.profile.name
 # => nil
 ```
 
-Take a look at our [documentation](http://clowne.evilmartians.io) for more info!
+Take a look at our [documentation](https://clowne.evilmartians.io) for more info!
 
 ### Supported ORM adapters
 
 Adapter                                   |1:1         | 1:M         | M:M                     |
 ------------------------------------------|------------|-------------|-------------------------|
-[Active Record](http://clowne.evilmartians.io/clowne/docs/active_record.html)  | has_one    | has_many    | has_and_belongs_to|
-[Sequel](http://clowne.evilmartians.io/clowne/docs/sequel.html)           | one_to_one | one_to_many | many_to_many     |
+[Active Record](https://clowne.evilmartians.io/clowne/docs/active_record.html)  | has_one    | has_many    | has_and_belongs_to|
+[Sequel](https://clowne.evilmartians.io/clowne/docs/sequel.html)           | one_to_one | one_to_many | many_to_many     |
 
 ## Maintainers
 
