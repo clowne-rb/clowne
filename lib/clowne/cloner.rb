@@ -3,6 +3,7 @@
 require 'clowne/planner'
 require 'clowne/dsl'
 require 'clowne/params'
+require 'clowne/operation'
 
 module Clowne # :nodoc: all
   class UnprocessableSourceError < StandardError; end
@@ -63,7 +64,7 @@ module Clowne # :nodoc: all
 
         plan = Clowne::Planner.filter_declarations(plan, only)
 
-        adapter.clone(object, plan, params: options)
+        wrap { adapter.clone(object, plan, params: options) }
       end
 
       def partial_apply(only, *args, **hargs)
@@ -92,6 +93,14 @@ module Clowne # :nodoc: all
       attr_writer :declarations
 
       private
+
+      def wrap
+        return yield unless adapter.is_a?(Clowne::Adapters::ActiveRecord)
+
+        Clowne::Operation.wrap do
+          yield
+        end
+      end
 
       def traits_plans
         return @traits_plans if instance_variable_defined?(:@traits_plans)
