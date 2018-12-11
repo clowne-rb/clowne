@@ -2,7 +2,7 @@
 
 module Clowne
   module Adapters
-    class Base
+    class Resolvers
       module Finalize # :nodoc: all
         def self.call(source, record, declaration, params:, **_options)
           declaration.block.call(source, record, params)
@@ -14,6 +14,6 @@ module Clowne
 end
 
 Clowne::Adapters::Base.register_resolver(
-  :finalize, Clowne::Adapters::Base::Finalize,
+  :finalize, Clowne::Adapters::Resolvers::Finalize,
   after: :nullify
 )

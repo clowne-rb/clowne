@@ -2,7 +2,7 @@
 
 module Clowne
   module Adapters
-    class Base
+    class Resolvers
       module InitAs # :nodoc: all
         # rubocop: disable Metrics/ParameterLists
         def self.call(source, _record, declaration, params:, adapter:, **_options)
@@ -16,6 +16,6 @@ end
 
 Clowne::Adapters::Base.register_resolver(
   :init_as,
-  Clowne::Adapters::Base::InitAs,
+  Clowne::Adapters::Resolvers::InitAs,
   prepend: true
 )

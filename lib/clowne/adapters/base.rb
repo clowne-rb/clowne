@@ -71,6 +71,6 @@ module Clowne
   end
 end
 
-require 'clowne/adapters/base/init_as'
-require 'clowne/adapters/base/nullify'
-require 'clowne/adapters/base/finalize'
+require 'clowne/adapters/resolvers/init_as'
+require 'clowne/adapters/resolvers/nullify'
+require 'clowne/adapters/resolvers/finalize'

@@ -1,4 +1,4 @@
-describe Clowne::Adapters::ActiveRecord::Association do
+describe Clowne::Adapters::ActiveRecord::Resolvers::Association do
   let(:params) { double }
   let(:record) { double }
   let(:source) { build_stubbed(:post) }
