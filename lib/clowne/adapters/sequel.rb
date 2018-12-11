@@ -20,6 +20,6 @@ end
 ::Sequel::Model.extend Clowne::Ext::ORMExt
 
 require 'clowne/adapters/sequel/associations'
-require 'clowne/adapters/sequel/association'
 require 'clowne/adapters/sequel/copier'
 require 'clowne/adapters/sequel/record_wrapper'
+require 'clowne/adapters/sequel/resolvers/association'
