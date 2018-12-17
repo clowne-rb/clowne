@@ -41,5 +41,10 @@ module Clowne
     def save
       @clone.save
     end
+
+    def save_with_magic
+      save
+      @post_processings.each(&:call)
+    end
   end
 end
