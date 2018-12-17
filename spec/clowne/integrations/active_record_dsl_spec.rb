@@ -68,7 +68,7 @@ describe 'AR DSl', :cleandb do
 
   describe '#clowne' do
     it 'uses in-model config' do
-      cloned_post = post.clowne(title: 'New Post')
+      cloned_post = post.clowne(title: 'New Post').clone
 
       expect(cloned_post.title).to eq 'New Post'
       expect(cloned_post.account).not_to be_nil
@@ -76,7 +76,7 @@ describe 'AR DSl', :cleandb do
     end
 
     it 'works with inherit: false' do
-      cloned_post = draft_post.clowne(title: 'New Post')
+      cloned_post = draft_post.clowne(title: 'New Post').clone
 
       expect(cloned_post.title).to eq '[wip]'
       expect(cloned_post.account).to be_nil
@@ -85,8 +85,8 @@ describe 'AR DSl', :cleandb do
     it 'works with inheritance' do
       admin = AR_DSL::Admin.find(user.id)
 
-      cloned_admin = admin.clowne
-      cloned_user = user.clowne
+      cloned_admin = admin.clowne.clone
+      cloned_user = user.clowne.clone
 
       expect(cloned_user.email).to be_nil
       expect(cloned_user.posts.size).to eq 2
@@ -99,7 +99,7 @@ describe 'AR DSl', :cleandb do
     it 'works with inline config' do
       cloned_post = draft_post.clowne(title: 'New Post') do
         nullify :owner_id
-      end
+      end.clone
 
       expect(cloned_post.title).to eq '[wip]'
       expect(cloned_post.account).to be_nil

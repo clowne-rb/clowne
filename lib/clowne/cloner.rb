@@ -64,7 +64,7 @@ module Clowne # :nodoc: all
 
         plan = Clowne::Planner.filter_declarations(plan, only)
 
-        wrap { adapter.clone(object, plan, params: options) }
+        with_operation { adapter.clone(object, plan, params: options) }
       end
 
       def partial_apply(only, *args, **hargs)
@@ -94,8 +94,8 @@ module Clowne # :nodoc: all
 
       private
 
-      def wrap
-        return yield unless adapter.is_a?(Clowne::Adapters::ActiveRecord)
+      def with_operation
+        return yield unless adapter.is_a?(Clowne::Adapters::ActiveRecord) # TODO: use Operation for all adapters
 
         Clowne::Operation.wrap do
           yield
