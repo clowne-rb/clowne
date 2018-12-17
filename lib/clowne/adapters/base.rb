@@ -35,3 +35,4 @@ end
 require 'clowne/adapters/resolvers/init_as'
 require 'clowne/adapters/resolvers/nullify'
 require 'clowne/adapters/resolvers/finalize'
+require 'clowne/adapters/resolvers/post_processing'

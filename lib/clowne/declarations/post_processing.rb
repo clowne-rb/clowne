@@ -2,19 +2,19 @@
 
 module Clowne
   module Declarations
-    class Finalize < Base # :nodoc: all
+    class PostProcessing < Base # :nodoc: all
       attr_reader :block
 
       def initialize
-        raise ArgumentError, 'Block is required for finalize' unless block_given?
+        raise ArgumentError, 'Block is required for post_processing' unless block_given?
         @block = Proc.new
       end
 
       def compile(plan)
-        plan.add(:finalize, self)
+        plan.add(:post_processing, self)
       end
     end
   end
 end
 
-Clowne::Declarations.add :finalize, Clowne::Declarations::Finalize
+Clowne::Declarations.add :post_processing, Clowne::Declarations::PostProcessing

@@ -10,14 +10,15 @@ module Clowne
         Thread.current[THREAD_KEY]
       end
 
-      def wrap
+      def wrap(operation_class = self)
         return yield if current
 
-        Thread.current[THREAD_KEY] =
-          new.tap do |operation|
-            operation.clone = yield
-            clear!
-          end
+        Thread.current[THREAD_KEY] = operation_class.new
+
+        current.tap do |operation|
+          operation.clone = yield
+          clear!
+        end
       end
 
       def clear!
@@ -26,10 +27,15 @@ module Clowne
     end
 
     attr_accessor :clone
+    attr_reader :mapper
 
     def initialize
       @post_processings = []
       @mapper = {}
+    end
+
+    def add_post_processing(block)
+      @post_processings.unshift(block)
     end
 
     def save

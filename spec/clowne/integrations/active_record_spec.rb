@@ -75,7 +75,8 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       tags: %w[CI CD],
       post_contents: 'THIS IS CLONE! (☉_☉)',
       history: { suffix: ' - 2' }
-    )
+    ).clone
+
     cloned.save!
 
     expect(AR::Topic.count).to eq(1)
@@ -120,7 +121,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       traits: :copy,
       target: a_post,
       history: { suffix: ' - 3' }
-    )
+    ).clone
     cloned.save!
 
     expect(cloned).to be_eql(a_post)
@@ -150,7 +151,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       post,
       traits: :mark_as_clone,
       tags: %w[CI CD]
-    )
+    ).clone
 
     cloned.save!
     cloned.reload
