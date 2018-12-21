@@ -32,10 +32,19 @@ module Clowne
     def initialize
       @post_processings = []
       @mapper = {}
+      def @mapper.clone_of(origin)
+        key = [origin.class.name, origin.id].join('#')
+        fetch(key, nil)
+      end
     end
 
     def add_post_processing(block)
       @post_processings.unshift(block)
+    end
+
+    def add_mapping(origin, clone)
+      return if @mapper.has_key?(mapping_key(origin))
+      @mapper[mapping_key(origin)] = clone
     end
 
     def save
@@ -45,6 +54,12 @@ module Clowne
     def save_with_magic
       save
       @post_processings.each(&:call)
+    end
+
+    private
+
+    def mapping_key(record)
+      [record.class.name, record.id].join('#')
     end
   end
 end

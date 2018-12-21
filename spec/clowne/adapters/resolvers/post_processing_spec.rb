@@ -2,17 +2,18 @@ describe Clowne::Adapters::Resolvers::PostProcessing do
   let(:declaration) { Clowne::Declarations::PostProcessing.new(&block) }
 
   describe '.call' do
-    let(:source) { AR::User.new(email: 'admin@example.com') }
+    let(:source) { AR::User.create(email: 'admin@example.com') }
     let(:params) { {} }
     let(:block) do
-      proc do |source, record|
-        record.update_attributes(email: "admin#{ record.id }@example.com")
+      proc do |source, record, mapper:|
+        record.update_attributes(email: "admin#{ record.id }@#{ mapper.clone_of(source) }")
       end
     end
 
     subject(:result) do
       record = AR::User.new
       operation = Clowne::Operation.wrap { described_class.call(source, record, declaration, params: params) }
+      operation.add_mapping(source, 'example.com')
       operation.save_with_magic
       operation.clone
     end
