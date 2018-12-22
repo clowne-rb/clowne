@@ -20,11 +20,11 @@ describe 'AR DSl', :cleandb do
       end
 
       class Post < ActiveRecord::Base
-        has_one :account, class_name: 'AR_DSL::Account'
+        has_one :image, class_name: 'AR_DSL::Image'
         belongs_to :owner, class_name: 'AR_DSL::User'
 
         clowne_config do
-          include_association :account
+          include_association :image
 
           finalize do |source, record, params|
             record.title = params[:title] || "Clone of #{source.title}"
@@ -38,14 +38,14 @@ describe 'AR DSl', :cleandb do
         clowne_config(inherit: false) {}
       end
 
-      class Account < ActiveRecord::Base
+      class Image < ActiveRecord::Base
         belongs_to :post, class_name: 'AR_DSL::Post'
       end
     end
   end
 
   after(:all) do
-    %w[User Admin Post DraftPost Account].each do |klass|
+    %w[User Admin Post DraftPost Image].each do |klass|
       AR_DSL.send(:remove_const, klass)
     end
   end
@@ -63,23 +63,23 @@ describe 'AR DSl', :cleandb do
     AR_DSL::DraftPost.create!(owner: user, topic_id: nil, title: '[wip]', contents: 'TBD')
   end
 
-  let!(:account) { AR_DSL::Account.create!(post: post, title: 'Union Black') }
-  let!(:draft_account) { AR_DSL::Account.create!(post: draft_post, title: 'Draf of Union Black') }
+  let!(:image) { AR_DSL::Image.create!(post: post, title: 'Union Black') }
+  let!(:draft_image) { AR_DSL::Image.create!(post: draft_post, title: 'Draf of Union Black') }
 
   describe '#clowne' do
     it 'uses in-model config' do
       cloned_post = post.clowne(title: 'New Post').clone
 
       expect(cloned_post.title).to eq 'New Post'
-      expect(cloned_post.account).not_to be_nil
-      expect(cloned_post.account.title).to eq 'Union Black'
+      expect(cloned_post.image).not_to be_nil
+      expect(cloned_post.image.title).to eq 'Union Black'
     end
 
     it 'works with inherit: false' do
       cloned_post = draft_post.clowne(title: 'New Post').clone
 
       expect(cloned_post.title).to eq '[wip]'
-      expect(cloned_post.account).to be_nil
+      expect(cloned_post.image).to be_nil
     end
 
     it 'works with inheritance' do
@@ -102,7 +102,7 @@ describe 'AR DSl', :cleandb do
       end.clone
 
       expect(cloned_post.title).to eq '[wip]'
-      expect(cloned_post.account).to be_nil
+      expect(cloned_post.image).to be_nil
       expect(cloned_post.owner_id).to be_nil
     end
   end

@@ -1,9 +1,10 @@
+# coding: utf-8
 describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
       class AccCloner < Clowne::Cloner
-        trait :with_history do
-          include_association :history, params: :history
+        trait :with_preview_image do
+          include_association :preview_image, params: :preview_image
         end
 
         trait :nullify_title do
@@ -18,8 +19,8 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       end
 
       class PostCloner < BasePostCloner
-        include_association :account, clone_with: 'AR::AccCloner',
-                                      traits: %i[with_history nullify_title],
+        include_association :image, clone_with: 'AR::AccCloner',
+                                      traits: %i[with_preview_image nullify_title],
                                       params: true
         include_association :tags, ->(params) { where(value: params[:tags]) if params[:tags] }
 
@@ -37,7 +38,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
         end
       end
 
-      class HistoryCloner < Clowne::Cloner
+      class PreviewImageCloner < Clowne::Cloner
         finalize do |_source, record, suffix:|
           record.some_stuff = record.some_stuff + suffix
         end
@@ -46,14 +47,14 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
   end
 
   after(:all) do
-    %w[AccCloner BasePostCloner PostCloner HistoryCloner].each do |cloner|
+    %w[AccCloner BasePostCloner PostCloner PreviewImageCloner].each do |cloner|
       AR.send(:remove_const, cloner)
     end
   end
 
-  let!(:account) { create(:account, title: 'Manager') }
-  let!(:history) { create(:history, some_stuff: 'This is history about my life', account: account) }
-  let!(:post) { create(:post, title: 'TeamCity', account: account) }
+  let!(:image) { create(:image, title: 'Manager') }
+  let!(:preview_image) { create(:preview_image, some_stuff: 'This is preview_image about my life', image: image) }
+  let!(:post) { create(:post, title: 'TeamCity', image: image) }
   let(:topic) { post.topic }
 
   let!(:tags) do
@@ -66,15 +67,15 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     expect(AR::Topic.count).to eq(1)
     expect(AR::Post.count).to eq(1)
     expect(AR::Tag.count).to eq(3)
-    expect(AR::Account.count).to eq(1)
-    expect(AR::History.count).to eq(1)
+    expect(AR::Image.count).to eq(1)
+    expect(AR::PreviewImage.count).to eq(1)
 
     cloned = AR::PostCloner.call(
       post,
       traits: :mark_as_clone,
       tags: %w[CI CD],
       post_contents: 'THIS IS CLONE! (☉_☉)',
-      history: { suffix: ' - 2' }
+      preview_image: { suffix: ' - 2' }
     ).clone
 
     cloned.save!
@@ -82,23 +83,23 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     expect(AR::Topic.count).to eq(1)
     expect(AR::Post.count).to eq(2)
     expect(AR::Tag.count).to eq(5)
-    expect(AR::Account.count).to eq(2)
-    expect(AR::History.count).to eq(2)
+    expect(AR::Image.count).to eq(2)
+    expect(AR::PreviewImage.count).to eq(2)
 
     # post
     expect(cloned).to be_a(AR::Post)
     expect(cloned.title).to eq('TeamCity Super!')
     expect(cloned.contents).to eq('THIS IS CLONE! (☉_☉)')
 
-    # account
-    account_clone = cloned.account
-    expect(account_clone).to be_a(AR::Account)
-    expect(account_clone.title).to be_nil
-    expect(account_clone.history).to be_a(AR::History)
+    # image
+    image_clone = cloned.image
+    expect(image_clone).to be_a(AR::Image)
+    expect(image_clone.title).to be_nil
+    expect(image_clone.preview_image).to be_a(AR::Preview_Image)
 
-    # history
-    history_clone = account_clone.history
-    expect(history_clone.some_stuff).to eq('This is history about my life - 2')
+    # preview_image
+    preview_image_clone = image_clone.preview_image
+    expect(preview_image_clone.some_stuff).to eq('This is preview_image about my life - 2')
 
     # tags
     tags_clone = cloned.tags
@@ -113,14 +114,14 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     expect(AR::Topic.count).to eq(2)
     expect(AR::Post.count).to eq(2)
     expect(AR::Tag.count).to eq(4)
-    expect(AR::Account.count).to eq(2)
-    expect(AR::History.count).to eq(1)
+    expect(AR::Image.count).to eq(2)
+    expect(AR::PreviewImage.count).to eq(1)
 
     cloned = AR::PostCloner.call(
       post,
       traits: :copy,
       target: a_post,
-      history: { suffix: ' - 3' }
+      preview_image: { suffix: ' - 3' }
     ).clone
     cloned.save!
 
@@ -129,16 +130,16 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     expect(AR::Topic.count).to eq(2)
     expect(AR::Post.count).to eq(2)
     expect(AR::Tag.count).to eq(7)
-    expect(AR::Account.count).to eq(3)
-    expect(AR::History.count).to eq(2)
+    expect(AR::Image.count).to eq(3)
+    expect(AR::PreviewImage.count).to eq(2)
 
     # post
     expect(a_post.title).to eq('Thing')
     expect(a_post.contents).to eq(post.contents)
 
-    # history
-    history_clone = a_post.account.history
-    expect(history_clone.some_stuff).to eq('This is history about my life - 3')
+    # preview_image
+    preview_image_clone = a_post.image.preview_image
+    expect(preview_image_clone.some_stuff).to eq('This is preview_image about my life - 3')
 
     # tags
     tags_clone = a_post.tags
@@ -159,8 +160,8 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     # title
     expect(cloned.title).to eq post.title
 
-    # account
-    expect(cloned.account).to be_nil
+    # image
+    expect(cloned.image).to be_nil
 
     # tags
     tags_clone = cloned.tags
