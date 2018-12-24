@@ -54,7 +54,7 @@ describe 'RSpec matchers and helpers', adapter: :active_record do
   end
 
   after(:all) do
-    %w[ImageCloner PostCloner Preview_ImageCloner].each do |cloner|
+    %w[ImageCloner PostCloner PreviewImageCloner].each do |cloner|
       RSpecTest.send(:remove_const, cloner)
     end
   end

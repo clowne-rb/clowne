@@ -24,7 +24,7 @@ module AR
     belongs_to :post, class_name: 'AR::Post'
     belongs_to :topic, class_name: 'AR:Topic'
 
-    has_one :preview, class_name: 'AR::PreviewImage'
+    has_one :preview_image, class_name: 'AR::PreviewImage'
   end
 
   class PreviewImage < ActiveRecord::Base

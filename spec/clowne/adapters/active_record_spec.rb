@@ -1,13 +1,27 @@
 describe Clowne::Adapters::ActiveRecord do
   let(:source) { create(:post) }
 
-  subject { described_class.new.dup_source(source) }
+  let(:operation) do
+    Clowne::Operation.wrap { described_class.new.dup_source(source) }
+  end
 
-  it "get source's dup" do
-    expect(subject).to be_a(::AR::Post)
-    expect(subject).to be_new_record
-    expect(subject.id).to be_nil
-    expect(subject.created_at).to be_nil
-    expect(subject.updated_at).to be_nil
+  describe 'duplicate' do
+    subject(:clone) { operation.clone }
+
+    it "get source's dup" do
+      expect(subject).to be_a(::AR::Post)
+      expect(subject).to be_new_record
+      expect(subject.id).to be_nil
+      expect(subject.created_at).to be_nil
+      expect(subject.updated_at).to be_nil
+    end
+
+    describe 'mapper' do
+      subject(:mapper) { operation.mapper }
+
+      it "saves mapping" do
+        expect(mapper.clone_of(source)).to eq(clone)
+      end
+    end
   end
 end

@@ -59,7 +59,8 @@ module Clowne
     private
 
     def mapping_key(record)
-      [record.class.name, record.id].join('#')
+      id = record.respond_to?(:id) ? record.id : record.__id__
+      [record.class.name, id].join('#')
     end
   end
 end

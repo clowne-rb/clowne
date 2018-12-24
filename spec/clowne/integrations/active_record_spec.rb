@@ -95,7 +95,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     image_clone = cloned.image
     expect(image_clone).to be_a(AR::Image)
     expect(image_clone.title).to be_nil
-    expect(image_clone.preview_image).to be_a(AR::Preview_Image)
+    expect(image_clone.preview_image).to be_a(AR::PreviewImage)
 
     # preview_image
     preview_image_clone = image_clone.preview_image

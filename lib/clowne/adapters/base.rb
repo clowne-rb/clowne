@@ -21,10 +21,7 @@ module Clowne
       end
 
       def dup_source(source)
-        source.dup.tap do |clone|
-          operation = Clowne::Operation.current
-          operation.add_mapping(source, clone)
-        end
+        source.dup
       end
 
       def init_record(record)
