@@ -1,4 +1,4 @@
-describe Clowne::Adapters::Resolvers::Finalize do
+describe Clowne::Resolvers::Finalize do
   let(:declaration) { Clowne::Declarations::Finalize.new(&block) }
 
   describe '.call' do

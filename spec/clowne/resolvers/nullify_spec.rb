@@ -1,4 +1,4 @@
-describe Clowne::Adapters::Resolvers::Nullify do
+describe Clowne::Resolvers::Nullify do
   let(:declaration) { Clowne::Declarations::Nullify.new(*args) }
 
   describe '.call' do

@@ -2,6 +2,11 @@
 
 require 'clowne/adapters/registry'
 
+require 'clowne/resolvers/init_as'
+require 'clowne/resolvers/nullify'
+require 'clowne/resolvers/finalize'
+require 'clowne/resolvers/post_processing'
+
 module Clowne
   module Adapters
     # ORM-independant adapter (just calls #dup).
@@ -32,7 +37,23 @@ module Clowne
   end
 end
 
-require 'clowne/adapters/resolvers/init_as'
-require 'clowne/adapters/resolvers/nullify'
-require 'clowne/adapters/resolvers/finalize'
-require 'clowne/adapters/resolvers/post_processing'
+Clowne::Adapters::Base.register_resolver(
+  :init_as,
+  Clowne::Resolvers::InitAs,
+  prepend: true
+)
+
+Clowne::Adapters::Base.register_resolver(
+  :nullify,
+  Clowne::Resolvers::Nullify
+)
+
+Clowne::Adapters::Base.register_resolver(
+  :finalize, Clowne::Resolvers::Finalize,
+  after: :nullify
+)
+
+Clowne::Adapters::Base.register_resolver(
+  :post_processing, Clowne::Resolvers::PostProcessing,
+  after: :finalize
+)

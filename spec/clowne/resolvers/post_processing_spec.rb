@@ -1,4 +1,4 @@
-describe Clowne::Adapters::Resolvers::PostProcessing do
+describe Clowne::Resolvers::PostProcessing do
   let(:declaration) { Clowne::Declarations::PostProcessing.new(&block) }
 
   describe '.call' do
