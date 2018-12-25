@@ -12,7 +12,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HABTM, :cleanup, adapter:
   subject(:resolver) { described_class.new(reflection, source, declaration, params) }
 
   describe '.call' do
-    subject { Clowne::Operation.wrap { resolver.call(record) }.clone }
+    subject { Clowne::Utils::Operation.wrap { resolver.call(record) }.clone }
 
     it 'clones all the tags withtout cloner' do
       expect(subject.tags.size).to eq 2

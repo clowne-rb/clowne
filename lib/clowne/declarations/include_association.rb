@@ -25,7 +25,7 @@ module Clowne
       end
 
       def params_proxy
-        @_params_proxy ||= Clowne::Params.proxy(options[:params])
+        @_params_proxy ||= Clowne::Utils::Params.proxy(options[:params])
       end
 
       def params

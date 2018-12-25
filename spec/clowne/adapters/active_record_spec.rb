@@ -2,7 +2,7 @@ describe Clowne::Adapters::ActiveRecord do
   let(:source) { create(:post) }
 
   let(:operation) do
-    Clowne::Operation.wrap { described_class.new.dup_source(source) }
+    Clowne::Utils::Operation.wrap { described_class.new.dup_source(source) }
   end
 
   describe 'duplicate' do

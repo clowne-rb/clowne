@@ -32,7 +32,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapte
   after(:all) { AR.send(:remove_const, 'PostCloner') }
 
   describe '.call' do
-    subject { Clowne::Operation.wrap { resolver.call(record) }.clone }
+    subject { Clowne::Utils::Operation.wrap { resolver.call(record) }.clone }
 
     it 'infers default cloner from model name' do
       expect(subject.posts.size).to eq 2

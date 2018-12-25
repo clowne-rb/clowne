@@ -8,7 +8,7 @@ module Clowne
     class ActiveRecord < Base
       def dup_source(source)
         source.dup.tap do |clone|
-          operation = Clowne::Operation.current
+          operation = Clowne::Utils::Operation.current
           operation.add_mapping(source, clone)
         end
       end

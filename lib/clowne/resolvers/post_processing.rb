@@ -4,7 +4,7 @@ module Clowne
   class Resolvers
     module PostProcessing # :nodoc: all
       def self.call(source, record, declaration, params:, **_options)
-        operation = Clowne::Operation.current
+        operation = Clowne::Utils::Operation.current
         params ||= {}
         operation.add_post_processing(
           proc do

@@ -53,7 +53,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter
   end
 
   describe '.call' do
-    subject { Clowne::Operation.wrap { resolver.call(record) }.clone }
+    subject { Clowne::Utils::Operation.wrap { resolver.call(record) }.clone }
 
     it 'infers default cloner from model name' do
       expect(subject.image).to be_new_record

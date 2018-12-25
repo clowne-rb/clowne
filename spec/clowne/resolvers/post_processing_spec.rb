@@ -12,9 +12,10 @@ describe Clowne::Resolvers::PostProcessing do
 
     subject(:result) do
       record = AR::User.new
-      operation = Clowne::Operation.wrap { described_class.call(source, record, declaration, params: params) }
+      operation = Clowne::Utils::Operation.wrap { described_class.call(source, record, declaration, params: params) }
       operation.add_mapping(source, 'example.com')
-      operation.save_with_magic
+      operation.save
+      operation.do_post_processing!
       operation.clone
     end
 

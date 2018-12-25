@@ -2,8 +2,8 @@
 
 require 'clowne/planner'
 require 'clowne/dsl'
-require 'clowne/params'
-require 'clowne/operation'
+require 'clowne/utils/params'
+require 'clowne/utils/operation'
 
 module Clowne # :nodoc: all
   class UnprocessableSourceError < StandardError; end
@@ -97,7 +97,7 @@ module Clowne # :nodoc: all
       def with_operation
         return yield unless adapter.is_a?(Clowne::Adapters::ActiveRecord) # TODO: use Operation for all adapters
 
-        Clowne::Operation.wrap do
+        Clowne::Utils::Operation.wrap do
           yield
         end
       end

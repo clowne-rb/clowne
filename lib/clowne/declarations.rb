@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'clowne/dsl'
-require 'clowne/plan'
+require 'clowne/utils/plan'
 
 module Clowne
   module Declarations # :nodoc:
