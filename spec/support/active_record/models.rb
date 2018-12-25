@@ -1,6 +1,7 @@
 module AR
   class Topic < ActiveRecord::Base
     has_many :posts, class_name: 'AR::Post'
+    belongs_to :image, class_name: 'AR::Image'
   end
 
   class User < ActiveRecord::Base
@@ -22,7 +23,6 @@ module AR
 
   class Image < ActiveRecord::Base
     belongs_to :post, class_name: 'AR::Post'
-    belongs_to :topic, class_name: 'AR:Topic'
 
     has_one :preview_image, class_name: 'AR::PreviewImage'
   end

@@ -4,6 +4,7 @@ ActiveRecord::Schema.define do
   create_table :topics, force: true do |t|
     t.string :title
     t.string :description
+    t.integer :image_id
     t.timestamps null: true
   end
 
@@ -33,7 +34,6 @@ ActiveRecord::Schema.define do
 
   create_table :images, force: true do |t|
     t.integer :post_id
-    t.integer :topic_id
     t.string :title
     t.timestamps null: true
   end

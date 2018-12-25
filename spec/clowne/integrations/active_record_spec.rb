@@ -2,7 +2,7 @@
 describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
-      class AccCloner < Clowne::Cloner
+      class ImgCloner < Clowne::Cloner
         trait :with_preview_image do
           include_association :preview_image, params: :preview_image
         end
@@ -19,9 +19,9 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       end
 
       class PostCloner < BasePostCloner
-        include_association :image, clone_with: 'AR::AccCloner',
-                                      traits: %i[with_preview_image nullify_title],
-                                      params: true
+        include_association :image, clone_with: 'AR::ImgCloner',
+                                    traits: %i[with_preview_image nullify_title],
+                                    params: true
         include_association :tags, ->(params) { where(value: params[:tags]) if params[:tags] }
 
         trait :mark_as_clone do
@@ -47,7 +47,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
   end
 
   after(:all) do
-    %w[AccCloner BasePostCloner PostCloner PreviewImageCloner].each do |cloner|
+    %w[ImgCloner BasePostCloner PostCloner PreviewImageCloner].each do |cloner|
       AR.send(:remove_const, cloner)
     end
   end
