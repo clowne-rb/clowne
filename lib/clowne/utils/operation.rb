@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'clowne/utils/source_mapping'
+
 module Clowne
   module Utils
     class Operation # :nodoc: all
@@ -32,11 +34,7 @@ module Clowne
 
       def initialize
         @post_processings = []
-        @mapper = {}
-        def @mapper.clone_of(origin)
-          key = [origin.class.name, origin.id].join('#')
-          fetch(key, nil)
-        end
+        @mapper = Utils::SourceMapping.new
       end
 
       def add_post_processing(block)
@@ -44,8 +42,7 @@ module Clowne
       end
 
       def add_mapping(origin, clone)
-        return if @mapper.has_key?(mapping_key(origin))
-        @mapper[mapping_key(origin)] = clone
+        @mapper.add(origin, clone)
       end
 
       def save
@@ -54,13 +51,6 @@ module Clowne
 
       def do_post_processing!
         @post_processings.each(&:call)
-      end
-
-      private
-
-      def mapping_key(record)
-        id = record.respond_to?(:id) ? record.id : record.__id__
-        [record.class.name, id].join('#')
       end
     end
   end
