@@ -13,6 +13,7 @@ module Clowne
 
       def compiled
         return @compiled if instance_variable_defined?(:@compiled)
+
         @compiled = compile
       end
 

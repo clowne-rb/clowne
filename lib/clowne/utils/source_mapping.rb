@@ -2,14 +2,15 @@
 
 module Clowne
   module Utils
-    class SourceMapping
+    class SourceMapping # :nodoc: all
       def initialize
         @store = {}
       end
 
       def add(origin, clone)
         origin_key = key(origin)
-        return @store[origin_key] if @store.has_key?(origin_key)
+        return @store[origin_key] if @store.key?(origin_key)
+
         @store[origin_key] = clone
       end
 

@@ -1,4 +1,4 @@
-describe 'Post processing feature', :cleanup, adapter: :active_record, transactional: :active_record do
+describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
       class TopicCloner < Clowne::Cloner
@@ -35,7 +35,7 @@ describe 'Post processing feature', :cleanup, adapter: :active_record, transacti
   let(:topic_image) { images.sample }
 
   before do
-    images.each { |image| create(:preview_image, image: image)}
+    images.each { |image| create(:preview_image, image: image) }
     topic.update_attributes(image_id: topic_image.id)
   end
 
@@ -46,12 +46,13 @@ describe 'Post processing feature', :cleanup, adapter: :active_record, transacti
 
     subject(:operation) { AR::TopicCloner.call(topic) }
 
+    # rubocop:disable MultilineMethodCallIndentation
     it 'clone and use cloned image' do
-      expect {
+      expect do
         operation.save
-      }.to change(AR::Topic, :count).by(+1)
-      .and change(AR::Post, :count).by(+3)
-      .and change(AR::Image, :count).by(+3)
+      end.to change(AR::Topic, :count).by(+1)
+        .and change(AR::Post, :count).by(+3)
+        .and change(AR::Image, :count).by(+3)
 
       cloned = operation.clone
       expect { operation.do_post_processing! }.to change {
@@ -60,5 +61,6 @@ describe 'Post processing feature', :cleanup, adapter: :active_record, transacti
 
       expect(cloned.image.post.topic).to eq(cloned)
     end
+    # rubocop:enable MultilineMethodCallIndentation
   end
 end

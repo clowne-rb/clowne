@@ -9,6 +9,7 @@ module Clowne
           def call(record)
             child = association
             return record unless child
+
             unless scope.nil?
               warn(
                 '[Clowne] Has one association does not support scopes ' \

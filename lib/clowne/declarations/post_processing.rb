@@ -7,6 +7,7 @@ module Clowne
 
       def initialize
         raise ArgumentError, 'Block is required for post_processing' unless block_given?
+
         @block = Proc.new
       end
 

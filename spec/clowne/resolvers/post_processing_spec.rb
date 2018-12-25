@@ -6,13 +6,15 @@ describe Clowne::Resolvers::PostProcessing do
     let(:params) { {} }
     let(:block) do
       proc do |source, record, mapper:|
-        record.update_attributes(email: "admin#{ record.id }@#{ mapper.clone_of(source) }")
+        record.update_attributes(email: "admin#{record.id}@#{mapper.clone_of(source)}")
       end
     end
 
     subject(:result) do
       record = AR::User.new
-      operation = Clowne::Utils::Operation.wrap { described_class.call(source, record, declaration, params: params) }
+      operation = Clowne::Utils::Operation.wrap do
+        described_class.call(source, record, declaration, params: params)
+      end
       operation.add_mapping(source, 'example.com')
       operation.save
       operation.do_post_processing!
@@ -21,7 +23,7 @@ describe Clowne::Resolvers::PostProcessing do
 
     it 'execute post_processing block' do
       expect(result).to be_a(AR::User)
-      expect(result.email).to eq("admin#{ result.id }@example.com")
+      expect(result.email).to eq("admin#{result.id}@example.com")
     end
 
     context 'with params' do

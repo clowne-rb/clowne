@@ -7,6 +7,7 @@ module Clowne
       refine Proc do
         def to_proc
           return self unless lambda?
+
           this = self
           proc { |*args| this.call(*args.take(this.arity)) }
         end

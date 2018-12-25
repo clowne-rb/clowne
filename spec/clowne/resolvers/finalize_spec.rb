@@ -12,7 +12,7 @@ describe Clowne::Resolvers::Finalize do
 
     subject(:result) do
       record = AR::User.new
-      result = described_class.call(source, record, declaration, params: params)
+      described_class.call(source, record, declaration, params: params)
     end
 
     it 'execute finalize block' do

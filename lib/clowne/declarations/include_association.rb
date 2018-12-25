@@ -34,6 +34,7 @@ module Clowne
 
       def clone_with
         return @clone_with if instance_variable_defined?(:@clone_with)
+
         @clone_with =
           case options[:clone_with]
           when String, Symbol

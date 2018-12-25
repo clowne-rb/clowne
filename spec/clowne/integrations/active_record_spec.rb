@@ -1,4 +1,3 @@
-# coding: utf-8
 describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
@@ -53,7 +52,9 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
   end
 
   let!(:image) { create(:image, title: 'Manager') }
-  let!(:preview_image) { create(:preview_image, some_stuff: 'This is preview_image about my life', image: image) }
+  let!(:preview_image) do
+    create(:preview_image, some_stuff: 'This is preview about my life', image: image)
+  end
   let!(:post) { create(:post, title: 'TeamCity', image: image) }
   let(:topic) { post.topic }
 
@@ -99,7 +100,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
 
     # preview_image
     preview_image_clone = image_clone.preview_image
-    expect(preview_image_clone.some_stuff).to eq('This is preview_image about my life - 2')
+    expect(preview_image_clone.some_stuff).to eq('This is preview about my life - 2')
 
     # tags
     tags_clone = cloned.tags
@@ -139,7 +140,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
 
     # preview_image
     preview_image_clone = a_post.image.preview_image
-    expect(preview_image_clone.some_stuff).to eq('This is preview_image about my life - 3')
+    expect(preview_image_clone.some_stuff).to eq('This is preview about my life - 3')
 
     # tags
     tags_clone = a_post.tags

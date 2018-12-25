@@ -7,6 +7,7 @@ module Clowne
 
       def initialize(*attributes)
         raise ArgumentError, 'At least one attribute required' if attributes.empty?
+
         @attributes = attributes
       end
 

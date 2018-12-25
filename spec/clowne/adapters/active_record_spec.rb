@@ -19,7 +19,7 @@ describe Clowne::Adapters::ActiveRecord do
     describe 'mapper' do
       subject(:mapper) { operation.mapper }
 
-      it "saves mapping" do
+      it 'saves mapping' do
         expect(mapper.clone_of(source)).to eq(clone)
       end
     end

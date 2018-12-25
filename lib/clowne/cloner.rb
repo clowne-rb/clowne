@@ -26,11 +26,13 @@ module Clowne # :nodoc: all
 
       def declarations
         return @declarations if instance_variable_defined?(:@declarations)
+
         @declarations = []
       end
 
       def traits
         return @traits if instance_variable_defined?(:@traits)
+
         @traits = {}
       end
 
@@ -76,6 +78,7 @@ module Clowne # :nodoc: all
 
       def default_plan
         return @default_plan if instance_variable_defined?(:@default_plan)
+
         @default_plan = Clowne::Planner.compile(self)
       end
 
@@ -83,6 +86,7 @@ module Clowne # :nodoc: all
         # Cache plans for combinations of traits
         traits_id = ids.map(&:to_s).join(':')
         return traits_plans[traits_id] if traits_plans.key?(traits_id)
+
         traits_plans[traits_id] = Clowne::Planner.compile(
           self, traits: ids
         )
@@ -95,7 +99,7 @@ module Clowne # :nodoc: all
       private
 
       def with_operation
-        return yield unless adapter.is_a?(Clowne::Adapters::ActiveRecord) # TODO: use Operation for all adapters
+        return yield unless adapter.is_a?(Clowne::Adapters::ActiveRecord) # TODO: for all adapters
 
         Clowne::Utils::Operation.wrap do
           yield
@@ -104,6 +108,7 @@ module Clowne # :nodoc: all
 
       def traits_plans
         return @traits_plans if instance_variable_defined?(:@traits_plans)
+
         @traits_plans = {}
       end
 
