@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'clowne/utils/clone_mapping'
+require 'clowne/utils/clone_mapper'
 
 module Clowne
   module Utils
     class Operation # :nodoc: all
       THREAD_KEY = :"#{name}.clowne_operation"
-      DEFAULT_MAPPER = Utils::CloneMapping
+      DEFAULT_MAPPER = Utils::CloneMapper
 
       private_constant :THREAD_KEY
 
@@ -49,6 +49,10 @@ module Clowne
 
       def save
         @clone.save
+      end
+
+      def save!
+        @clone.save!
       end
 
       def do_post_processing!

@@ -63,4 +63,23 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
     end
     # rubocop:enable MultilineMethodCallIndentation
   end
+
+  describe 'pass mappping' do
+    let(:another_image) { create(:image) }
+    let(:mapper) do
+      Class.new(Clowne::Utils::CloneMapper).new.tap do |stub_mapper|
+        expect(stub_mapper).to receive(:clone_of).and_return(another_image)
+      end
+    end
+
+    subject(:operation) { AR::TopicCloner.call(topic, mapper: mapper) }
+
+    it 'uses another_image' do
+      operation.save
+      cloned = operation.clone
+      expect { operation.do_post_processing! }.to change {
+        cloned.reload.image_id
+      }.to(another_image.id)
+    end
+  end
 end
