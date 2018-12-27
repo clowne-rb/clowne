@@ -2,7 +2,7 @@
 
 module Clowne
   module Utils
-    class SourceMapping # :nodoc: all
+    class CloneMapping # :nodoc: all
       def initialize
         @store = {}
       end

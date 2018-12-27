@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
-require 'clowne/utils/source_mapping'
+require 'clowne/utils/clone_mapping'
 
 module Clowne
   module Utils
     class Operation # :nodoc: all
       THREAD_KEY = :"#{name}.clowne_operation"
+      DEFAULT_MAPPER = Utils::CloneMapping
+
       private_constant :THREAD_KEY
 
       class << self
@@ -13,10 +15,10 @@ module Clowne
           Thread.current[THREAD_KEY]
         end
 
-        def wrap(operation_class = self)
+        def wrap(operation_class: self, mapper: nil)
           return yield if current
 
-          Thread.current[THREAD_KEY] = operation_class.new
+          Thread.current[THREAD_KEY] = operation_class.new(mapper || DEFAULT_MAPPER.new)
 
           current.tap do |operation|
             operation.clone = yield
@@ -32,9 +34,9 @@ module Clowne
       attr_accessor :clone
       attr_reader :mapper
 
-      def initialize
+      def initialize(mapper)
         @post_processings = []
-        @mapper = Utils::SourceMapping.new
+        @mapper = mapper
       end
 
       def add_post_processing(block)
