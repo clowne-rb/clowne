@@ -13,6 +13,10 @@ module Clowne
       def dup_source(source)
         Clowne::Adapters::Sequel::Copier.call(source)
       end
+
+      def operation_class
+        Clowne::Utils::Operation
+      end
     end
   end
 end

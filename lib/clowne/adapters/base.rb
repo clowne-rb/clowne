@@ -33,6 +33,10 @@ module Clowne
         # Override in custom adapters
         record
       end
+
+      def operation_class
+        Clowne::Utils::Operation
+      end
     end
   end
 end

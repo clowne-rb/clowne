@@ -93,9 +93,7 @@ module Clowne # :nodoc: all
       private
 
       def with_operation(options)
-        return yield unless adapter.is_a?(Clowne::Adapters::ActiveRecord) # TODO: for all adapters
-
-        Clowne::Utils::Operation.wrap(mapper: options.mapper) do
+        adapter.operation_class.wrap(mapper: options.mapper) do
           yield
         end
       end
