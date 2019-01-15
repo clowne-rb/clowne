@@ -1,4 +1,4 @@
-describe Clowne::Adapters::Sequel::Association do
+describe Clowne::Adapters::Sequel::Resolvers::Association do
   let(:params) { double }
   let(:record) { double }
   let(:association) {}

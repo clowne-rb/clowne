@@ -8,6 +8,7 @@ module Clowne
           def call(record)
             child = association
             return record unless child
+
             warn '[Clowne] Has one association does not support scopes' unless scope.nil?
 
             child_clone = clone_one(child)

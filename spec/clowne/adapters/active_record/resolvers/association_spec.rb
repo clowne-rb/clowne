@@ -1,4 +1,4 @@
-describe Clowne::Adapters::ActiveRecord::Association do
+describe Clowne::Adapters::ActiveRecord::Resolvers::Association do
   let(:params) { double }
   let(:record) { double }
   let(:source) { build_stubbed(:post) }
@@ -24,12 +24,12 @@ describe Clowne::Adapters::ActiveRecord::Association do
   end
 
   context 'with has_many through' do
-    let(:association) { :accounts }
+    let(:association) { :images }
     let(:source) { build_stubbed(:user) }
 
     it 'uses Noop resolver' do
       expect(Clowne::Adapters::ActiveRecord::Associations::Noop).to receive(:new).with(
-        AR::User.reflections['accounts'], source, declaration, params
+        AR::User.reflections['images'], source, declaration, params
       ) do
         double.tap do |resolver|
           expect(resolver).to receive(:call).with(record)
@@ -41,11 +41,11 @@ describe Clowne::Adapters::ActiveRecord::Association do
   end
 
   context 'with has_one' do
-    let(:association) { :account }
+    let(:association) { :image }
 
     it 'uses HasOne resolver' do
       expect(Clowne::Adapters::ActiveRecord::Associations::HasOne).to receive(:new).with(
-        AR::Post.reflections['account'], source, declaration, params
+        AR::Post.reflections['image'], source, declaration, params
       ) do
         double.tap do |resolver|
           expect(resolver).to receive(:call).with(record)
@@ -57,11 +57,11 @@ describe Clowne::Adapters::ActiveRecord::Association do
   end
 
   context 'with has_one through' do
-    let(:association) { :history }
+    let(:association) { :preview_image }
 
     it 'uses Noop resolver' do
       expect(Clowne::Adapters::ActiveRecord::Associations::Noop).to receive(:new).with(
-        AR::Post.reflections['history'], source, declaration, params
+        AR::Post.reflections['preview_image'], source, declaration, params
       ) do
         double.tap do |resolver|
           expect(resolver).to receive(:call).with(record)

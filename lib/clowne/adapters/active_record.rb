@@ -6,6 +6,12 @@ module Clowne
   module Adapters
     # Cloning adapter for ActiveRecord
     class ActiveRecord < Base
+      def dup_source(source)
+        source.dup.tap do |clone|
+          operation = Clowne::Utils::Operation.current
+          operation.add_mapping(source, clone)
+        end
+      end
     end
   end
 end
@@ -15,4 +21,4 @@ ActiveSupport.on_load(:active_record) do
 end
 
 require 'clowne/adapters/active_record/associations'
-require 'clowne/adapters/active_record/association'
+require 'clowne/adapters/active_record/resolvers/association'

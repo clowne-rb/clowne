@@ -25,7 +25,7 @@ module Clowne
       end
 
       def params_proxy
-        @_params_proxy ||= Clowne::Params.proxy(options[:params])
+        @_params_proxy ||= Clowne::Utils::Params.proxy(options[:params])
       end
 
       def params
@@ -34,6 +34,7 @@ module Clowne
 
       def clone_with
         return @clone_with if instance_variable_defined?(:@clone_with)
+
         @clone_with =
           case options[:clone_with]
           when String, Symbol
