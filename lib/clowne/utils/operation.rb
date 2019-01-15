@@ -47,16 +47,35 @@ module Clowne
         @mapper.add(origin, clone)
       end
 
+      def to_record
+        @clone
+      end
+
+      def persist!
+        to_record.save!.tap do
+          run_after_persist
+        end
+      end
+
+      def persist
+        to_record.save.tap do |result|
+          next unless result
+
+          run_after_persist
+        end
+      end
 
       def save
+        warn '[DEPRECATION] `save` is deprecated.  Please use `persist` instead.'
         @clone.save
       end
 
       def save!
+        warn '[DEPRECATION] `save!` is deprecated.  Please use `persist!` instead.'
         @clone.save!
       end
 
-      def run_after_persist!
+      def run_after_persist
         @blocks.each(&:call)
       end
     end

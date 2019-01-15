@@ -39,7 +39,7 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
     topic.update_attributes(image_id: topic_image.id)
   end
 
-  describe 'The main idea of "post-processing" feature is a possibility
+  describe 'The main idea of "after persist" feature is a possibility
       to fix broken associations when you clone complex record.
       In our case, topic has a link to one of the posts images
       and we need to update the cloned topic with the cloned image' do
@@ -49,15 +49,13 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
     # rubocop:disable MultilineMethodCallIndentation
     it 'clone and use cloned image' do
       expect do
-        operation.save
+        operation.persist
       end.to change(AR::Topic, :count).by(+1)
         .and change(AR::Post, :count).by(+3)
         .and change(AR::Image, :count).by(+3)
 
-      cloned = operation.clone
-      expect { operation.run_after_persist! }.to change {
-        cloned.reload.image_id
-      }.from(topic_image.id)
+      cloned = operation.to_record
+      expect(cloned.reload.image_id).not_to eq(topic_image.id)
 
       expect(cloned.image.post.topic).to eq(cloned)
     end
@@ -75,9 +73,9 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
     subject(:operation) { AR::TopicCloner.call(topic, mapper: mapper) }
 
     it 'uses another_image' do
-      operation.save
-      cloned = operation.clone
-      expect { operation.run_after_persist! }.to change {
+      cloned = operation.to_record
+      cloned.save!
+      expect { operation.run_after_persist }.to change {
         cloned.reload.image_id
       }.to(another_image.id)
     end

@@ -16,9 +16,8 @@ describe Clowne::Resolvers::AfterPersist do
         described_class.call(source, record, declaration, params: params)
       end
       operation.add_mapping(source, 'example.com')
-      operation.save
-      operation.run_after_persist!
-      operation.clone
+      operation.persist
+      operation.to_record
     end
 
     it 'execute after_persist block' do
