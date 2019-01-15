@@ -6,7 +6,7 @@ describe Clowne::Adapters::ActiveRecord do
   end
 
   describe 'duplicate' do
-    subject(:clone) { operation.clone }
+    subject(:clone) { operation.to_record }
 
     it "get source's dup" do
       expect(subject).to be_a(::AR::Post)

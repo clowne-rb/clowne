@@ -184,21 +184,21 @@ describe Clowne::Cloner do
     let(:source) { source_class.new('John', 28, 99) }
 
     specify 'one action' do
-      cloned = cloner.partial_apply(:nullify, source).clone
+      cloned = cloner.partial_apply(:nullify, source).to_record
       expect(cloned.age).to eq 28
       expect(cloned.rating).to be_nil
       expect(cloned.name).to eq 'John'
     end
 
     specify 'with traits' do
-      cloned = cloner.partial_apply(:nullify, source, traits: :without_name).clone
+      cloned = cloner.partial_apply(:nullify, source, traits: :without_name).to_record
       expect(cloned.age).to eq 28
       expect(cloned.rating).to be_nil
       expect(cloned.name).to be_nil
     end
 
     specify 'with params' do
-      cloned = cloner.partial_apply(:finalize, source, coef: 3).clone
+      cloned = cloner.partial_apply(:finalize, source, coef: 3).to_record
       expect(cloned.age).to eq 84
       expect(cloned.rating).to eq 99
       expect(cloned.name).to eq 'John'
@@ -209,7 +209,7 @@ describe Clowne::Cloner do
       cloned = cloner.partial_apply(
         [:init_as, :finalize], source,
         traits: :copy, coef: 0.5, target: another
-      ).clone
+      ).to_record
 
       expect(cloned).to be_eql(another)
       expect(cloned.age).to eq 16.5

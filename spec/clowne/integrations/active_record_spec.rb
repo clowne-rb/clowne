@@ -1,3 +1,4 @@
+# coding: utf-8
 describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
@@ -77,7 +78,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       tags: %w[CI CD],
       post_contents: 'THIS IS CLONE! (☉_☉)',
       preview_image: { suffix: ' - 2' }
-    ).clone
+    ).to_record
 
     cloned.save!
 
@@ -123,7 +124,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       traits: :copy,
       target: a_post,
       preview_image: { suffix: ' - 3' }
-    ).clone
+    ).to_record
     cloned.save!
 
     expect(cloned).to be_eql(a_post)
@@ -153,7 +154,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       post,
       traits: :mark_as_clone,
       tags: %w[CI CD]
-    ).clone
+    ).to_record
 
     cloned.save!
     cloned.reload

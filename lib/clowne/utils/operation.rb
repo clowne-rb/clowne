@@ -31,7 +31,7 @@ module Clowne
         end
       end
 
-      attr_accessor :clone
+      attr_writer :clone
       attr_reader :mapper
 
       def initialize(mapper)
