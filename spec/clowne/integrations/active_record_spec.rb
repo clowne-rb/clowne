@@ -1,4 +1,3 @@
-# coding: utf-8
 describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
