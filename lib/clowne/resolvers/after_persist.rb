@@ -2,11 +2,11 @@
 
 module Clowne
   class Resolvers
-    module PostProcessing # :nodoc: all
+    module AfterPersist # :nodoc: all
       def self.call(source, record, declaration, params:, **_options)
         operation = Clowne::Utils::Operation.current
         params ||= {}
-        operation.add_post_processing(
+        operation.add_after_persist(
           proc do
             declaration.block.call(source, record, params.merge(mapper: operation.mapper))
           end

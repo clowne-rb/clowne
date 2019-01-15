@@ -5,7 +5,7 @@ require 'clowne/adapters/registry'
 require 'clowne/resolvers/init_as'
 require 'clowne/resolvers/nullify'
 require 'clowne/resolvers/finalize'
-require 'clowne/resolvers/post_processing'
+require 'clowne/resolvers/after_persist'
 
 module Clowne
   module Adapters
@@ -54,6 +54,6 @@ Clowne::Adapters::Base.register_resolver(
 )
 
 Clowne::Adapters::Base.register_resolver(
-  :post_processing, Clowne::Resolvers::PostProcessing,
+  :after_persist, Clowne::Resolvers::AfterPersist,
   after: :finalize
 )

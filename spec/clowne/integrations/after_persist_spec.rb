@@ -4,7 +4,7 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
       class TopicCloner < Clowne::Cloner
         include_association :posts
 
-        post_processing do |origin, clone, mapper:|
+        after_persist do |origin, clone, mapper:|
           cloned_image = mapper.clone_of(origin.image)
           clone.update_attributes(image_id: cloned_image.id)
         end
@@ -55,7 +55,7 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
         .and change(AR::Image, :count).by(+3)
 
       cloned = operation.clone
-      expect { operation.do_post_processing! }.to change {
+      expect { operation.run_after_persist! }.to change {
         cloned.reload.image_id
       }.from(topic_image.id)
 
@@ -77,7 +77,7 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
     it 'uses another_image' do
       operation.save
       cloned = operation.clone
-      expect { operation.do_post_processing! }.to change {
+      expect { operation.run_after_persist! }.to change {
         cloned.reload.image_id
       }.to(another_image.id)
     end

@@ -16,7 +16,7 @@ describe Clowne::Cloner do
         1 + 1
       end
 
-      post_processing do |_source, _record, _params|
+      after_persist do |_source, _record, _params|
         2 + 2
       end
 
@@ -47,7 +47,7 @@ describe Clowne::Cloner do
       }],
       [:nullify, Clowne::Declarations::Nullify, { attributes: %i[title description] }],
       [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }],
-      [:post_processing, Clowne::Declarations::PostProcessing, { block: proc { 2 + 2 } }]
+      [:after_persist, Clowne::Declarations::AfterPersist, { block: proc { 2 + 2 } }]
     ]
   end
 
@@ -79,7 +79,7 @@ describe Clowne::Cloner do
         }],
         [:nullify, Clowne::Declarations::Nullify, { attributes: %i[title description] }],
         [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }],
-        [:post_processing, Clowne::Declarations::PostProcessing, { block: proc { 2 + 2 } }]
+        [:after_persist, Clowne::Declarations::AfterPersist, { block: proc { 2 + 2 } }]
       ]
     end
 

@@ -1,5 +1,5 @@
-describe Clowne::Resolvers::PostProcessing do
-  let(:declaration) { Clowne::Declarations::PostProcessing.new(&block) }
+describe Clowne::Resolvers::AfterPersist do
+  let(:declaration) { Clowne::Declarations::AfterPersist.new(&block) }
 
   describe '.call' do
     let(:source) { AR::User.create(email: 'admin@example.com') }
@@ -17,11 +17,11 @@ describe Clowne::Resolvers::PostProcessing do
       end
       operation.add_mapping(source, 'example.com')
       operation.save
-      operation.do_post_processing!
+      operation.run_after_persist!
       operation.clone
     end
 
-    it 'execute post_processing block' do
+    it 'execute after_persist block' do
       expect(result).to be_a(AR::User)
       expect(result.email).to eq("admin#{result.id}@example.com")
     end

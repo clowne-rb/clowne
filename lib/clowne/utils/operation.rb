@@ -35,17 +35,18 @@ module Clowne
       attr_reader :mapper
 
       def initialize(mapper)
-        @post_processings = []
+        @blocks = []
         @mapper = mapper
       end
 
-      def add_post_processing(block)
-        @post_processings.unshift(block)
+      def add_after_persist(block)
+        @blocks.unshift(block)
       end
 
       def add_mapping(origin, clone)
         @mapper.add(origin, clone)
       end
+
 
       def save
         @clone.save
@@ -55,8 +56,8 @@ module Clowne
         @clone.save!
       end
 
-      def do_post_processing!
-        @post_processings.each(&:call)
+      def run_after_persist!
+        @blocks.each(&:call)
       end
     end
   end
