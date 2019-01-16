@@ -13,7 +13,10 @@ module Clowne
 
             child_clone = clone_one(child)
             child_clone[:"#{reflection[:key]}"] = nil
-            record.remember_assoc(:"#{association_name}_attributes", child_clone)
+            operation = Clowne::Utils::Operation.current
+            operation.
+              record_wrapper(record).
+              remember_assoc(:"#{association_name}_attributes", operation.record_wrapper(child_clone))
 
             record
           end

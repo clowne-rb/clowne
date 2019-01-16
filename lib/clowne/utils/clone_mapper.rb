@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require 'clowne/ext/record_key'
+
 module Clowne
   module Utils
     class CloneMapper # :nodoc: all
+      include Clowne::Ext::RecordKey
+
       def initialize
         @store = {}
       end
@@ -16,13 +20,6 @@ module Clowne
 
       def clone_of(record)
         @store[key(record)]
-      end
-
-      private
-
-      def key(record)
-        id = record.respond_to?(:id) ? record.id : record.__id__
-        [record.class.name, id].join('#')
       end
     end
   end

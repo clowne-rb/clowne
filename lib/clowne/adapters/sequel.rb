@@ -7,7 +7,7 @@ module Clowne
     # Cloning adapter for Sequel
     class Sequel < Base
       def init_record(source)
-        RecordWrapper.new(source)
+        source
       end
 
       def dup_source(source)
@@ -15,7 +15,7 @@ module Clowne
       end
 
       def operation_class
-        Clowne::Utils::Operation
+        Clowne::Adapters::Sequel::Operation
       end
     end
   end
@@ -23,6 +23,7 @@ end
 
 ::Sequel::Model.extend Clowne::Ext::ORMExt
 
+require 'clowne/adapters/sequel/operation'
 require 'clowne/adapters/sequel/associations'
 require 'clowne/adapters/sequel/copier'
 require 'clowne/adapters/sequel/record_wrapper'
