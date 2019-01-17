@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'forwardable'
 require 'clowne/adapters/base/association'
 
 module Clowne
