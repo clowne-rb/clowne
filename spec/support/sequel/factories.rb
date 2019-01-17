@@ -1,6 +1,21 @@
 FactoryBot.define do
   to_create(&:save)
 
+  factory 'sequel:topic', class: 'Sequel::Topic' do
+    sequence(:title) { |n| "Topic ##{n}}" }
+    sequence(:description) { |n| "Let's talk about #{n}" }
+
+    transient do
+      posts_num 2
+    end
+
+    trait :with_posts do
+      after(:create) do |topic, ev|
+        create_list('sequel:post', ev.posts_num, topic: topic)
+      end
+    end
+  end
+
   factory 'sequel:user', class: 'Sequel::User' do
     sequence(:name) { |n| "John #{n}" }
     sequence(:email) { |n| "clowne_#{n}@test.rb" }
@@ -36,33 +51,18 @@ FactoryBot.define do
     end
   end
 
-  factory 'sequel:account', class: 'Sequel::Account' do
-    sequence(:title) { |n| "Account ##{n}" }
+  factory 'sequel:image', class: 'Sequel::Image' do
+    sequence(:title) { |n| "Image  ##{n}" }
 
-    trait :with_history do
-      after(:create) { |account| create('sequel:history', account: account) }
+    trait :with_preview_image do
+      after(:create) { |image| create('sequel:preview_image', image: image) }
     end
   end
 
-  factory 'sequel:history', class: 'Sequel::History' do
+  factory 'sequel:preview_image', class: 'Sequel::PreviewImage' do
     sequence(:some_stuff) { |n| "Bla-bla #{n}" }
 
-    association :account, factory: 'sequel:account'
-  end
-
-  factory 'sequel:topic', class: 'Sequel::Topic' do
-    sequence(:title) { |n| "Topic ##{n}}" }
-    sequence(:description) { |n| "Let's talk about #{n}" }
-
-    transient do
-      posts_num 2
-    end
-
-    trait :with_posts do
-      after(:create) do |topic, ev|
-        create_list('sequel:post', ev.posts_num, topic: topic)
-      end
-    end
+    association :image, factory: 'sequel:image'
   end
 
   factory 'sequel:tag', class: 'Sequel::Tag' do
