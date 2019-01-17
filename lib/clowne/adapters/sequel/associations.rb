@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'forwardable'
+
 require 'clowne/adapters/sequel/associations/base'
 require 'clowne/adapters/sequel/associations/noop'
 require 'clowne/adapters/sequel/associations/one_to_one'

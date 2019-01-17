@@ -53,7 +53,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
   end
 
   describe '.call' do
-    subject { Clowne::Adapters::Sequel::Operation.wrap { resolver.call(record) } }
+    subject { Clowne::Adapters::Sequel::Operation.wrap { resolver.call(record) }.to_record }
 
     it 'infers default cloner from model name' do
       expect(subject.account).to be_new
@@ -78,7 +78,6 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
       let(:params) { { include_timestamps: true } }
 
       it 'pass params to child cloner' do
-        binding.pry
         expect(subject.account).to be_new
         expect(subject.account).to have_attributes(
           post_id: nil,
