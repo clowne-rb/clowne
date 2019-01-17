@@ -1,4 +1,3 @@
-# coding: utf-8
 describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
   before(:all) do
     module Sequel

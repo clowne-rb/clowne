@@ -4,7 +4,7 @@ require 'clowne/ext/record_key'
 
 module Clowne
   module Adapters
-    class Sequel
+    class Sequel # :nodoc: all
       class Operation < Clowne::Utils::Operation
         include Clowne::Ext::RecordKey
 
