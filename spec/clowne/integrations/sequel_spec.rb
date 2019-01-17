@@ -1,3 +1,4 @@
+# coding: utf-8
 describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
   before(:all) do
     module Sequel
@@ -78,7 +79,7 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
       tags: %w[CI CD],
       post_contents: 'THIS IS CLONE! (☉_☉)'
     )
-    cloned = cloned_wrapper.save
+    cloned = cloned_wrapper.persist
 
     expect(Sequel::Topic.count).to eq(1)
     expect(Sequel::Post.count).to eq(2)
@@ -123,7 +124,7 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
       target: a_post
     )
 
-    cloned = cloned_wrapper.save
+    cloned = cloned_wrapper.persist
 
     expect(cloned).to be_eql(a_post)
 
