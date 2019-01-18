@@ -5,9 +5,9 @@ describe 'Sequel Post Processing', :cleanup, adapter: :sequel, transactional: :s
         include_association :posts
 
         after_persist do |origin, clone, mapper:|
+          cloned_image = mapper.clone_of(origin.image)
           binding.pry
-          # cloned_image = mapper.clone_of(origin.image)
-          # clone.update_attributes(image_id: cloned_image.id)
+          clone.update(image_id: cloned_image.id)
         end
       end
 

@@ -93,7 +93,7 @@ module Clowne # :nodoc: all
       private
 
       def with_operation(options)
-        adapter.operation_class.wrap(mapper: options.mapper) do
+        adapter.class.operation_class.wrap(mapper: options.mapper) do
           yield
         end
       end

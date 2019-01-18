@@ -5,14 +5,7 @@ require 'clowne/ext/orm_ext'
 module Clowne
   module Adapters
     # Cloning adapter for ActiveRecord
-    class ActiveRecord < Base
-      def dup_source(source)
-        source.dup.tap do |clone|
-          operation = Clowne::Utils::Operation.current
-          operation.add_mapping(source, clone)
-        end
-      end
-    end
+    class ActiveRecord < Base; end
   end
 end
 

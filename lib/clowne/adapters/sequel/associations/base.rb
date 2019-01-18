@@ -13,10 +13,7 @@ module Clowne
           private
 
           def_delegators :operation, :record_wrapper
-
-          def clone_record(record)
-            Clowne::Adapters::Sequel::Copier.call(record)
-          end
+          def_delegators Clowne::Adapters::Sequel, :dup_record
 
           def init_scope
             @_init_scope ||= source.__send__([association_name, 'dataset'].join('_'))
