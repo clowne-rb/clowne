@@ -38,7 +38,9 @@ module Clowne
       # +params+:: Custom params hash
       def clone(source, plan, params: {})
         declarations = plan.declarations
-        declarations.inject(init_record(self.class.dup_record(source))) do |record, (type, declaration)|
+        init_record = init_record(self.class.dup_record(source))
+
+        declarations.inject(init_record) do |record, (type, declaration)|
           resolver_for(type).call(source, record, declaration, params: params, adapter: self)
         end
       end

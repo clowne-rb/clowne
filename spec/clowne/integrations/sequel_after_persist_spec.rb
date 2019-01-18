@@ -44,7 +44,7 @@ describe 'Sequel Post Processing', :cleanup, adapter: :sequel, transactional: :s
 
     it 'clone and use cloned image' do
       expect { operation.persist }.to raise_exception(
-        Clowne::Adapters::Sequel::Specifications::CloneOfDoesNotSupport::CloneOfDoesNotSupportException
+        Clowne::Adapters::Sequel::Specifications::CloneOfDoesNotSupportException
       )
     end
   end

@@ -20,7 +20,7 @@ module Clowne
           end
 
           def operation
-            @_operation ||= Clowne::Utils::Operation.current
+            @_operation ||= Clowne::Adapters::Sequel.operation_class.current
           end
         end
       end

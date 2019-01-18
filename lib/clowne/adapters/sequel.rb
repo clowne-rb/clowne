@@ -11,9 +11,9 @@ module Clowne
           Clowne::Adapters::Sequel::Copier.call(record)
         end
 
-       def operation_class
-         Clowne::Adapters::Sequel::Operation
-       end
+        def operation_class
+          Clowne::Adapters::Sequel::Operation
+        end
       end
     end
   end

@@ -19,7 +19,7 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
         trait :with_preview_image do
           include_association :preview_image
 
-          after_persist do |origin, clone, mapper:|
+          after_persist do |origin, _clone, mapper:|
             cloned_preview_image = mapper.clone_of(origin.preview_image)
             raise 'Leaf record does not have mapped source' if cloned_preview_image.nil?
           end
