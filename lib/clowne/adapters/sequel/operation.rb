@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'clowne/ext/record_key'
+require 'clowne/adapters/sequel/specifications/clone_of_does_not_support'
 
 module Clowne
   module Adapters
@@ -10,6 +11,7 @@ module Clowne
 
         def initialize(mapper)
           super
+          decorate_mapper
           @records = {}
         end
 
@@ -25,6 +27,14 @@ module Clowne
           return @_record if defined?(@_record)
 
           @_record = @records[key(@clone)].to_model
+        end
+
+        private
+
+        def decorate_mapper
+          return unless mapper.class == Clowne::Utils::CloneMapper
+
+          mapper.extend(Specifications::CloneOfDoesNotSupport)
         end
       end
     end
