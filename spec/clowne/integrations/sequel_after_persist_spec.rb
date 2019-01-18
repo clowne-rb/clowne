@@ -1,12 +1,13 @@
-describe 'Sequel Post Processing', :cleanup, adapter: :sequel_record, transactional: :sequel do
+describe 'Sequel Post Processing', :cleanup, adapter: :sequel, transactional: :sequel do
   before(:all) do
     module Sequel
       class TopicCloner < Clowne::Cloner
         include_association :posts
 
         after_persist do |origin, clone, mapper:|
-          cloned_image = mapper.clone_of(origin.image)
-          clone.update_attributes(image_id: cloned_image.id)
+          binding.pry
+          # cloned_image = mapper.clone_of(origin.image)
+          # clone.update_attributes(image_id: cloned_image.id)
         end
       end
 
@@ -31,12 +32,12 @@ describe 'Sequel Post Processing', :cleanup, adapter: :sequel_record, transactio
 
   let!(:topic) { create('sequel:topic') }
   let!(:posts) { create_list('sequel:post', 3, topic: topic) }
-  let!(:images) { posts.map(&:image) }
+  let!(:images) { posts.collect { |post| create('sequel:image', post: post) } }
   let(:topic_image) { images.sample }
 
   before do
-    images.each { |image| create(:preview_image, image: image) }
-    topic.update_attributes(image_id: topic_image.id)
+    images.each { |image| create('sequel:preview_image', image: image) }
+    topic.update(image_id: topic_image.id)
   end
 
   describe 'The main idea of "after persist" feature is a possibility

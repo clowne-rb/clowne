@@ -22,7 +22,7 @@ module Clowne
         end
 
         def to_record
-          @_record if defined?(@_record)
+          return @_record if defined?(@_record)
 
           @_record = @records[key(@clone)].to_model
         end

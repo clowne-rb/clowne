@@ -5,6 +5,8 @@ module Sequel
   class Topic < Sequel::Model
     one_to_many :posts
     many_to_one :image
+
+    nested_attributes :posts
   end
 
   class User < Sequel::Model
