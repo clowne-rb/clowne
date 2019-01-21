@@ -4,7 +4,7 @@ FactoryBot.define do
     sequence(:email) { |n| "clowne_#{n}@test.rb" }
 
     transient do
-      posts_num 2
+      posts_num { 2 }
     end
 
     trait :with_posts do
@@ -23,7 +23,7 @@ FactoryBot.define do
     topic
 
     transient do
-      tags_num 2
+      tags_num { 2 }
     end
 
     trait :with_tags do
@@ -52,7 +52,7 @@ FactoryBot.define do
     sequence(:description) { |n| "Let's talk about #{n}" }
 
     transient do
-      posts_num 2
+      posts_num { 2 }
     end
 
     trait :with_posts do
@@ -66,7 +66,7 @@ FactoryBot.define do
     sequence(:value) { |n| "T#{n}" }
 
     transient do
-      posts_num 2
+      posts_num { 2 }
     end
 
     trait :with_posts do
