@@ -21,7 +21,7 @@ class IncludeAll < Clowne::Declarations::Base # :nodoc: all
 end
 
 # Register our declrations, i.e. extend DSL
-Clowne::Declarations.add :include_all, Clowne::Declarations::IncludeAll
+Clowne::Declarations.add :include_all, IncludeAll
 ```
 
 See more on `plan` in [architecture overview](architecture.md).

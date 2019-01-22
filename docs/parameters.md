@@ -16,7 +16,8 @@ class UserCloner < Clowne::Cloner
   end
 end
 
-cloned = UserCloner.call(user, state: :draft, email: 'cloned@example.com')
+operation = UserCloner.call(user, state: :draft, email: 'cloned@example.com')
+cloned = operation.to_record
 cloned.email
 # => 'cloned@example.com'
 ```
@@ -54,7 +55,7 @@ class UserCloner < Clowne::Cloner
   end
 
   # Pass all parameters to associations
-  trait :params_true do
+  trait :all_params do
     include_association :profile, params: true
   end
 
@@ -93,14 +94,14 @@ end
 
 def get_profile_jsonb(user, trait)
   params = { profile: { name: 'John', surname: 'Cena' } }
-  cloned = UserCloner.call(user, traits: trait, **params)
+  cloned = UserCloner.call(user, traits: trait, **params).to_record
   cloned.profile.jsonb_field
 end
 
 get_profile_jsonb(user, :default)
 # => {}
 
-get_profile_jsonb(user, :params_true)
+get_profile_jsonb(user, :all_params)
 # => { profile: { name: 'John', surname: 'Cena' } }
 
 get_profile_jsonb(user, :by_key)

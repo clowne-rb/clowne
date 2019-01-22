@@ -19,12 +19,12 @@ class UserCloner < Clowne::Cloner
 end
 
 # copy user and posts
-clone = UserCloner.call(user)
+clone = UserCloner.call(user).to_record
 clone.posts.count == user.posts.count
 # => true
 
 # copy only user
-clone2 = UserCloner.call(user, traits: :without_posts)
+clone2 = UserCloner.call(user, traits: :without_posts).to_record
 clone2.posts
 # => []
 ```
@@ -41,7 +41,7 @@ class UserCloner < Clowne::Cloner
   end
 end
 
-clone = UserCloner.call(user, traits: :with_comments)
+clone = UserCloner.call(user, traits: :with_comments).to_record
 clone.comments.empty? #=> true
 ```
 
