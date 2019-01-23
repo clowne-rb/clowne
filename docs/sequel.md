@@ -3,7 +3,7 @@ id: sequel
 title: Sequel
 ---
 
-Under the hood, Clowne uses Sequel [`NestedAttributes` plugin](http://sequel.jeremyevans.net/rdoc-plugins/classes/Sequel/Plugins/NestedAttributes.html) for cloning source's associations and you need to configure it.
+Under the hood, Clowne uses Sequel [`NestedAttributes` plugin](http://sequel.jeremyevans.net/rdoc-plugins/classes/Sequel/Plugins/NestedAttributes.html) for cloning source's associations, and you need to configure it.
 
 Example:
 
@@ -30,7 +30,7 @@ user = User.last
 operation = UserCloner.call(user)
 # => <#Clowne::Adapters::Sequel::Operation...>
 cloned = operation.to_record
-# => <#User id: nil,...>
+# => <#User id: nil, ...>
 cloned.new?
 # => true
 ```
@@ -39,13 +39,13 @@ or you can save it immediately
 
 ```ruby
 user = User.last
-# => <#User id: 1,...>
+# => <#User id: 1, ...>
 operation = UserCloner.call(user)
 # => <#Clowne::Adapters::Sequel::Operation...>
 operation.persist
 # => true
 cloned = operation.to_record
-# => <#User id: 2,...>
+# => <#User id: 2, ...>
 cloned.new?
 # => false
 ```

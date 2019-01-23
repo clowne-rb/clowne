@@ -75,4 +75,4 @@ clone.posts.pluck(:id).include?(clone.bio_id)
 # => true
 ```
 
-_Notice: be careful while using after_persist feature! If you clone a fat record (with a lot of associations) and will implement complex logic inside after_persist callback it may affect your system._
+_Notice: be careful while using after_persist feature! If you clone a fat record (with a lot of associations) and will implement complex logic inside `after_persist` callback, it may affect your system._

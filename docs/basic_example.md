@@ -56,19 +56,19 @@ Now you can use `UserCloner` to clone existing records:
 
 ```ruby
 user = User.last
-# => <#User id: 1, login: 'clown', email: 'clown@circus.example.com' >
+# => <#User id: 1, login: 'clown', email: 'clown@circus.example.com'>
 
 operation = UserCloner.call(user, email: 'fake@example.com')
 # => <#Clowne::Utils::Operation...>
 
 operation.to_record
-# => <#User id: nil, login: nil, email: 'fake@example.com' >
+# => <#User id: nil, login: nil, email: 'fake@example.com'>
 
 operation.persist!
 # => true
 
 cloned = operation.to_record
-# => <#User id: 2, login: nil, email: 'fake@example.com' >
+# => <#User id: 2, login: nil, email: 'fake@example.com'>
 
 cloned.login
 # => nil

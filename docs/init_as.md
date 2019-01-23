@@ -28,17 +28,17 @@ class UserCloner < Clowne::Cloner
 end
 
 jack = User.find_by(email: 'jack@evl.ms')
-# => <#User id: 1, ... >
+# => <#User id: 1, ...>
 jack.create_profile(name: 'Jack')
-# => <#Profile id: 1, name: 'Jack', ... >
+# => <#Profile id: 1, name: 'Jack', ...>
 
 john = User.find_by(email: 'john@evl.ms')
-# => <#User id: 2, ... >
+# => <#User id: 2, ...>
 
 # we want to clone Jack's profile to John's user,
 # without creating a new one
 john_with_profile = UserCloner.call(jack, traits: :copy_settings, target: john).to_record
-# => <#User id: 2, ... >
+# => <#User id: 2, ...>
 john_with_profile.profile
 #=> <#Profile id: nil, name: 'Jack',...>
 ```

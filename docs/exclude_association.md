@@ -42,7 +42,8 @@ class UserCloner < Clowne::Cloner
 end
 
 clone = UserCloner.call(user, traits: :with_comments).to_record
-clone.comments.empty? #=> true
+clone.comments.empty?
+# => true
 ```
 
 Why so? That allows us to have a deterministic cloning plan when combining multiple traits

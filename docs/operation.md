@@ -48,7 +48,7 @@ The last example is weird, but it can be helpful when you need to execute `save`
 ```ruby
 operation = UserClone.call(user)
 
-# Wrap main cloning into transaction
+# Wrap main cloning into the transaction
 ActiveRecord::Base.transaction do
   operation.to_record.save!
 end
