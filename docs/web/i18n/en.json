@@ -9,6 +9,7 @@
     "alternatives": "Motivation & Alternatives",
     "architecture": "Architecture",
     "basic_example": "Basic Example",
+    "clone_mapper": "Clone mapper",
     "customization": "Customization",
     "exclude_association": "Exclude Association",
     "finalize": "Finalization",
@@ -127,7 +128,7 @@
     "Getting Started": "Getting Started",
     "API": "API",
     "Adapters": "Adapters",
-    "Features": "Features"
+    "Advanced options": "Advanced options"
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",

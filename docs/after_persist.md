@@ -3,7 +3,7 @@ id: after_persist
 title: After Persist
 ---
 
-The special mechanism for transformation of cloned record. In contradistinction to [finalize](finalize.md) executes with a saved record. This type of callbacks provides a default `mapper:` parameter which contains a relation between origin and cloned objects.
+The special mechanism for transformation of cloned record. In contradistinction to [`finalize`](finalize.md) executes with a saved record. This type of callbacks provides a default `mapper:` parameter which contains a relation between origin and cloned objects.
 
 `afrer_perist` helps to restore broken while cloning associations and implement some logic with already persisted clone record. (_Inspired by [issues#19](https://github.com/palkan/clowne/issues/19)_)
 
@@ -41,6 +41,8 @@ class PostCloner < Clowne::Cloner
   end
 end
 ```
+
+_Notice: `mapper:` supported only with [`active_record`](active_record.md) adapter. See more [`here`](clone_mapper.md)_
 
 `after_perstist` runs when you call [`Operation#persist`]('operation.md) (or `Operation#persist!`)
 

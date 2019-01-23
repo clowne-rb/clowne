@@ -22,9 +22,10 @@
       "active_record",
       "sequel"
     ],
-    "Features": [
+    "Advanced options": [
       "implicit_cloner",
       "inline_configuration",
+      "clone_mapper",
       "architecture",
       "testing",
       "customization"
