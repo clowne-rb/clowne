@@ -2,6 +2,7 @@
 id: operation
 title: Operation
 ---
+
 Since version 1.0 Clowne returns specific result object instead of a raw cloned object. It has allowed unifying interface between adapters and has opened an opportunity to implement new features. We called this object `Operation`.
 
 An instance of `Operation` has a very clear interface:
