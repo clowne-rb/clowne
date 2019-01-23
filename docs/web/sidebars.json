@@ -3,10 +3,11 @@
     "Getting Started": [
       "installation",
       "basic_example",
-      "operation",
+      "overview",
       "alternatives"
     ],
     "API": [
+      "operation",
       "include_association",
       "exclude_association",
       "nullify",
@@ -14,8 +15,7 @@
       "after_persist",
       "init_as",
       "traits",
-      "parameters",
-      "execution_order"
+      "parameters"
     ],
     "Adapters": [
       "supported_adapters",
