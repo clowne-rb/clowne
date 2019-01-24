@@ -2,6 +2,7 @@ SEQUEL_DB.create_table :topics do
   primary_key :id
   String :title
   String :description
+  Integer :image_id
   DateTime :created_at, null: false
   DateTime :updated_at, null: false
 end
@@ -37,7 +38,7 @@ SEQUEL_DB.create_table :posts_tags do
   Integer :tag_id
 end
 
-SEQUEL_DB.create_table :accounts do
+SEQUEL_DB.create_table :images do
   primary_key :id
   Integer :post_id
   String :title
@@ -45,9 +46,9 @@ SEQUEL_DB.create_table :accounts do
   DateTime :updated_at, null: false
 end
 
-SEQUEL_DB.create_table :histories do
+SEQUEL_DB.create_table :preview_images do
   primary_key :id
-  Integer :account_id
+  Integer :image_id
   String :some_stuff
   DateTime :created_at, null: false
   DateTime :updated_at, null: false

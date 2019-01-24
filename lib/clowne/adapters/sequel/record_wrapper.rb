@@ -15,10 +15,6 @@ module Clowne
           @association_store[association] = value
         end
 
-        def save
-          to_model.save
-        end
-
         def to_model
           association_store.each_with_object(record) do |(name, value), acc|
             acc.send("#{name}=", association_to_model(value))
@@ -29,18 +25,6 @@ module Clowne
           init_hash = record.to_hash
           association_store.each_with_object(init_hash) do |(name, value), acc|
             acc[name] = association_to_model(value)
-          end
-        end
-
-        def respond_to_missing?(method_name, include_private = false)
-          record.respond_to?(method_name) || super
-        end
-
-        def method_missing(method_name, *args, &block)
-          if record.respond_to?(method_name)
-            record.public_send(method_name, *args, &block)
-          else
-            super
           end
         end
 

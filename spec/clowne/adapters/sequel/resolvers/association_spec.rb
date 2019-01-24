@@ -25,11 +25,11 @@ describe Clowne::Adapters::Sequel::Resolvers::Association do
   end
 
   context 'with one_to_one' do
-    let(:association) { :account }
+    let(:association) { :image }
 
     it 'uses OneToOne resolver' do
       expect(Clowne::Adapters::Sequel::Associations::OneToOne).to receive(:new).with(
-        Sequel::Post.association_reflections[:account], source, declaration, params
+        Sequel::Post.association_reflections[:image], source, declaration, params
       ) do
         double.tap do |resolver|
           expect(resolver).to receive(:call).with(record)

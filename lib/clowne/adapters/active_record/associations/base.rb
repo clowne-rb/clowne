@@ -9,14 +9,12 @@ module Clowne
         class Base < Base::Association
           private
 
-          def clone_record(record)
-            record.dup
-          end
-
           def init_scope
             association
           end
         end
+
+        Base.adapter = Clowne::Adapters::ActiveRecord
       end
     end
   end

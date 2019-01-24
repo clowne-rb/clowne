@@ -15,10 +15,10 @@ module Clowne
           Thread.current[THREAD_KEY]
         end
 
-        def wrap(operation_class: self, mapper: nil)
+        def wrap(mapper: nil)
           return yield if current
 
-          Thread.current[THREAD_KEY] = operation_class.new(mapper || DEFAULT_MAPPER.new)
+          Thread.current[THREAD_KEY] = new(mapper || DEFAULT_MAPPER.new)
 
           current.tap do |operation|
             operation.clone = yield

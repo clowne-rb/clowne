@@ -145,14 +145,14 @@ describe Clowne::Cloner do
           finalize { |_, record| record.age *= 2 }
         end
 
-        expect(inlined).to have_attributes(
+        expect(inlined.to_record).to have_attributes(
           name: nil,
           age: 58
         )
 
         cloned = cloner.call(source)
 
-        expect(cloned).to have_attributes(
+        expect(cloned.to_record).to have_attributes(
           name: 'John',
           age: 29
         )

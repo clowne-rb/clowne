@@ -18,6 +18,11 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
       class ImgCloner < Clowne::Cloner
         trait :with_preview_image do
           include_association :preview_image
+
+          after_persist do |origin, _clone, mapper:|
+            cloned_preview_image = mapper.clone_of(origin.preview_image)
+            raise 'Leaf record does not have mapped source' if cloned_preview_image.nil?
+          end
         end
       end
     end
@@ -66,7 +71,7 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
     let(:another_image) { create(:image) }
     let(:mapper) do
       Class.new(Clowne::Utils::CloneMapper).new.tap do |stub_mapper|
-        expect(stub_mapper).to receive(:clone_of).and_return(another_image)
+        expect(stub_mapper).to receive(:clone_of).at_least(:once).and_return(another_image)
       end
     end
 

@@ -7,12 +7,13 @@ module Clowne
         class OneToMany < Base
           def call(record)
             clones =
-              with_scope.map do |child|
+              with_scope.lazy.map do |child|
                 clone_one(child).tap do |child_clone|
                   child_clone[:"#{reflection[:key]}"] = nil
                 end
-              end
-            record.remember_assoc(:"#{association_name}_attributes", clones)
+              end.map(&method(:record_wrapper))
+
+            record_wrapper(record).remember_assoc(:"#{association_name}_attributes", clones.to_a)
 
             record
           end

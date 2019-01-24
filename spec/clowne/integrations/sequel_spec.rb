@@ -1,11 +1,11 @@
 describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
   before(:all) do
     module Sequel
-      class AccCloner < Clowne::Cloner
-        exclude_association :history
+      class ImgCloner < Clowne::Cloner
+        exclude_association :preview_image
 
-        trait :with_history do
-          include_association :history
+        trait :with_preview_image do
+          include_association :preview_image
         end
 
         trait :nullify_title do
@@ -20,8 +20,8 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
       end
 
       class PostCloner < BasePostCloner
-        include_association :account, clone_with: 'Sequel::AccCloner',
-                                      traits: %i[with_history nullify_title]
+        include_association :image, clone_with: 'Sequel::ImgCloner',
+                                    traits: %i[with_preview_image nullify_title]
         include_association :tags, ->(params) { where(value: params[:tags]) if params[:tags] }
 
         trait :mark_as_clone do
@@ -38,7 +38,7 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
         end
       end
 
-      class HistoryCloner < Clowne::Cloner
+      class PreviewImageCloner < Clowne::Cloner
         finalize do |_source, record|
           record.some_stuff = record.some_stuff + ' - 2'
         end
@@ -47,15 +47,15 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
   end
 
   after(:all) do
-    %w[AccCloner BasePostCloner PostCloner HistoryCloner].each do |cloner|
+    %w[ImgCloner BasePostCloner PostCloner PreviewImageCloner].each do |cloner|
       Sequel.send(:remove_const, cloner)
     end
   end
 
   let!(:post) { create('sequel:post', title: 'TeamCity') }
-  let!(:account) { create('sequel:account', title: 'Manager', post: post) }
-  let!(:history) do
-    create('sequel:history', some_stuff: 'This is history about my life', account: account)
+  let!(:image) { create('sequel:image', title: 'Manager', post: post) }
+  let!(:preview_image) do
+    create('sequel:preview_image', some_stuff: 'This is preview_image about my life', image: image)
   end
   let(:topic) { post.topic }
 
@@ -69,8 +69,8 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
     expect(Sequel::Topic.count).to eq(1)
     expect(Sequel::Post.count).to eq(1)
     expect(Sequel::Tag.count).to eq(3)
-    expect(Sequel::Account.count).to eq(1)
-    expect(Sequel::History.count).to eq(1)
+    expect(Sequel::Image.count).to eq(1)
+    expect(Sequel::PreviewImage.count).to eq(1)
 
     cloned_wrapper = Sequel::PostCloner.call(
       post,
@@ -78,28 +78,28 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
       tags: %w[CI CD],
       post_contents: 'THIS IS CLONE! (☉_☉)'
     )
-    cloned = cloned_wrapper.save
+    cloned = cloned_wrapper.persist
 
     expect(Sequel::Topic.count).to eq(1)
     expect(Sequel::Post.count).to eq(2)
     expect(Sequel::Tag.count).to eq(5)
-    expect(Sequel::Account.count).to eq(2)
-    expect(Sequel::History.count).to eq(2)
+    expect(Sequel::Image.count).to eq(2)
+    expect(Sequel::PreviewImage.count).to eq(2)
 
     # post
     expect(cloned).to be_a(Sequel::Post)
     expect(cloned.title).to eq('TeamCity Super!')
     expect(cloned.contents).to eq('THIS IS CLONE! (☉_☉)')
 
-    # account
-    account_clone = cloned.account
-    expect(account_clone).to be_a(Sequel::Account)
-    expect(account_clone.title).to be_nil
-    expect(account_clone.history).to be_a(Sequel::History)
+    # image
+    image_clone = cloned.image
+    expect(image_clone).to be_a(Sequel::Image)
+    expect(image_clone.title).to be_nil
+    expect(image_clone.preview_image).to be_a(Sequel::PreviewImage)
 
-    # history
-    history_clone = account_clone.history
-    expect(history_clone.some_stuff).to eq('This is history about my life - 2')
+    # preview_image
+    preview_image_clone = image_clone.preview_image
+    expect(preview_image_clone.some_stuff).to eq('This is preview_image about my life - 2')
 
     # tags
     tags_clone = cloned.tags
@@ -114,8 +114,8 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
     expect(Sequel::Topic.count).to eq(2)
     expect(Sequel::Post.count).to eq(2)
     expect(Sequel::Tag.count).to eq(4)
-    expect(Sequel::Account.count).to eq(1)
-    expect(Sequel::History.count).to eq(1)
+    expect(Sequel::Image.count).to eq(1)
+    expect(Sequel::PreviewImage.count).to eq(1)
 
     cloned_wrapper = Sequel::PostCloner.call(
       post,
@@ -123,24 +123,24 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
       target: a_post
     )
 
-    cloned = cloned_wrapper.save
+    cloned = cloned_wrapper.persist
 
     expect(cloned).to be_eql(a_post)
 
     expect(Sequel::Topic.count).to eq(2)
     expect(Sequel::Post.count).to eq(2)
     expect(Sequel::Tag.count).to eq(7)
-    expect(Sequel::Account.count).to eq(2)
-    expect(Sequel::History.count).to eq(2)
+    expect(Sequel::Image.count).to eq(2)
+    expect(Sequel::PreviewImage.count).to eq(2)
 
     # post
     expect(a_post).to be_a(Sequel::Post)
     expect(a_post.title).to eq('Thing')
     expect(a_post.contents).to eq(post.contents)
 
-    # history
-    history_clone = a_post.account.history
-    expect(history_clone.some_stuff).to eq('This is history about my life - 2')
+    # preview_image
+    preview_image_clone = a_post.image.preview_image
+    expect(preview_image_clone.some_stuff).to eq('This is preview_image about my life - 2')
 
     # tags
     tags_clone = a_post.tags
