@@ -14,6 +14,7 @@
     "exclude_association": "Exclude Association",
     "finalize": "Finalization",
     "Finalize": "Finalize",
+    "from_v02_to_v10": "From v0.2.x to v1.0.0",
     "implicit_cloner": "Implicit Cloner",
     "include_association": "Include Association",
     "init_as": "Initialize Cloning Target",
@@ -128,7 +129,8 @@
     "Getting Started": "Getting Started",
     "API": "API",
     "Adapters": "Adapters",
-    "Advanced options": "Advanced options"
+    "Advanced Options": "Advanced Options",
+    "Upgrade Notes": "Upgrade Notes"
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",

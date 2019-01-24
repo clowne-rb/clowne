@@ -22,13 +22,16 @@
       "active_record",
       "sequel"
     ],
-    "Advanced options": [
+    "Advanced Options": [
       "implicit_cloner",
       "inline_configuration",
       "clone_mapper",
       "architecture",
       "testing",
       "customization"
+    ],
+    "Upgrade Notes": [
+      "from_v02_to_v10"
     ]
   }
 }

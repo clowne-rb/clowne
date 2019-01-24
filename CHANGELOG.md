@@ -2,9 +2,11 @@
 
 ## 1.0.0 (2019-02-01)
 
-- Add `after_persist` declaration. ([@ssnickolay][])
+- Return `Operation` instance as a rusult of cloning. ([@ssnickolay][])
 
-- Return [`Operation`](https://clowne.evilmartians.io/docs/basic_example.html) as a rusult of cloning. ([@ssnickolay][])
+See [migration guide](https://clowne.evilmartians.io/docs/from_v02_to_v10.html)
+
+- Add `after_persist` declaration. ([@ssnickolay][])
 
 - Unify interface between adapters. ([@ssnickolay][])
 
