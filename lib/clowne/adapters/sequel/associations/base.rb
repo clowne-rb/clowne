@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'forwardable'
 require 'clowne/adapters/base/association'
 
 module Clowne
@@ -8,21 +7,22 @@ module Clowne
     class Sequel
       module Associations
         class Base < Base::Association
-          extend Forwardable
-
           private
-
-          def_delegators :operation, :record_wrapper
-          def_delegators Clowne::Adapters::Sequel, :dup_record
 
           def init_scope
             @_init_scope ||= source.__send__([association_name, 'dataset'].join('_'))
           end
 
+          def record_wrapper(record)
+            operation.record_wrapper(record)
+          end
+
           def operation
-            @_operation ||= Clowne::Adapters::Sequel.operation_class.current
+            @_operation ||= self.class.adapter.operation_class.current
           end
         end
+
+        Base.adapter = Clowne::Adapters::Sequel
       end
     end
   end

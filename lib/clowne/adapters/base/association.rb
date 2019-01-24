@@ -4,6 +4,26 @@ module Clowne
   module Adapters # :nodoc: all
     class Base
       class Association
+        class UndefinedAdapter < StandardError
+          def message
+            'Please, specify adapter for association level'
+          end
+        end
+
+        class << self
+          attr_writer :adapter
+
+          def inherited(subclass)
+            return unless defined?(@adapter)
+
+            subclass.adapter = adapter
+          end
+
+          def adapter
+            @adapter || raise(UndefinedAdapter)
+          end
+        end
+
         # Params:
         # +reflection+:: Association eflection object
         # +source+:: Instance of cloned object (ex: User.new(posts: posts))
@@ -47,8 +67,8 @@ module Clowne
 
         private
 
-        def dup_record(_record)
-          raise NotImplementedError
+        def dup_record(record)
+          self.class.adapter.dup_record(record)
         end
 
         def init_scope

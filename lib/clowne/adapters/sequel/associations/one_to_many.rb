@@ -11,9 +11,9 @@ module Clowne
                 clone_one(child).tap do |child_clone|
                   child_clone[:"#{reflection[:key]}"] = nil
                 end
-              end.map(&method(:record_wrapper)).to_a
+              end.map(&method(:record_wrapper))
 
-            record_wrapper(record).remember_assoc(:"#{association_name}_attributes", clones)
+            record_wrapper(record).remember_assoc(:"#{association_name}_attributes", clones.to_a)
 
             record
           end
