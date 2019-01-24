@@ -7,9 +7,9 @@ In [the basic example](basic_example.md), you can see that Clowne consists of fl
 
 You can combinate this DSL via [`traits`](traits.md) and make a cloning plan which exactly you want.
 
-**We strongly recommended cover resulting cloner logic [`with tests`](testing.md) (with unit and integration tests).**
+**We strongly recommend [`write tests`](testing.md) to cover resulting cloner logic**
 
-Cloner class returns [`Operation`](operation.md) object as a result of cloning. The operation provides methods to save cloned record, and you need to wrap this call to a transaction if it is necessary.
+Cloner class returns [`Operation`](operation.md) instance as a result of cloning. The operation provides methods to save cloned record. You can wrap this call to a transaction if it is necessary.
 
 ## Execution Order
 

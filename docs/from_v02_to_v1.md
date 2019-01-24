@@ -29,6 +29,7 @@ clone.persisted?
 
 ### Move post-processing cloning logic into [`after_persist`](after_persist.md) callback (if you have it)
 
+<span style="display:none;"># rubocop:disable all</span>
 ```ruby
 # Before
 clone = UserCloner.call(user)
@@ -43,8 +44,9 @@ class UserCloner < Clowne::Cloner
   end
 end
 
-clone = UserCloner.call(user).tap(&:persist).tap(&:to_record)
+clone = UserCloner.call(user).tap(&:persist).to_record
 ```
+<span style="display:none;"># rubocop:enable all</span>
 
 ## Sequel
 
@@ -66,6 +68,7 @@ clone.new?
 
 ### Use `operation#persist` instead of convering to model and calling `#save`
 
+<span style="display:none;"># rubocop:disable all</span>
 ```ruby
 # Before
 record_wrapper = UserCloner.call(user)
@@ -73,5 +76,6 @@ clone = record_wrapper.to_model
 clone.save
 
 # After
-clone = UserCloner.call(user).tap(&:persist).tap(&:to_record)
+clone = UserCloner.call(user).tap(&:persist).to_record
 ```
+<span style="display:none;"># rubocop:enable all</span>

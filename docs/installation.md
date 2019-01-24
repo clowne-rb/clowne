@@ -23,7 +23,7 @@ Basic cloner implementation looks like:
 
 ```ruby
 class SomeCloner < Clowne::Cloner
-  adapter :active_record # or adapter Clowne::ActiveRecord::Adapter
+  adapter :active_record # or adapter Clowne::Adapters::ActiveRecord
   # some implementation ...
 end
 ```

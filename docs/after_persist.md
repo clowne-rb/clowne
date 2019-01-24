@@ -42,7 +42,7 @@ class PostCloner < Clowne::Cloner
 end
 ```
 
-_Notice: `mapper:` supported only with [`active_record`](active_record.md) adapter. See more [`here`](clone_mapper.md)_
+_Notice: `mapper:` supported only with [`active_record`](active_record.md) adapter. See more [`here`](clone_mapper.md)._
 
 `after_perstist` runs when you call [`Operation#persist`]('operation.md) (or `Operation#persist!`)
 
