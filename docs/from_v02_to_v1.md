@@ -66,7 +66,7 @@ clone.new?
 # => true
 ```
 
-### Use `operation#persist` instead of convering to model and calling `#save`
+### Use `operation#persist` instead of converting to model and calling `#save`
 
 <span style="display:none;"># rubocop:disable all</span>
 ```ruby
