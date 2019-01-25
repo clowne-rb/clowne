@@ -17,6 +17,14 @@ clone.save!
 # => true
 
 # After
+clone = UserCloner.call(user)
+# => <#Clowne::Utils::Operation ...>
+clone = clone.to_record
+# => <#User id: 2, ...>
+clone.save!
+# => true
+
+# After (even better because of using full functionality)
 operation = UserCloner.call(user)
 # => <#Clowne::Utils::Operation ...>
 operation.persist!
