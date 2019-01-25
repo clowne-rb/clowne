@@ -6,13 +6,15 @@ title: Inline Configuration
 You can also enhance the cloner configuration inline (i.e., add declarations dynamically):
 
 ```ruby
-cloned = UserCloner.call(User.last) do
+operation = UserCloner.call(User.last) do
   exclude_association :profile
 
   finalize do |source, record|
     record.email = "clone_of_#{source.email}"
   end
 end
+
+cloned = operation.to_record
 
 cloned.email
 # => "clone_of_john@example.com"
@@ -31,7 +33,7 @@ Thus it's also possible to clone objects without any cloner classes at all by us
 ```ruby
 cloned = Clowne::Cloner.call(user) do
   # anything you want!
-end
+end.to_record
 
 cloned
 # => <#User..

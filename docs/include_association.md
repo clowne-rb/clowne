@@ -51,8 +51,8 @@ class UserCloner < Clowne::Cloner
 end
 
 # Clone only draft posts
-UserCloner.call(user, state: :draft)
-# => <#User...
+UserCloner.call(user, state: :draft).to_record
+# => <#User id: nil, ... >
 ```
 
 ## Options
@@ -93,8 +93,8 @@ class UserCloner < Clowne::Cloner
   # include_association :posts, clone_with: PostSpecialCloner, traits: :with_tags
 end
 
-UserCloner.call(user)
-# => <#User...
+UserCloner.call(user).to_record
+# => <#User id: nil, ... >
 ```
 
 **NOTE**: if custom cloner is not defined, Clowne tries to infer the [implicit cloner](implicit_cloner.md).

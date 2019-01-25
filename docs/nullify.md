@@ -21,7 +21,7 @@ class UserCloner < Clowne::Cloner
   end
 end
 
-clone = UserCloner.call(user)
+clone = UserCloner.call(user).to_record
 clone.name.nil?
 # => true
 clone.email.nil?
@@ -29,7 +29,7 @@ clone.email.nil?
 clone.surname.nil?
 # => false
 
-clone2 = UserCloner.call(user, traits: :nullify_surname)
+clone2 = UserCloner.call(user, traits: :nullify_surname).to_record
 clone2.name.nil?
 # => true
 clone2.surname.nil?

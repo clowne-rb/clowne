@@ -19,13 +19,13 @@ class UserCloner < Clowne::Cloner
   end
 end
 
-cloned = UserCloner.call(user)
+cloned = UserCloner.call(user).to_record
 cloned.name
 # => 'This is copy!'
 cloned.email == 'clone@example.com'
 # => false
 
-cloned2 = UserCloner.call(user, traits: :change_email)
+cloned2 = UserCloner.call(user, traits: :change_email).to_record
 cloned2.name
 # => 'This is copy!'
 cloned2.email

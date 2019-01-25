@@ -3,30 +3,35 @@
     "Getting Started": [
       "installation",
       "basic_example",
-      "configuration",
+      "overview",
       "alternatives"
     ],
     "API": [
+      "operation",
       "include_association",
       "exclude_association",
       "nullify",
       "finalize",
+      "after_persist",
       "init_as",
       "traits",
-      "parameters",
-      "execution_order"
+      "parameters"
     ],
     "Adapters": [
       "supported_adapters",
       "active_record",
       "sequel"
     ],
-    "Features": [
+    "Advanced Options": [
       "implicit_cloner",
       "inline_configuration",
+      "clone_mapper",
       "architecture",
       "testing",
       "customization"
+    ],
+    "Upgrade Notes": [
+      "from_v02_to_v10"
     ]
   }
 }
