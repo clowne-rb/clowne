@@ -50,7 +50,7 @@ describe 'Sequel Post Processing', :cleanup, adapter: :sequel, transactional: :s
   end
 
   describe 'pass mappping' do
-    let(:another_image) { create(:image) }
+    let(:another_image) { create('sequel:image') }
     let(:mapper) do
       Class.new(Clowne::Utils::CloneMapper).new.tap do |stub_mapper|
         expect(stub_mapper).to receive(:clone_of).and_return(another_image)
