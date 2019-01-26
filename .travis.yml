@@ -23,6 +23,8 @@ matrix:
   include:
     - rvm: ruby-head
       gemfile: gemfiles/railsmaster.gemfile
+    - rvm: jruby-9.2.5.0
+      gemfile: gemfiles/jruby.gemfile
     - rvm: jruby-9.1.15.0
       gemfile: gemfiles/jruby.gemfile
     - rvm: 2.5.0
@@ -39,6 +41,8 @@ matrix:
   allow_failures:
     - rvm: ruby-head
       gemfile: gemfiles/railsmaster.gemfile
+    - rvm: jruby-9.2.5.0
+      gemfile: gemfiles/jruby.gemfile
     - rvm: jruby-9.1.15.0
       gemfile: gemfiles/jruby.gemfile
 deploy:
