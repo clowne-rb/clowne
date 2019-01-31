@@ -37,6 +37,8 @@ clone.persisted?
 
 ### Move post-processing cloning logic into [`after_persist`](after_persist.md) callback (if you have it)
 
+_Notice: `after_persist` supported only with [`active_record`](active_record.md) adapter._
+
 <span style="display:none;"># rubocop:disable all</span>
 ```ruby
 # Before
