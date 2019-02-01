@@ -31,7 +31,7 @@ describe 'Sequel Post Processing', :cleanup, adapter: :sequel, transactional: :s
     subject(:operation) { Sequel::TopicCloner.call(topic) }
 
     it 'clone and use after_persis' do
-      expect { operation.persist }.to raise_exception(
+      expect { operation }.to raise_exception(
         Clowne::Adapters::Sequel::Specifications::AfterPersistDoesNotSupportException
       )
     end

@@ -7,14 +7,8 @@ module Clowne
     class Sequel
       module Resolvers
         class AfterPersist
-          def self.call(_source, record, _declaration, **)
-            operation = Clowne::Adapters::Sequel::Operation.current
-            operation.add_after_persist(
-              proc do
-                raise Specifications::AfterPersistDoesNotSupportException
-              end
-            )
-            record
+          def self.call(_source, _record, _declaration, **)
+            raise Specifications::AfterPersistDoesNotSupportException
           end
         end
       end
