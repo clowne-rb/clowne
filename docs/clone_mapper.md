@@ -3,7 +3,7 @@ id: clone_mapper
 title: Clone mapper
 ---
 
-_Notice: `Clone mapper` supported only with [`active_record`](active_record.md) adapter._
+_Notice: `after_persist` supported only with [`active_record`](active_record.md) adapter._
 
 In [`after_persist`](after_persist.md) documenation you can find interisting code:
 
