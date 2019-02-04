@@ -11,9 +11,10 @@ module Clowne
   # List of built-in adapters
   # rubocop:disable AlignHash
   ADAPTERS = {
-    base:          'Base',
-    active_record: 'ActiveRecord',
-    sequel:        'Sequel'
+    base:               'Base',
+    active_record:      'ActiveRecord',
+    active_record_sync: 'ActiveRecordSync',
+    sequel:             'Sequel'
   }.freeze
   # rubocop:enable AlignHash
 
@@ -40,5 +41,9 @@ module Clowne
   end
 end
 
-require 'clowne/adapters/active_record' if defined?(::ActiveRecord)
+if defined?(::ActiveRecord)
+  require 'clowne/adapters/active_record'
+  require 'clowne/adapters/active_record_sync'
+end
+
 require 'clowne/adapters/sequel' if defined?(::Sequel)

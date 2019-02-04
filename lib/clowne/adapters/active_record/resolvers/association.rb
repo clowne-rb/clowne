@@ -17,7 +17,7 @@ module Clowne
                       "Association #{declaration.name} couldn't be found for #{source.class}"
               end
 
-              cloner_class = Associations.cloner_for(reflection)
+              cloner_class = parent.parent::Associations.cloner_for(reflection)
 
               cloner_class.new(reflection, source, declaration, adapter, params).call(record)
 

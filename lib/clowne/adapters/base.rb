@@ -40,6 +40,8 @@ module Clowne
         declarations = plan.declarations
         init_record = init_record(self.class.dup_record(source))
 
+        return if init_record.nil?
+
         declarations.inject(init_record) do |record, (type, declaration)|
           resolver_for(type).call(source, record, declaration, params: params, adapter: self)
         end
