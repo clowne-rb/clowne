@@ -21,8 +21,6 @@ module Clowne
             @_operation ||= self.class.adapter.operation_class.current
           end
         end
-
-        Base.adapter = Clowne::Adapters::Sequel
       end
     end
   end
