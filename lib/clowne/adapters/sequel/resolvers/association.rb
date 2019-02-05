@@ -6,6 +6,7 @@ module Clowne
       module Resolvers
         class Association
           class << self
+            # rubocop: disable Metrics/ParameterLists
             def call(source, record, declaration, adapter:, params:, **_options)
               with_clonable(source, record, declaration) do
                 reflection = source.class.association_reflections[declaration.name.to_sym]
@@ -17,6 +18,7 @@ module Clowne
                 record
               end
             end
+            # rubocop: enable Metrics/ParameterLists
 
             private
 

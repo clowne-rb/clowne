@@ -18,7 +18,7 @@ describe Clowne::Adapters::Base::Association do
 
     context 'when params option not defined' do
       it 'clone without params' do
-        expect(child_cloner).to receive(:call).with(child, {adapter: adapter})
+        expect(child_cloner).to receive(:call).with(child, adapter: adapter)
 
         subject
       end
@@ -28,7 +28,7 @@ describe Clowne::Adapters::Base::Association do
       let(:custom_declaration_params) { { params: false } }
 
       it 'clone without params' do
-        expect(child_cloner).to receive(:call).with(child, {adapter: adapter})
+        expect(child_cloner).to receive(:call).with(child, adapter: adapter)
 
         subject
       end
