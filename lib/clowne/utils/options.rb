@@ -21,6 +21,10 @@ module Clowne
         options[:mapper]
       end
 
+      def adapter
+        options[:adapter]
+      end
+
       def params
         options.dup.tap do |o|
           INTERNAL_KEYS.each { |key| o.delete(key) }

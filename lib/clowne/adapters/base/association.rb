@@ -4,26 +4,6 @@ module Clowne
   module Adapters # :nodoc: all
     class Base
       class Association
-        # class UndefinedAdapter < StandardError
-        #   def message
-        #     'Please, specify adapter for association level'
-        #   end
-        # end
-
-        # class << self
-        #   attr_writer :adapter
-
-        #   def inherited(subclass)
-        #     return unless defined?(@adapter)
-
-        #     subclass.adapter = adapter
-        #   end
-
-        #   def adapter
-        #     @adapter || raise(UndefinedAdapter)
-        #   end
-        # end
-
         # Params:
         # +reflection+:: Association eflection object
         # +source+:: Instance of cloned object (ex: User.new(posts: posts))
@@ -33,8 +13,6 @@ module Clowne
         # +params+:: = Instance of Hash
         def initialize(reflection, source, declaration, adapter, params)
           @source = source
-          # @scope = declaration.scope
-          # @clone_with = declaration.clone_with
           @declaration = declaration
           @adapter = adapter
           @params = params
@@ -93,8 +71,7 @@ module Clowne
           end
         end
 
-        attr_reader :source, :declaration, :adapter, :params, :association_name,
-                    :reflection
+        attr_reader :source, :declaration, :adapter, :params, :association_name, :reflection
       end
     end
   end

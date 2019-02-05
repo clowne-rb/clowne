@@ -1,5 +1,5 @@
 describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapter: :active_record do
-  let(:adapter) { double }
+  let(:adapter) { Clowne::Adapters::ActiveRecord.new }
   let(:source) { create(:user, :with_posts, posts_num: 2) }
   let(:record) { AR::User.new }
   let(:reflection) { AR::User.reflections['posts'] }
@@ -10,7 +10,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapte
   end
   let(:params) { {} }
 
-  subject(:resolver) { described_class.new(reflection, source, declaration, double, params) }
+  subject(:resolver) { described_class.new(reflection, source, declaration, adapter, params) }
 
   before(:all) do
     module AR

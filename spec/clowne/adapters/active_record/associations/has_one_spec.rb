@@ -1,5 +1,5 @@
 describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter: :active_record do
-  let(:adapter) { double }
+  let(:adapter) { Clowne::Adapters::ActiveRecord.new }
   let(:image) { create(:image, :with_preview_image) }
   let(:post) { create(:post, image: image) }
   let(:source) { post }

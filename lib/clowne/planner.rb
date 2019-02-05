@@ -6,13 +6,13 @@ module Clowne
   class Planner # :nodoc: all
     class << self
       # Compile plan for cloner with traits
-      def compile(cloner, traits: nil)
+      def compile(adapter, cloner, traits: nil)
         declarations = cloner.declarations.dup
 
         declarations += compile_traits(cloner, traits) unless traits.nil?
 
         declarations.each_with_object(
-          Utils::Plan.new(cloner.adapter.registry)
+          Utils::Plan.new(adapter.registry)
         ) do |declaration, plan|
           declaration.compile(plan)
         end
