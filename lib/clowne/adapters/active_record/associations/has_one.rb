@@ -10,7 +10,7 @@ module Clowne
             child = association
             return record unless child
 
-            unless scope.nil?
+            unless declaration.scope.nil?
               warn(
                 '[Clowne] Has one association does not support scopes ' \
                 "(#{@association_name} for #{@source.class})"

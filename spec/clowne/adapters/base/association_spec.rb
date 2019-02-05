@@ -1,5 +1,6 @@
 describe Clowne::Adapters::Base::Association do
   describe '.clone_one' do
+    let(:adapter) { double }
     let(:reflection) { double }
     let(:source) { double }
     let(:child) { double }
@@ -11,13 +12,13 @@ describe Clowne::Adapters::Base::Association do
     let(:declaration) do
       Clowne::Declarations::IncludeAssociation.new(:posts, scope, **declaration_params)
     end
-    let(:association) { described_class.new(reflection, source, declaration, params) }
+    let(:association) { described_class.new(reflection, source, declaration, adapter, params) }
 
     subject { association.clone_one(child) }
 
     context 'when params option not defined' do
       it 'clone without params' do
-        expect(child_cloner).to receive(:call).with(child, {})
+        expect(child_cloner).to receive(:call).with(child, {adapter: adapter})
 
         subject
       end
@@ -27,7 +28,7 @@ describe Clowne::Adapters::Base::Association do
       let(:custom_declaration_params) { { params: false } }
 
       it 'clone without params' do
-        expect(child_cloner).to receive(:call).with(child, {})
+        expect(child_cloner).to receive(:call).with(child, {adapter: adapter})
 
         subject
       end
@@ -59,6 +60,7 @@ describe Clowne::Adapters::Base::Association do
       it 'clone nested params' do
         expect(child_cloner).to receive(:call).with(
           child,
+          adapter: adapter,
           post: { title: 'New post!' },
           some_stuff: 'ಠᴗಠ'
         )
@@ -76,6 +78,7 @@ describe Clowne::Adapters::Base::Association do
         it 'clone nested params' do
           expect(child_cloner).to receive(:call).with(
             child,
+            adapter: adapter,
             post: { title: 'New post!' },
             some_stuff: 'ಠᴗಠ',
             parent: source

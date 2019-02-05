@@ -1,4 +1,5 @@
 describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter: :active_record do
+  let(:adapter) { double }
   let(:image) { create(:image, :with_preview_image) }
   let(:post) { create(:post, image: image) }
   let(:source) { post }
@@ -11,7 +12,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter
   end
   let(:params) { {} }
 
-  subject(:resolver) { described_class.new(reflection, source, declaration, params) }
+  subject(:resolver) { described_class.new(reflection, source, declaration, adapter, params) }
 
   before(:all) do
     module AR

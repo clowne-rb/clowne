@@ -86,13 +86,15 @@ module Clowne
           return @_cloner_options if defined?(@_cloner_options)
 
           @_cloner_options = declaration.params_proxy.permit(
-            params: params, parent: source, adapter: adapter
-          )
-          @cloner_options.merge!(traits: declaration.traits) if declaration.traits
+            params: params, parent: source
+          ).tap do |options|
+            options.merge!(adapter: adapter)
+            options.merge!(traits: declaration.traits) if declaration.traits
+          end
         end
 
         attr_reader :source, :declaration, :adapter, :params, :association_name,
-                    :reflection, :cloner_options
+                    :reflection
       end
     end
   end

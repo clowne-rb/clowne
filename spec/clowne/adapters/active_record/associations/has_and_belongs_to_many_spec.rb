@@ -1,4 +1,5 @@
 describe Clowne::Adapters::ActiveRecord::Associations::HABTM, :cleanup, adapter: :active_record do
+  let(:adapter) { Clowne::Adapters::ActiveRecord.new }
   let(:source) { create(:post, :with_tags, tags_num: 2) }
   let(:record) { AR::Post.new }
   let(:reflection) { AR::Post.reflections['tags'] }
@@ -9,7 +10,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HABTM, :cleanup, adapter:
   end
   let(:params) { {} }
 
-  subject(:resolver) { described_class.new(reflection, source, declaration, params) }
+  subject(:resolver) { described_class.new(reflection, source, declaration, adapter, params) }
 
   describe '.call' do
     subject { Clowne::Utils::Operation.wrap { resolver.call(record) }.to_record }

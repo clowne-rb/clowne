@@ -3,7 +3,7 @@
 module Clowne
   module Utils # :nodoc: all
     class Options
-      INTERNAL_KEYS = %i[traits clowne_only_actions mapping only].freeze
+      INTERNAL_KEYS = %i[adapter traits clowne_only_actions mapping only].freeze
 
       def initialize(options)
         @options = options

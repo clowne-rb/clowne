@@ -18,7 +18,7 @@ module Clowne
           end
 
           def operation
-            @_operation ||= self.class.adapter.operation_class.current
+            @_operation ||= adapter.class.operation_class.current
           end
         end
       end
