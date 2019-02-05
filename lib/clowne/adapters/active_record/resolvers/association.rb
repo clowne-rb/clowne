@@ -8,7 +8,8 @@ module Clowne
 
         class Association
           class << self
-            def call(source, record, declaration, params:, **_options)
+            # rubocop: disable Metrics/ParameterLists
+            def call(source, record, declaration, adapter:, params:, **_options)
               reflection = source.class.reflections[declaration.name.to_s]
 
               if reflection.nil?
@@ -18,10 +19,11 @@ module Clowne
 
               cloner_class = Associations.cloner_for(reflection)
 
-              cloner_class.new(reflection, source, declaration, params).call(record)
+              cloner_class.new(reflection, source, declaration, adapter, params).call(record)
 
               record
             end
+            # rubocop: enable Metrics/ParameterLists
           end
         end
       end

@@ -13,8 +13,6 @@ module Clowne
             association
           end
         end
-
-        Base.adapter = Clowne::Adapters::ActiveRecord
       end
     end
   end

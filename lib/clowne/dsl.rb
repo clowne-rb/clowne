@@ -11,5 +11,13 @@ module Clowne
         @_adapter = Clowne.resolve_adapter(adapter)
       end
     end
+
+    private
+
+    def current_adapter(user_adapter)
+      return adapter if user_adapter.nil?
+
+      Clowne.resolve_adapter(user_adapter)
+    end
   end
 end

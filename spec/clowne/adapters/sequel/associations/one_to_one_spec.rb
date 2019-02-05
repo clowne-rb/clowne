@@ -1,4 +1,5 @@
 describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :sequel do
+  let(:adapter) { Clowne::Adapters::Sequel.new }
   let(:post) { create('sequel:post') }
   let!(:image) { create('sequel:image', :with_preview_image, post: post) }
   let(:source) { post }
@@ -11,7 +12,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
   end
   let(:params) { {} }
 
-  subject(:resolver) { described_class.new(reflection, source, declaration, params) }
+  subject(:resolver) { described_class.new(reflection, source, declaration, adapter, params) }
 
   before(:all) do
     module Sequel

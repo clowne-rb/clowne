@@ -1,4 +1,5 @@
 describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :sequel do
+  let(:adapter) { Clowne::Adapters::Sequel.new }
   let(:source) { create('sequel:user', :with_posts, posts_num: 2) }
   let(:record) { Sequel::User.new }
   let(:reflection) { Sequel::User.association_reflections[:posts] }
@@ -9,7 +10,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
   end
   let(:params) { {} }
 
-  subject(:resolver) { described_class.new(reflection, source, declaration, params) }
+  subject(:resolver) { described_class.new(reflection, source, declaration, adapter, params) }
 
   before(:all) do
     module Sequel

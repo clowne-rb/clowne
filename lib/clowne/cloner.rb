@@ -47,22 +47,23 @@ module Clowne # :nodoc: all
       def call(object, **options)
         raise(UnprocessableSourceError, 'Nil is not cloneable object') if object.nil?
 
-        raise(ConfigurationError, 'Adapter is not defined') if adapter.nil?
-
         options = Clowne::Utils::Options.new(options)
+        current_adapter = current_adapter(options.adapter)
+
+        raise(ConfigurationError, 'Adapter is not defined') if current_adapter.nil?
 
         plan =
           if options.traits.empty?
-            default_plan
+            default_plan(current_adapter: current_adapter)
           else
-            plan_with_traits(options.traits)
+            plan_with_traits(options.traits, current_adapter: current_adapter)
           end
 
         plan = Clowne::Planner.enhance(plan, Proc.new) if block_given?
 
         plan = Clowne::Planner.filter_declarations(plan, options.only)
 
-        with_operation(options) { adapter.clone(object, plan, params: options.params) }
+        call_operation(current_adapter, object, plan, options)
       end
       # rubocop: enable Metrics/AbcSize, Metrics/MethodLength
 
@@ -70,19 +71,19 @@ module Clowne # :nodoc: all
         call(*args, **hargs, clowne_only_actions: prepare_only(only))
       end
 
-      def default_plan
+      def default_plan(current_adapter: adapter)
         return @default_plan if instance_variable_defined?(:@default_plan)
 
-        @default_plan = Clowne::Planner.compile(self)
+        @default_plan = Clowne::Planner.compile(current_adapter, self)
       end
 
-      def plan_with_traits(ids)
+      def plan_with_traits(ids, current_adapter: adapter)
         # Cache plans for combinations of traits
         traits_id = ids.map(&:to_s).join(':')
         return traits_plans[traits_id] if traits_plans.key?(traits_id)
 
         traits_plans[traits_id] = Clowne::Planner.compile(
-          self, traits: ids
+          current_adapter, self, traits: ids
         )
       end
 
@@ -92,9 +93,9 @@ module Clowne # :nodoc: all
 
       private
 
-      def with_operation(options)
+      def call_operation(adapter, object, plan, options)
         adapter.class.operation_class.wrap(mapper: options.mapper) do
-          yield
+          adapter.clone(object, plan, params: options.params)
         end
       end
 
