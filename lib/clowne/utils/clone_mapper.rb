@@ -5,21 +5,21 @@ require 'clowne/ext/record_key'
 module Clowne
   module Utils
     class CloneMapper # :nodoc: all
-      include Clowne::Ext::RecordKey
-
       def initialize
         @store = {}
       end
 
       def add(origin, clone)
-        origin_key = key(origin)
-        return @store[origin_key] if @store.key?(origin_key)
-
-        @store[origin_key] = clone
+        @store[origin] ||= clone
       end
 
-      def clone_of(record)
-        @store[key(record)]
+      def clone_of(origin)
+        @store[origin]
+      end
+
+      def origin_of(clone)
+        origin, _clone = @store.rassoc(clone)
+        origin
       end
     end
   end
