@@ -2,46 +2,34 @@
 
 require 'clowne/adapters/registry'
 
+require 'clowne/resolvers/init_as'
+require 'clowne/resolvers/nullify'
+require 'clowne/resolvers/finalize'
+require 'clowne/resolvers/after_persist'
+
 module Clowne
   module Adapters
     # ORM-independant adapter (just calls #dup).
     # Works with nullify/finalize.
     class Base
+      include Clowne::Adapters::Registry::Container
+
       class << self
-        attr_reader :registry
-
-        def inherited(subclass)
-          # Duplicate registry
-          subclass.registry = registry.dup
-        end
-
-        def resolver_for(type)
-          registry.mapping[type] || raise("Uknown resolver #{type} for #{self}")
-        end
-
-        def register_resolver(type, resolver, after: nil, before: nil, prepend: nil)
-          registry.mapping[type] = resolver
-
-          if prepend
-            registry.unshift type
-          elsif after
-            registry.insert_after after, type
-          elsif before
-            registry.insert_before before, type
-          else
-            registry.append type
+        # Duplicate record and remember record <-> clone relationship in operation
+        # Cab be overrided in special adapter
+        # +record+:: Instance of record (ActiveRecord or Sequel)
+        def dup_record(record)
+          record.dup.tap do |clone|
+            operation = operation_class.current
+            operation.add_mapping(record, clone)
           end
         end
 
-        protected
-
-        attr_writer :registry
-      end
-
-      self.registry = Registry.new
-
-      def registry
-        self.class.registry
+        # Operation class which  using for cloning
+        # Cab be overrided in special adapter
+        def operation_class
+          Clowne::Utils::Operation
+        end
       end
 
       # Using a plan make full duplicate of record
@@ -50,17 +38,11 @@ module Clowne
       # +params+:: Custom params hash
       def clone(source, plan, params: {})
         declarations = plan.declarations
-        declarations.inject(init_record(dup_source(source))) do |record, (type, declaration)|
+        init_record = init_record(self.class.dup_record(source))
+
+        declarations.inject(init_record) do |record, (type, declaration)|
           resolver_for(type).call(source, record, declaration, params: params, adapter: self)
         end
-      end
-
-      def resolver_for(type)
-        self.class.resolver_for(type)
-      end
-
-      def dup_source(source)
-        source.dup
       end
 
       def init_record(record)
@@ -71,6 +53,23 @@ module Clowne
   end
 end
 
-require 'clowne/adapters/base/init_as'
-require 'clowne/adapters/base/nullify'
-require 'clowne/adapters/base/finalize'
+Clowne::Adapters::Base.register_resolver(
+  :init_as,
+  Clowne::Resolvers::InitAs,
+  prepend: true
+)
+
+Clowne::Adapters::Base.register_resolver(
+  :nullify,
+  Clowne::Resolvers::Nullify
+)
+
+Clowne::Adapters::Base.register_resolver(
+  :finalize, Clowne::Resolvers::Finalize,
+  after: :nullify
+)
+
+Clowne::Adapters::Base.register_resolver(
+  :after_persist, Clowne::Resolvers::AfterPersist,
+  after: :finalize
+)

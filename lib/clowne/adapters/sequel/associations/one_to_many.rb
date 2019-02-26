@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'clowne/ext/yield_self_then'
+
+using Clowne::Ext::YieldSelfThen
+
 module Clowne
   module Adapters # :nodoc: all
     class Sequel
@@ -10,9 +14,10 @@ module Clowne
               with_scope.map do |child|
                 clone_one(child).tap do |child_clone|
                   child_clone[:"#{reflection[:key]}"] = nil
-                end
+                end.then(&method(:record_wrapper))
               end
-            record.remember_assoc(:"#{association_name}_attributes", clones)
+
+            record_wrapper(record).remember_assoc(:"#{association_name}_attributes", clones)
 
             record
           end

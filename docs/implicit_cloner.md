@@ -28,7 +28,7 @@ user = User.last
 user.profile.name
 #=> "Bimbo"
 
-cloned = UserCloner.call(user)
+cloned = UserCloner.call(user).to_record
 cloned.profile.name
 # => "Clone of Bimbo"
 ```

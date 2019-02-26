@@ -12,6 +12,7 @@ module Clowne
 
       def matches?(actual)
         raise ArgumentError, non_cloner_message unless actual <= ::Clowne::Cloner
+
         @cloner = actual
         super
       end

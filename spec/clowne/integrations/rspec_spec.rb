@@ -6,9 +6,9 @@ require 'clowne/rspec'
 describe 'RSpec matchers and helpers', adapter: :active_record do
   before(:all) do
     module RSpecTest
-      class AccountCloner < Clowne::Cloner
-        trait :with_history do
-          include_association :history, params: :history
+      class ImageCloner < Clowne::Cloner
+        trait :with_preview_image do
+          include_association :preview_image, params: :preview_image
         end
 
         trait :nullify_title do
@@ -17,9 +17,9 @@ describe 'RSpec matchers and helpers', adapter: :active_record do
       end
 
       class PostCloner < Clowne::Cloner
-        include_association :account, clone_with: 'RSpecTest::AccountCloner',
-                                      traits: %i[with_history nullify_title],
-                                      params: true
+        include_association :image, clone_with: 'RSpecTest::ImageCloner',
+                                    traits: %i[with_preview_image nullify_title],
+                                    params: true
 
         include_association :tags, ->(params) { where(value: params[:tags]) if params[:tags] }
 
@@ -45,7 +45,7 @@ describe 'RSpec matchers and helpers', adapter: :active_record do
         end
       end
 
-      class HistoryCloner < Clowne::Cloner
+      class PreviewImageCloner < Clowne::Cloner
         finalize do |_source, record, suffix:|
           record.some_stuff = record.some_stuff + suffix
         end
@@ -54,7 +54,7 @@ describe 'RSpec matchers and helpers', adapter: :active_record do
   end
 
   after(:all) do
-    %w[AccountCloner PostCloner HistoryCloner].each do |cloner|
+    %w[ImageCloner PostCloner PreviewImageCloner].each do |cloner|
       RSpecTest.send(:remove_const, cloner)
     end
   end
@@ -63,7 +63,7 @@ describe 'RSpec matchers and helpers', adapter: :active_record do
     subject { RSpecTest::PostCloner }
 
     it 'asserts when all associations specified' do
-      expect(subject).to clone_associations(:account, :tags)
+      expect(subject).to clone_associations(:image, :tags)
     end
 
     it 'refutes when not all specified' do
@@ -80,12 +80,12 @@ describe 'RSpec matchers and helpers', adapter: :active_record do
 
     context 'with traits' do
       it 'asserts when all associations specified' do
-        expect(subject).to clone_associations(:account).with_traits(:without_tags)
+        expect(subject).to clone_associations(:image).with_traits(:without_tags)
       end
 
       it 'refutes when not all specified' do
         expect do
-          expect(subject).to clone_associations(:tags, :account)
+          expect(subject).to clone_associations(:tags, :image)
             .with_traits(:without_tags)
         end.to raise_error(RSpec::Expectations::ExpectationNotMetError)
       end
@@ -96,7 +96,7 @@ describe 'RSpec matchers and helpers', adapter: :active_record do
     subject { RSpecTest::PostCloner }
 
     it 'asserts when association is included' do
-      expect(subject).to clone_association(:account)
+      expect(subject).to clone_association(:image)
     end
 
     it 'refutes when association is not included (with traits)' do
@@ -108,16 +108,16 @@ describe 'RSpec matchers and helpers', adapter: :active_record do
     context 'clone_with' do
       it 'asserts when cloner is correct' do
         expect(subject).to clone_association(
-          :account,
-          clone_with: RSpecTest::AccountCloner
+          :image,
+          clone_with: RSpecTest::ImageCloner
         )
       end
 
       it 'refutes when cloner is incorrect' do
         expect do
           expect(subject).to clone_association(
-            :account,
-            clone_with: RSpecTest::HistoryCloner
+            :image,
+            clone_with: RSpecTest::PreviewImageCloner
           )
         end.to raise_error(RSpec::Expectations::ExpectationNotMetError)
       end
@@ -130,16 +130,16 @@ describe 'RSpec matchers and helpers', adapter: :active_record do
     context 'traits' do
       it 'asserts when all traits specified' do
         expect(subject).to clone_association(
-          :account,
-          traits: [:with_history, :nullify_title]
+          :image,
+          traits: [:with_preview_image, :nullify_title]
         )
       end
 
       it 'refutes when not all traits specified' do
         expect do
           expect(subject).to clone_association(
-            :account,
-            traits: :with_history
+            :image,
+            traits: :with_preview_image
           )
         end.to raise_error(RSpec::Expectations::ExpectationNotMetError)
       end
@@ -173,21 +173,21 @@ describe 'RSpec matchers and helpers', adapter: :active_record do
     end
 
     context 'params' do
-      subject { RSpecTest::AccountCloner }
+      subject { RSpecTest::ImageCloner }
 
       it 'asserts when correct' do
         expect(subject).to clone_association(
-          :history,
-          params: :history
-        ).with_traits(:with_history)
+          :preview_image,
+          params: :preview_image
+        ).with_traits(:with_preview_image)
       end
 
       it 'refutes when incorrect' do
         expect do
           expect(subject).to clone_association(
-            :history,
+            :preview_image,
             params: nil
-          ).with_traits(:with_history)
+          ).with_traits(:with_preview_image)
         end.to raise_error(RSpec::Expectations::ExpectationNotMetError)
       end
     end

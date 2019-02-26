@@ -2,7 +2,9 @@
 
 require 'clowne/planner'
 require 'clowne/dsl'
-require 'clowne/params'
+require 'clowne/utils/options'
+require 'clowne/utils/params'
+require 'clowne/utils/operation'
 
 module Clowne # :nodoc: all
   class UnprocessableSourceError < StandardError; end
@@ -25,11 +27,13 @@ module Clowne # :nodoc: all
 
       def declarations
         return @declarations if instance_variable_defined?(:@declarations)
+
         @declarations = []
       end
 
       def traits
         return @traits if instance_variable_defined?(:@traits)
+
         @traits = {}
       end
 
@@ -40,50 +44,46 @@ module Clowne # :nodoc: all
       end
 
       # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
-      # rubocop: disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def call(object, **options)
         raise(UnprocessableSourceError, 'Nil is not cloneable object') if object.nil?
 
-        raise(ConfigurationError, 'Adapter is not defined') if adapter.nil?
+        options = Clowne::Utils::Options.new(options)
+        current_adapter = current_adapter(options.adapter)
 
-        traits = options.delete(:traits)
-
-        only = options.delete(:clowne_only_actions)
-
-        traits = Array(traits) unless traits.nil?
+        raise(ConfigurationError, 'Adapter is not defined') if current_adapter.nil?
 
         plan =
-          if traits.nil? || traits.empty?
-            default_plan
+          if options.traits.empty?
+            default_plan(current_adapter: current_adapter)
           else
-            plan_with_traits(traits)
+            plan_with_traits(options.traits, current_adapter: current_adapter)
           end
 
         plan = Clowne::Planner.enhance(plan, Proc.new) if block_given?
 
-        plan = Clowne::Planner.filter_declarations(plan, only)
+        plan = Clowne::Planner.filter_declarations(plan, options.only)
 
-        adapter.clone(object, plan, params: options)
+        call_operation(current_adapter, object, plan, options)
       end
+      # rubocop: enable Metrics/AbcSize, Metrics/MethodLength
 
       def partial_apply(only, *args, **hargs)
         call(*args, **hargs, clowne_only_actions: prepare_only(only))
       end
 
-      # rubocop: enable Metrics/AbcSize, Metrics/MethodLength
-      # rubocop: enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-
-      def default_plan
+      def default_plan(current_adapter: adapter)
         return @default_plan if instance_variable_defined?(:@default_plan)
-        @default_plan = Clowne::Planner.compile(self)
+
+        @default_plan = Clowne::Planner.compile(current_adapter, self)
       end
 
-      def plan_with_traits(ids)
+      def plan_with_traits(ids, current_adapter: adapter)
         # Cache plans for combinations of traits
         traits_id = ids.map(&:to_s).join(':')
         return traits_plans[traits_id] if traits_plans.key?(traits_id)
+
         traits_plans[traits_id] = Clowne::Planner.compile(
-          self, traits: ids
+          current_adapter, self, traits: ids
         )
       end
 
@@ -93,8 +93,15 @@ module Clowne # :nodoc: all
 
       private
 
+      def call_operation(adapter, object, plan, options)
+        adapter.class.operation_class.wrap(mapper: options.mapper) do
+          adapter.clone(object, plan, params: options.params)
+        end
+      end
+
       def traits_plans
         return @traits_plans if instance_variable_defined?(:@traits_plans)
+
         @traits_plans = {}
       end
 

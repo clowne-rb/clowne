@@ -1,6 +1,7 @@
 describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: :sequel do
+  let(:adapter) { Clowne::Adapters::Sequel.new }
   let(:source) { create('sequel:post', :with_tags, tags_num: 2) }
-  let(:record) { Clowne::Adapters::Sequel::RecordWrapper.new(Sequel::Post.new) }
+  let(:record) { Sequel::Post.new }
   let(:reflection) { Sequel::Post.association_reflections[:tags] }
   let(:scope) { {} }
   let(:declaration_params) { {} }
@@ -9,10 +10,10 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
   end
   let(:params) { {} }
 
-  subject(:resolver) { described_class.new(reflection, source, declaration, params) }
+  subject(:resolver) { described_class.new(reflection, source, declaration, adapter, params) }
 
   describe '.call' do
-    subject { resolver.call(record).to_model }
+    subject { Clowne::Adapters::Sequel::Operation.wrap { resolver.call(record) }.to_record }
 
     it 'clones all the tags withtout cloner' do
       expect(subject.tags.size).to eq 2

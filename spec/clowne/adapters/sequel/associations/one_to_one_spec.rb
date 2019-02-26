@@ -1,28 +1,29 @@
 describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :sequel do
+  let(:adapter) { Clowne::Adapters::Sequel.new }
   let(:post) { create('sequel:post') }
-  let!(:account) { create('sequel:account', :with_history, post: post) }
+  let!(:image) { create('sequel:image', :with_preview_image, post: post) }
   let(:source) { post }
   let(:declaration_params) { {} }
-  let(:record) { Clowne::Adapters::Sequel::RecordWrapper.new(Sequel::Post.new) }
-  let(:reflection) { Sequel::Post.association_reflections[:account] }
-  let(:association) { :account }
+  let(:record) { Sequel::Post.new }
+  let(:reflection) { Sequel::Post.association_reflections[:image] }
+  let(:association) { :image }
   let(:declaration) do
     Clowne::Declarations::IncludeAssociation.new(association, **declaration_params)
   end
   let(:params) { {} }
 
-  subject(:resolver) { described_class.new(reflection, source, declaration, params) }
+  subject(:resolver) { described_class.new(reflection, source, declaration, adapter, params) }
 
   before(:all) do
     module Sequel
-      class AccountCloner < Clowne::Cloner
+      class ImageCloner < Clowne::Cloner
         finalize do |source, record, params|
           record.created_at = source.created_at if params[:include_timestamps]
         end
 
         nullify :updated_at, :created_at
 
-        include_association :history, params: true
+        include_association :preview_image, params: true
 
         trait :mark_as_clone do
           finalize do |source, record|
@@ -31,7 +32,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
         end
       end
 
-      class HistoryCloner < Clowne::Cloner
+      class PreviewImageCloner < Clowne::Cloner
         finalize do |source, record, params|
           record.created_at = source.created_at if params[:include_timestamps]
         end
@@ -48,26 +49,26 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
   end
 
   after(:all) do
-    Sequel.send(:remove_const, 'AccountCloner')
-    Sequel.send(:remove_const, 'HistoryCloner')
+    Sequel.send(:remove_const, 'ImageCloner')
+    Sequel.send(:remove_const, 'PreviewImageCloner')
   end
 
   describe '.call' do
-    subject { resolver.call(record).to_model }
+    subject { Clowne::Adapters::Sequel::Operation.wrap { resolver.call(record) }.to_record }
 
     it 'infers default cloner from model name' do
-      expect(subject.account).to be_new
-      expect(subject.account).to be_a(Sequel::Account)
-      expect(subject.account.to_hash).to eq(
+      expect(subject.image).to be_new
+      expect(subject.image).to be_a(Sequel::Image)
+      expect(subject.image.to_hash).to eq(
         post_id: nil,
-        title: account.title,
+        title: image.title,
         created_at: nil,
         updated_at: nil
       )
-      expect(subject.account.history).to be_new
-      expect(subject.account.history.to_hash).to eq(
-        some_stuff: account.history.some_stuff,
-        account_id: nil,
+      expect(subject.image.preview_image).to be_new
+      expect(subject.image.preview_image.to_hash).to eq(
+        some_stuff: image.preview_image.some_stuff,
+        image_id: nil,
         created_at: nil,
         updated_at: nil
       )
@@ -78,18 +79,18 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
       let(:params) { { include_timestamps: true } }
 
       it 'pass params to child cloner' do
-        expect(subject.account).to be_new
-        expect(subject.account).to have_attributes(
+        expect(subject.image).to be_new
+        expect(subject.image).to have_attributes(
           post_id: nil,
-          title: account.title
+          title: image.title
         )
-        expect(subject.account.created_at).not_to be_nil
-        expect(subject.account.history).to be_new
-        expect(subject.account.history).to have_attributes(
-          some_stuff: account.history.some_stuff,
-          account_id: nil
+        expect(subject.image.created_at).not_to be_nil
+        expect(subject.image.preview_image).to be_new
+        expect(subject.image.preview_image).to have_attributes(
+          some_stuff: image.preview_image.some_stuff,
+          image_id: nil
         )
-        expect(subject.account.history.created_at).not_to be_nil
+        expect(subject.image.preview_image.created_at).not_to be_nil
       end
     end
 
@@ -97,21 +98,21 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
       let(:declaration_params) { { traits: [:mark_as_clone] } }
 
       it 'includes traits for self' do
-        expect(subject.account).to be_new
-        expect(subject.account).to have_attributes(
+        expect(subject.image).to be_new
+        expect(subject.image).to have_attributes(
           post_id: nil,
-          title: "#{account.title} (Cloned)"
+          title: "#{image.title} (Cloned)"
         )
-        expect(subject.account.history).to be_new
-        expect(subject.account.history).to have_attributes(
-          some_stuff: account.history.some_stuff,
-          account_id: nil
+        expect(subject.image.preview_image).to be_new
+        expect(subject.image.preview_image).to have_attributes(
+          some_stuff: image.preview_image.some_stuff,
+          image_id: nil
         )
       end
     end
 
     context 'with custom cloner' do
-      let(:account_cloner) do
+      let(:image_cloner) do
         Class.new(Clowne::Cloner) do
           finalize do |source, record, _params|
             record.title = "Copy of #{source.title}"
@@ -119,15 +120,15 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
         end
       end
 
-      let(:declaration_params) { { clone_with: account_cloner } }
+      let(:declaration_params) { { clone_with: image_cloner } }
 
       it 'applies custom cloner' do
-        expect(subject.account).to be_new
-        expect(subject.account).to have_attributes(
+        expect(subject.image).to be_new
+        expect(subject.image).to have_attributes(
           post_id: nil,
-          title: "Copy of #{account.title}"
+          title: "Copy of #{image.title}"
         )
-        expect(subject.account.history).to be_nil
+        expect(subject.image.preview_image).to be_nil
       end
     end
   end

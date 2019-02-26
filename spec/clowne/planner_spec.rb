@@ -1,8 +1,10 @@
 describe Clowne::Planner, adapter: :active_record do
+  let(:adapter) { Clowne::Adapters::ActiveRecord }
+
   describe '.compile' do
     let(:options) { {} }
 
-    subject { described_class.compile(cloner, **options).declarations }
+    subject { described_class.compile(adapter, cloner, **options).declarations }
 
     context 'when cloner with one included association' do
       let(:cloner) do
@@ -151,7 +153,7 @@ describe Clowne::Planner, adapter: :active_record do
           end
         end
 
-        subject { described_class.compile(new_cloner, **options).declarations }
+        subject { described_class.compile(adapter, new_cloner, **options).declarations }
 
         let(:options) { { traits: [:with_brands, :clear_fields] } }
 

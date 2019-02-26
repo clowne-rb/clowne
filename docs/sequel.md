@@ -3,9 +3,7 @@ id: sequel
 title: Sequel
 ---
 
-Clowne uses Sequel [`NestedAttributes` plugin](http://sequel.jeremyevans.net/rdoc-plugins/classes/Sequel/Plugins/NestedAttributes.html) for cloning source's associations and you need to configure it.
-
-Also, Sequel target record wrapped into a special class for implementation full Clowne's behavior. You need to use method `to_model` for getting final cloned `Sequel::Model` object (or you can use `save` for saving the cloned object to DB).
+Under the hood, Clowne uses Sequel [`NestedAttributes` plugin](http://sequel.jeremyevans.net/rdoc-plugins/classes/Sequel/Plugins/NestedAttributes.html) for cloning source's associations, and you need to configure it.
 
 Example:
 
@@ -29,13 +27,11 @@ and get cloned user
 
 ```ruby
 user = User.last
-wrapper = UserCloner.call(user)
-wrapper.class
-# => Clowne::Adapters::Sequel::RecordWrapper
-cloned_record = wrapper.to_model
-cloned_record.class
-# => User
-cloned_record.new?
+operation = UserCloner.call(user)
+# => <#Clowne::Adapters::Sequel::Operation...>
+cloned = operation.to_record
+# => <#User id: nil, ...>
+cloned.new?
 # => true
 ```
 
@@ -43,14 +39,15 @@ or you can save it immediately
 
 ```ruby
 user = User.last
-wrapper = UserCloner.call(user)
-wrapper.class
-# => Clowne::Adapters::Sequel::RecordWrapper
-cloned_record = wrapper.save
-cloned_record.class
-# => User
-cloned_record.new?
+# => <#User id: 1, ...>
+operation = UserCloner.call(user)
+# => <#Clowne::Adapters::Sequel::Operation...>
+operation.persist
+# => true
+cloned = operation.to_record
+# => <#User id: 2, ...>
+cloned.new?
 # => false
 ```
 
-If you try to clone associations without `NestedAttributes` plugin, Clowne will skip this declaration.
+If you try to clone association without `NestedAttributes` plugin, Clowne will skip this declaration.

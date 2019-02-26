@@ -1,4 +1,4 @@
-describe Clowne::Plan do
+describe Clowne::Utils::Plan do
   describe '#declarations' do
     let(:registry) do
       Clowne::Adapters::Registry.new.tap do |r|

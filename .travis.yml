@@ -5,7 +5,8 @@ notifications:
   email: false
 
 before_install:
-  gem update --system
+  - gem update --system
+  - gem install bundler
 
 before_script:
   # Only generate coverage report for the specified job
@@ -22,6 +23,8 @@ matrix:
   include:
     - rvm: ruby-head
       gemfile: gemfiles/railsmaster.gemfile
+    - rvm: jruby-9.2.5.0
+      gemfile: gemfiles/jruby.gemfile
     - rvm: jruby-9.1.15.0
       gemfile: gemfiles/jruby.gemfile
     - rvm: 2.5.0
@@ -35,11 +38,11 @@ matrix:
       gemfile: gemfiles/activerecord42.gemfile
     - rvm: 2.3.1
       gemfile: Gemfile
-    - rvm: 2.2.0
-      gemfile: gemfiles/activerecord42.gemfile
   allow_failures:
     - rvm: ruby-head
       gemfile: gemfiles/railsmaster.gemfile
+    - rvm: jruby-9.2.5.0
+      gemfile: gemfiles/jruby.gemfile
     - rvm: jruby-9.1.15.0
       gemfile: gemfiles/jruby.gemfile
 deploy:

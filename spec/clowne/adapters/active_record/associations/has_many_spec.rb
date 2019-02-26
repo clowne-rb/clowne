@@ -1,4 +1,5 @@
 describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapter: :active_record do
+  let(:adapter) { Clowne::Adapters::ActiveRecord.new }
   let(:source) { create(:user, :with_posts, posts_num: 2) }
   let(:record) { AR::User.new }
   let(:reflection) { AR::User.reflections['posts'] }
@@ -9,7 +10,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapte
   end
   let(:params) { {} }
 
-  subject(:resolver) { described_class.new(reflection, source, declaration, params) }
+  subject(:resolver) { described_class.new(reflection, source, declaration, adapter, params) }
 
   before(:all) do
     module AR
@@ -32,7 +33,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapte
   after(:all) { AR.send(:remove_const, 'PostCloner') }
 
   describe '.call' do
-    subject { resolver.call(record) }
+    subject { Clowne::Utils::Operation.wrap { resolver.call(record) }.to_record }
 
     it 'infers default cloner from model name' do
       expect(subject.posts.size).to eq 2

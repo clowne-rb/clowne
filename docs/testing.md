@@ -155,14 +155,14 @@ RSpec.describe UserCloner, type: :cloner do
 
   specify 'simple case' do
     # apply only the specified part of the plan
-    cloned_user = described_class.partial_apply(:nullify, user)
+    cloned_user = described_class.partial_apply(:nullify, user).to_record
     expect(cloned_user.email).to be_nil
     # finalize wasn't applied
     expect(cloned_user.name).to eq 'Bombon'
   end
 
   specify 'with params' do
-    cloned_user = described_class.partial_apply(:finalize, user, name: 'new name')
+    cloned_user = described_class.partial_apply(:finalize, user, name: 'new name').to_record
     # nullify actions were not applied!
     expect(cloned_user.email).to eq user.email
     # finalize was applied
@@ -171,7 +171,9 @@ RSpec.describe UserCloner, type: :cloner do
 
   specify 'with traits' do
     a_user = create(:user, name: 'Dindon')
-    cloned_user = described_class.partial_apply(:init_as, user, traits: :copy, target: a_user)
+    cloned_user = described_class.partial_apply(
+      :init_as, user, traits: :copy, target: a_user
+    ).to_record
     # returned user is the same as target
     expect(cloned_user).to be_eql(a_user)
     expect(cloned_user.name).to eq 'Bombon'
@@ -186,7 +188,7 @@ RSpec.describe UserCloner, type: :cloner do
     #   plan.apply(:association)
     cloned_user = described_class.partial_apply(
       'association.posts', user, traits: :with_popular_posts, min_rating: 1
-    )
+    ).to_record
 
     expect(cloned_user.posts.size).to eq 1
     expect(cloned_user.posts.first.text).to eq 'Flying Dumplings'

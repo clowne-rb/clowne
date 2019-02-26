@@ -8,11 +8,16 @@ module Clowne
           def call(record)
             child = association
             return record unless child
-            warn '[Clowne] Has one association does not support scopes' unless scope.nil?
+
+            warn '[Clowne] Has one association does not support scope' unless declaration.scope.nil?
 
             child_clone = clone_one(child)
             child_clone[:"#{reflection[:key]}"] = nil
-            record.remember_assoc(:"#{association_name}_attributes", child_clone)
+
+            record_wrapper(record).remember_assoc(
+              :"#{association_name}_attributes",
+              record_wrapper(child_clone)
+            )
 
             record
           end

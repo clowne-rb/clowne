@@ -21,7 +21,7 @@ class IncludeAll < Clowne::Declarations::Base # :nodoc: all
 end
 
 # Register our declrations, i.e. extend DSL
-Clowne::Declarations.add :include_all, Clowne::Declarations::IncludeAll
+Clowne::Declarations.add :include_all, IncludeAll
 ```
 
 See more on `plan` in [architecture overview](architecture.md).
@@ -40,6 +40,7 @@ class AllAssociations
     source.class.reflections.each_value do |_name, reflection|
       # Exclude belongs_to associations
       next if reflection.macro == :belongs_to
+
       # Resolve and apply association cloner
       cloner_class = Clowne::Adapters::ActiveRecord::Associations.cloner_for(reflection)
       cloner_class.new(reflection, source, declaration, params).call(record)

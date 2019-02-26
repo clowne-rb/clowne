@@ -1,6 +1,7 @@
 describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :sequel do
+  let(:adapter) { Clowne::Adapters::Sequel.new }
   let(:source) { create('sequel:user', :with_posts, posts_num: 2) }
-  let(:record) { Clowne::Adapters::Sequel::RecordWrapper.new(Sequel::User.new) }
+  let(:record) { Sequel::User.new }
   let(:reflection) { Sequel::User.association_reflections[:posts] }
   let(:scope) { {} }
   let(:declaration_params) { {} }
@@ -9,12 +10,12 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
   end
   let(:params) { {} }
 
-  subject(:resolver) { described_class.new(reflection, source, declaration, params) }
+  subject(:resolver) { described_class.new(reflection, source, declaration, adapter, params) }
 
   before(:all) do
     module Sequel
       class PostCloner < Clowne::Cloner
-        include_associations :account, :tags
+        include_associations :image, :tags
 
         finalize do |_source, record, params|
           record.topic_id = params[:topic_id] if params[:topic_id]
@@ -34,12 +35,12 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
   after(:all) { Sequel.send(:remove_const, 'PostCloner') }
 
   describe '.call' do
-    subject { resolver.call(record).to_model }
+    subject { Clowne::Adapters::Sequel::Operation.wrap { resolver.call(record) }.to_record }
 
     it 'infers default cloner from model name' do
       expect(subject.posts.size).to eq 2
       expect(subject.posts.first).to be_a(Sequel::Post)
-      expect(subject.posts.first.account).to be_nil
+      expect(subject.posts.first.image).to be_nil
       expect(subject.posts.first.to_hash).to eq(
         owner_id: nil,
         topic_id: nil,
@@ -54,15 +55,15 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
       )
     end
 
-    context 'when post has account' do
-      let!(:accounts) do
-        source.posts.map { |post| create('sequel:account', post: post) }
+    context 'when post has image' do
+      let!(:images) do
+        source.posts.map { |post| create('sequel:image', post: post) }
       end
 
-      it 'infers nested account cloner' do
-        expect(subject.posts.first.account).to be_a(Sequel::Account)
-        expect(subject.posts.first.account).to have_attributes(
-          title: accounts.first.title
+      it 'infers nested image cloner' do
+        expect(subject.posts.first.image).to be_a(Sequel::Image)
+        expect(subject.posts.first.image).to have_attributes(
+          title: images.first.title
         )
       end
     end
@@ -74,7 +75,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
         end
       end
 
-      it 'infers nested account cloner' do
+      it 'infers nested image cloner' do
         post = subject.posts.first
         expect(post.tags.first).to be_a(Sequel::Tag)
         expect(post.tags.first).to have_attributes(

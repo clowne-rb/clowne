@@ -16,6 +16,10 @@ describe Clowne::Cloner do
         1 + 1
       end
 
+      after_persist do |_source, _record, _params|
+        2 + 2
+      end
+
       trait :with_brands do
         include_association :brands
       end
@@ -42,7 +46,8 @@ describe Clowne::Cloner do
         options: { clone_with: 'AnotherCloner2Class' }
       }],
       [:nullify, Clowne::Declarations::Nullify, { attributes: %i[title description] }],
-      [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }]
+      [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }],
+      [:after_persist, Clowne::Declarations::AfterPersist, { block: proc { 2 + 2 } }]
     ]
   end
 
@@ -73,7 +78,8 @@ describe Clowne::Cloner do
           name: :brands, scope: nil, options: {}
         }],
         [:nullify, Clowne::Declarations::Nullify, { attributes: %i[title description] }],
-        [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }]
+        [:finalize, Clowne::Declarations::Finalize, { block: proc { 1 + 1 } }],
+        [:after_persist, Clowne::Declarations::AfterPersist, { block: proc { 2 + 2 } }]
       ]
     end
 
@@ -139,14 +145,14 @@ describe Clowne::Cloner do
           finalize { |_, record| record.age *= 2 }
         end
 
-        expect(inlined).to have_attributes(
+        expect(inlined.to_record).to have_attributes(
           name: nil,
           age: 58
         )
 
         cloned = cloner.call(source)
 
-        expect(cloned).to have_attributes(
+        expect(cloned.to_record).to have_attributes(
           name: 'John',
           age: 29
         )
@@ -178,21 +184,21 @@ describe Clowne::Cloner do
     let(:source) { source_class.new('John', 28, 99) }
 
     specify 'one action' do
-      cloned = cloner.partial_apply(:nullify, source)
+      cloned = cloner.partial_apply(:nullify, source).to_record
       expect(cloned.age).to eq 28
       expect(cloned.rating).to be_nil
       expect(cloned.name).to eq 'John'
     end
 
     specify 'with traits' do
-      cloned = cloner.partial_apply(:nullify, source, traits: :without_name)
+      cloned = cloner.partial_apply(:nullify, source, traits: :without_name).to_record
       expect(cloned.age).to eq 28
       expect(cloned.rating).to be_nil
       expect(cloned.name).to be_nil
     end
 
     specify 'with params' do
-      cloned = cloner.partial_apply(:finalize, source, coef: 3)
+      cloned = cloner.partial_apply(:finalize, source, coef: 3).to_record
       expect(cloned.age).to eq 84
       expect(cloned.rating).to eq 99
       expect(cloned.name).to eq 'John'
@@ -203,7 +209,7 @@ describe Clowne::Cloner do
       cloned = cloner.partial_apply(
         [:init_as, :finalize], source,
         traits: :copy, coef: 0.5, target: another
-      )
+      ).to_record
 
       expect(cloned).to be_eql(another)
       expect(cloned.age).to eq 16.5

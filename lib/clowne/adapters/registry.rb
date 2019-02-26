@@ -3,6 +3,55 @@
 module Clowne
   module Adapters
     class Registry # :nodoc: all
+      module Container
+        def self.included(base)
+          base.extend ClassMethods
+
+          base.class_eval do
+            self.registry = Registry.new
+
+            def registry
+              self.class.registry
+            end
+
+            def resolver_for(type)
+              self.class.resolver_for(type)
+            end
+          end
+        end
+
+        module ClassMethods
+          attr_reader :registry
+
+          def inherited(subclass)
+            # Duplicate registry
+            subclass.registry = registry.dup
+          end
+
+          def resolver_for(type)
+            registry.mapping[type] || raise("Uknown resolver #{type} for #{self}")
+          end
+
+          def register_resolver(type, resolver, after: nil, before: nil, prepend: nil)
+            registry.mapping[type] = resolver
+
+            if prepend
+              registry.unshift type
+            elsif after
+              registry.insert_after after, type
+            elsif before
+              registry.insert_before before, type
+            else
+              registry.append type
+            end
+          end
+
+          protected
+
+          attr_writer :registry
+        end
+      end
+
       attr_reader :actions, :mapping
 
       def initialize

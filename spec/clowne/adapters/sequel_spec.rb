@@ -1,7 +1,7 @@
 describe Clowne::Adapters::Sequel do
-  let(:source) { create('sequel:post') }
+  let(:record) { create('sequel:post') }
 
-  subject { described_class.new.dup_source(source) }
+  subject { described_class.dup_record(record) }
 
   it "get source's clone" do
     expect(subject).to be_a(::Sequel::Post)

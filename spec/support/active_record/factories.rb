@@ -4,7 +4,7 @@ FactoryBot.define do
     sequence(:email) { |n| "clowne_#{n}@test.rb" }
 
     transient do
-      posts_num 2
+      posts_num { 2 }
     end
 
     trait :with_posts do
@@ -19,11 +19,11 @@ FactoryBot.define do
     sequence(:contents) { |n| "About a number #{n}" }
 
     association :owner, factory: :user
-    account
+    image
     topic
 
     transient do
-      tags_num 2
+      tags_num { 2 }
     end
 
     trait :with_tags do
@@ -33,18 +33,18 @@ FactoryBot.define do
     end
   end
 
-  factory :account, class: 'AR::Account' do
-    sequence(:title) { |n| "Account ##{n}" }
+  factory :image, class: 'AR::Image' do
+    sequence(:title) { |n| "Image ##{n}" }
 
-    trait :with_history do
-      after(:create) { |account| create(:history, account: account) }
+    trait :with_preview_image do
+      after(:create) { |image| create(:preview_image, image: image) }
     end
   end
 
-  factory :history, class: 'AR::History' do
+  factory :preview_image, class: 'AR::PreviewImage' do
     sequence(:some_stuff) { |n| "Bla-bla #{n}" }
 
-    account
+    image
   end
 
   factory :topic, class: 'AR::Topic' do
@@ -52,7 +52,7 @@ FactoryBot.define do
     sequence(:description) { |n| "Let's talk about #{n}" }
 
     transient do
-      posts_num 2
+      posts_num { 2 }
     end
 
     trait :with_posts do
@@ -66,7 +66,7 @@ FactoryBot.define do
     sequence(:value) { |n| "T#{n}" }
 
     transient do
-      posts_num 2
+      posts_num { 2 }
     end
 
     trait :with_posts do

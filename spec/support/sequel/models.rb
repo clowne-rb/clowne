@@ -4,6 +4,9 @@ Sequel::Model.plugin :nested_attributes
 module Sequel
   class Topic < Sequel::Model
     one_to_many :posts
+    many_to_one :image
+
+    nested_attributes :posts
   end
 
   class User < Sequel::Model
@@ -16,11 +19,11 @@ module Sequel
   class Post < Sequel::Model
     many_to_one :topic
     many_to_one :owner, class_name: Sequel::User
-    one_to_one :account
-    # has_one :history, through: :account - Does not supported in Sequel
+    one_to_one :image
+    # has_one :prevew_image, through: :image - Does not supported in Sequel
     many_to_many :tags
 
-    nested_attributes :account
+    nested_attributes :image
     nested_attributes :tags
     nested_attributes :topic # For testing Noop resolver
 
@@ -31,15 +34,15 @@ module Sequel
     end
   end
 
-  class Account < Sequel::Model
+  class Image < Sequel::Model
     many_to_one :post
-    one_to_one :history
+    one_to_one :preview_image
 
-    nested_attributes :history
+    nested_attributes :preview_image
   end
 
-  class History < Sequel::Model
-    many_to_one :account
+  class PreviewImage < Sequel::Model
+    many_to_one :image
   end
 
   class Tag < Sequel::Model

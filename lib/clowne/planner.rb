@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
-require 'clowne/plan'
+require 'clowne/utils/plan'
 
 module Clowne
   class Planner # :nodoc: all
     class << self
       # Compile plan for cloner with traits
-      def compile(cloner, traits: nil)
+      def compile(adapter, cloner, traits: nil)
         declarations = cloner.declarations.dup
 
         declarations += compile_traits(cloner, traits) unless traits.nil?
 
-        declarations.each_with_object(Plan.new(cloner.adapter.registry)) do |declaration, plan|
+        declarations.each_with_object(
+          Utils::Plan.new(adapter.registry)
+        ) do |declaration, plan|
           declaration.compile(plan)
         end
       end
@@ -42,6 +44,7 @@ module Clowne
         traits.map do |id|
           trait = cloner.traits[id]
           raise ConfigurationError, "Trait not found: #{id}" if trait.nil?
+
           trait.compiled
         end.flatten
       end

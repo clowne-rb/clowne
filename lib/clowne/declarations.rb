@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'clowne/dsl'
-require 'clowne/plan'
+require 'clowne/utils/plan'
 
 module Clowne
   module Declarations # :nodoc:
@@ -30,3 +30,4 @@ require 'clowne/declarations/finalize'
 require 'clowne/declarations/include_association'
 require 'clowne/declarations/nullify'
 require 'clowne/declarations/trait'
+require 'clowne/declarations/after_persist'
