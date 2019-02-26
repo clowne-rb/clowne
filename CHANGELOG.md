@@ -1,6 +1,6 @@
 # Change log
 
-## 1.0.0 (2019-02-01)
+## 1.0.0 (2019-02-26)
 
 - Return `Operation` instance as a rusult of cloning. ([@ssnickolay][])
 
