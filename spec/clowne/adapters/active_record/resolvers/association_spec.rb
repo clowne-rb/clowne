@@ -76,8 +76,8 @@ describe Clowne::Adapters::ActiveRecord::Resolvers::Association do
   context 'with belongs_to' do
     let(:association) { :topic }
 
-    it 'uses Noop resolver' do
-      expect(Clowne::Adapters::ActiveRecord::Associations::Noop).to receive(:new).with(
+    it 'uses BelongsTo resolver' do
+      expect(Clowne::Adapters::ActiveRecord::Associations::BelongsTo).to receive(:new).with(
         AR::Post.reflections['topic'], source, declaration, adapter, params
       ) do
         double.tap do |resolver|

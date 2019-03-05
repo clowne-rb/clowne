@@ -49,6 +49,8 @@ class Profile < ActiveRecord::Base
   # create_table :profiles do |t|
   #   t.string :name
   # end
+
+  belongs_to :user
 end
 
 class Post < ActiveRecord::Base
@@ -111,6 +113,10 @@ cloned.profile.name
 ```
 
 Take a look at our [documentation](https://clowne.evilmartians.io) for more info!
+### Belongs To association
+You can include belongs_to association, but will do it carefully.
+If you have loop by relations in your models, when you clone it will raise SystemStackError.
+Check this [test](https://github.com/palkan/clowne/blob/master/spec/clowne/integrations/active_record_belongs_to_spec.rb) for instance.
 
 ### Supported ORM adapters
 
