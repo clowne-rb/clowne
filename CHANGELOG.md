@@ -1,5 +1,9 @@
 # Change log
 
+## 1.1.0 (2019-03-09)
+
+- Added opporotunity to include belongs_to association for active_record adapter. ([@madding][])
+
 ## 1.0.0 (2019-02-26)
 
 - Return `Operation` instance as a rusult of cloning. ([@ssnickolay][])
