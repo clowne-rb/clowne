@@ -15,7 +15,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::HABTM, :cleanup, adapter:
   describe '.call' do
     subject { Clowne::Utils::Operation.wrap { resolver.call(record) }.to_record }
 
-    it 'clones all the tags withtout cloner' do
+    it 'clones all the tags without cloner' do
       expect(subject.tags.size).to eq 2
       expect(subject.tags.first).to have_attributes(
         value: source.tags.first.value
