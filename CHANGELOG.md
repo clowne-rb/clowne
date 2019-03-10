@@ -1,5 +1,9 @@
 # Change log
 
+## 1.1.0 (2019-03-09)
+
+- Add `after_clone` declaration. ([@elardo][])
+
 ## 1.0.0 (2019-02-26)
 
 - Return `Operation` instance as a rusult of cloning. ([@ssnickolay][])
@@ -36,3 +40,4 @@ See [migration guide](https://clowne.evilmartians.io/docs/from_v02_to_v10.html)
 
 [@palkan]: https://github.com/palkan
 [@ssnickolay]: https://github.com/ssnickolay
+[@elardo]: https://github.com/elardo
