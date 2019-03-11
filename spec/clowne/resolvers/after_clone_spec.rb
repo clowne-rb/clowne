@@ -6,7 +6,7 @@ describe Clowne::Resolvers::AfterClone do
     let(:params) { {} }
     let(:block) do
       proc do |_source, record|
-        record.email = "admin#{record.id}@example.com"
+        record.email = 'admin-cloned@example.com'
       end
     end
 
@@ -21,7 +21,7 @@ describe Clowne::Resolvers::AfterClone do
 
     it 'execute after_clone block' do
       expect(result).to be_a(AR::User)
-      expect(result.email).to eq("admin#{result.id}@example.com")
+      expect(result.email).to eq('admin-cloned@example.com')
     end
 
     context 'with params' do

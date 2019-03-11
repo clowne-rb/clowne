@@ -8,33 +8,33 @@ The `after_clone` callbacks can help you to make additional operations on cloned
 Examples:
 
 ```ruby
-  class User < ActiveRecord::Base
-    # create_table :users do |t|
-    #   t.string :login
-    #   t.integer :draft_count
-    # end
+class User < ActiveRecord::Base
+  # create_table :users do |t|
+  #   t.string :login
+  #   t.integer :draft_count
+  # end
 
-    has_many :posts # all user's posts
-  end
+  has_many :posts # all user's posts
+end
 
-  class Post < ActiveRecord::Base
-    # create_table :posts do |t|
-    #   t.integer :user_id
-    #   t.boolean :is_draft
-    # end
+class Post < ActiveRecord::Base
+  # create_table :posts do |t|
+  #   t.integer :user_id
+  #   t.boolean :is_draft
+  # end
 
-    scope :draft, -> { where is_draft: true }
-  end
+  scope :draft, -> { where is_draft: true }
+end
 
-  class UserCloner < Clowne::Cloner
-  # clone user and his posts, which is drafts
+class UserCloner < Clowne::Cloner
+# clone user and his posts, which is drafts
   include_association :posts, scope: :draft
 
-    after_clone do |_origin, clone, **|
-      # actualize user attribute
-      clone.draft_count = clone.posts.count
-    end
+  after_clone do |_origin, clone, **|
+    # actualize user attribute
+    clone.draft_count = clone.posts.count
   end
+end
 ```
 
 `after_clone` runs when you call `Operation#to_record` or [`Operation#persist`]('operation.md) (or `Operation#persist!`)
