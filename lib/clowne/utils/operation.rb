@@ -55,9 +55,8 @@ module Clowne
       def to_record
         return @_record if defined?(@_record)
 
-        @_record = @clone.tap do
-          run_after_clone
-        end
+        run_after_clone
+        @_record = @clone
       end
 
       def persist!
