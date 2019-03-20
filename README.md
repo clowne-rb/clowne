@@ -123,7 +123,7 @@ Adapter                                   |1:1         |*:1         | 1:M       
 
 - [Vladimir Dementyev](https://github.com/palkan)
 
-- [Sverchkov Nikolay](https://github.com/ssnickolay)
+- [Nikolay Sverchkov](https://github.com/ssnickolay)
 
 ## License
 
