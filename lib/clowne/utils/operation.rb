@@ -35,12 +35,17 @@ module Clowne
       attr_reader :mapper
 
       def initialize(mapper)
-        @blocks = []
+        @after_clone_blocks = []
+        @after_persist_blocks = []
         @mapper = mapper
       end
 
       def add_after_persist(block)
-        @blocks.unshift(block)
+        @after_persist_blocks.unshift(block)
+      end
+
+      def add_after_clone(block)
+        @after_clone_blocks.unshift(block)
       end
 
       def add_mapping(origin, clone)
@@ -48,7 +53,10 @@ module Clowne
       end
 
       def to_record
-        @clone
+        return @_record if defined?(@_record)
+
+        run_after_clone
+        @_record = @clone
       end
 
       def persist!
@@ -76,7 +84,11 @@ module Clowne
       end
 
       def run_after_persist
-        @blocks.each(&:call)
+        @after_persist_blocks.each(&:call)
+      end
+
+      def run_after_clone
+        @after_clone_blocks.each(&:call)
       end
     end
   end

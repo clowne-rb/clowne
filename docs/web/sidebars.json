@@ -12,6 +12,7 @@
       "exclude_association",
       "nullify",
       "finalize",
+      "after_clone",
       "after_persist",
       "init_as",
       "traits",

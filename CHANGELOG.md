@@ -1,8 +1,10 @@
 # Change log
 
-## 1.1.0 (2019-03-09)
+## 1.1.0 (2019-03-20)
 
-- Added opporotunity to include belongs_to association for active_record adapter. ([@madding][])
+
+- Add `after_clone` declaration. ([@elardo][])
+- Add opporotunity to include belongs_to association for active_record adapter. ([@madding][])
 
 ## 1.0.0 (2019-02-26)
 
@@ -40,3 +42,5 @@ See [migration guide](https://clowne.evilmartians.io/docs/from_v02_to_v10.html)
 
 [@palkan]: https://github.com/palkan
 [@ssnickolay]: https://github.com/ssnickolay
+[@elardo]: https://github.com/elardo
+[@madding]: https://github.com/madding

@@ -20,5 +20,6 @@ All built-in adapters have the same order and what happens when you call `Operat
 - [`clone associations`](include_association.md)
 - [`nullify`](nullify.md) attributes
 - run [`finalize`](finalize.md) blocks. _The order of [`finalize`](finalize.md) blocks is the order they've been written._
+- run [`after_clone`](after_clone.md) callbacks
 - __SAVE CLONED RECORD__
 - run [`after_persist`](after_persist.md) callbacks

@@ -24,7 +24,9 @@ module Clowne
         def to_record
           return @_record if defined?(@_record)
 
-          @_record = @records[key(@clone)].to_model
+          @_record = @records[key(@clone)].to_model.tap do
+            run_after_clone
+          end
         end
       end
     end
