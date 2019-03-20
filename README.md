@@ -114,10 +114,10 @@ Take a look at our [documentation](https://clowne.evilmartians.io) for more info
 
 ### Supported ORM adapters
 
-Adapter                                   |1:1         | 1:M         | M:M                     |
-------------------------------------------|------------|-------------|-------------------------|
-[Active Record](https://clowne.evilmartians.io/clowne/docs/active_record.html)  | has_one    | has_many    | has_and_belongs_to|
-[Sequel](https://clowne.evilmartians.io/clowne/docs/sequel.html)                | one_to_one | one_to_many | many_to_many     |
+Adapter                                   |1:1         |*:1         | 1:M         | M:M                     |
+------------------------------------------|------------|------------|-------------|-------------------------|
+[Active Record](https://clowne.evilmartians.io/clowne/docs/active_record.html)  | has_one    | belongs_to | has_many    | has_and_belongs_to|
+[Sequel](https://clowne.evilmartians.io/clowne/docs/sequel.html)                | one_to_one | -          | one_to_many | many_to_many     |
 
 ## Maintainers
 

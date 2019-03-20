@@ -23,6 +23,13 @@ The declaration supports additional arguments:
 include_association name, scope, options
 ```
 
+### Supported Associations
+
+Adapter                                   |1:1         |*:1         | 1:M         | M:M                     |
+------------------------------------------|------------|------------|-------------|-------------------------|
+[Active Record](https://clowne.evilmartians.io/clowne/docs/active_record.html)  | has_one    | belongs_to | has_many    | has_and_belongs_to|
+[Sequel](https://clowne.evilmartians.io/clowne/docs/sequel.html)                | one_to_one | -          | one_to_many | many_to_many     |
+
 ## Scope
 
 Scope can be a:
@@ -121,3 +128,9 @@ end
 ```
 
 **NOTE:** in that case, it's not possible to provide custom scopes and options.
+
+### Belongs To association
+
+You can include belongs_to association, but will do it carefully.
+If you have loop by relations in your models, when you clone it will raise SystemStackError.
+Check this [test](https://github.com/palkan/clowne/blob/master/spec/clowne/integrations/active_record_belongs_to_spec.rb) for instance.
