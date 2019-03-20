@@ -1,4 +1,5 @@
-describe Clowne::Adapters::ActiveRecord::Associations::BelongsTo, :cleanup, adapter: :active_record do
+describe Clowne::Adapters::ActiveRecord::Associations::BelongsTo,
+         :cleanup, adapter: :active_record do
   let(:adapter) { Clowne::Adapters::ActiveRecord.new }
   let(:topic) { create(:topic) }
   let(:source) { create(:post, topic: topic) }
@@ -20,7 +21,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::BelongsTo, :cleanup, adap
       expect(subject.topic).to be_new_record
       expect(subject.topic).to have_attributes(
         title: topic.title,
-        description: topic.description,
+        description: topic.description
       )
     end
 
