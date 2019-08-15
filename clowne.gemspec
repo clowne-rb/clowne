@@ -10,18 +10,18 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'A flexible gem for cloning your models.'
   spec.description   = 'A flexible gem for cloning your models.'
-  spec.homepage      = 'https://github.com/palkan/clowne'
+  spec.homepage      = 'https://github.com/clowne-rb/clowne'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
   spec.metadata = {
-    "bug_tracker_uri" => "http://github.com/palkan/clowne/issues",
-    "changelog_uri" => "https://github.com/palkan/clowne/blob/master/CHANGELOG.md",
+    "bug_tracker_uri" => "http://github.com/clowne-rb/clowne/issues",
+    "changelog_uri" => "https://github.com/clowne-rb/clowne/blob/master/CHANGELOG.md",
     "documentation_uri" => "https://clowne.evilmartians.io/",
     "homepage_uri" => "https://clowne.evilmartians.io/",
-    "source_code_uri" => "http://github.com/palkan/clowne"
+    "source_code_uri" => "http://github.com/clowne-rb/clowne"
   }
   spec.require_paths = ['lib']
 
