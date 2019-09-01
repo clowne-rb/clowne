@@ -10,7 +10,7 @@ module Clowne
           class << self
             # rubocop: disable Metrics/ParameterLists
             def call(source, record, declaration, adapter:, params:, **_options)
-              reflection = source.class.reflections[declaration.name.to_s]
+              reflection = source.class.reflections[declaration.name]
 
               if reflection.nil?
                 raise UnknownAssociation,
