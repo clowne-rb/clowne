@@ -20,7 +20,6 @@ describe 'Pre processing', :cleanup, adapter: :active_record, transactional: :ac
   describe 'The main idea of "after clone" feature is a possibility
       to make some additional work or checks on cloned record before
       persisting it.' do
-
     subject(:operation) { AR::TopicCloner.call(topic) }
 
     it 'raises error' do

@@ -39,7 +39,6 @@ clone.persisted?
 
 _Notice: `after_persist` supported only with [`active_record`](active_record.md) adapter._
 
-<span style="display:none;"># rubocop:disable all</span>
 ```ruby
 # Before
 clone = UserCloner.call(user)
@@ -56,8 +55,6 @@ end
 
 clone = UserCloner.call(user).tap(&:persist).to_record
 ```
-<span style="display:none;"># rubocop:enable all</span>
-
 ## Sequel
 
 ### Use `to_record` instead of `to_model`
@@ -78,7 +75,6 @@ clone.new?
 
 ### Use `operation#persist` instead of converting to model and calling `#save`
 
-<span style="display:none;"># rubocop:disable all</span>
 ```ruby
 # Before
 record_wrapper = UserCloner.call(user)
@@ -88,4 +84,3 @@ clone.save
 # After
 clone = UserCloner.call(user).tap(&:persist).to_record
 ```
-<span style="display:none;"># rubocop:enable all</span>
