@@ -9,13 +9,13 @@ require 'clowne/adapters/base'
 # Declarative models cloning
 module Clowne
   # List of built-in adapters
-  # rubocop:disable AlignHash
+  # rubocop:disable Layout/AlignHash
   ADAPTERS = {
     base:          'Base',
     active_record: 'ActiveRecord',
     sequel:        'Sequel'
   }.freeze
-  # rubocop:enable AlignHash
+  # rubocop:enable Layout/AlignHash
 
   class << self
     attr_reader :default_adapter, :raise_on_override

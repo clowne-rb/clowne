@@ -5,7 +5,7 @@ notifications:
   email: false
 
 before_install:
-  - gem update --system
+  - gem update --system --no-prerelease
   - gem install bundler
 
 before_script:
@@ -27,17 +27,13 @@ matrix:
       gemfile: gemfiles/jruby.gemfile
     - rvm: jruby-9.1.15.0
       gemfile: gemfiles/jruby.gemfile
-    - rvm: 2.5.0
-      gemfile: Gemfile
-    - rvm: 2.4.3
+    - rvm: 2.5.7
       gemfile: Gemfile
       env:
         - CC_REPORT=true
         - DEPLOY_ME=true
-    - rvm: 2.4.1
+    - rvm: 2.4.9
       gemfile: gemfiles/activerecord42.gemfile
-    - rvm: 2.3.1
-      gemfile: Gemfile
   allow_failures:
     - rvm: ruby-head
       gemfile: gemfiles/railsmaster.gemfile

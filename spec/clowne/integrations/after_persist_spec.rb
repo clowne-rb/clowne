@@ -48,10 +48,9 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
       to fix broken associations when you clone complex record.
       In our case, topic has a link to one of the posts images
       and we need to update the cloned topic with the cloned image' do
-
     subject(:operation) { AR::TopicCloner.call(topic) }
 
-    # rubocop:disable MultilineMethodCallIndentation
+    # rubocop:disable Layout/MultilineMethodCallIndentation
     it 'clone and use cloned image' do
       expect do
         operation.persist
@@ -64,7 +63,7 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
 
       expect(cloned.image.post.topic).to eq(cloned)
     end
-    # rubocop:enable MultilineMethodCallIndentation
+    # rubocop:enable Layout/MultilineMethodCallIndentation
   end
 
   describe 'pass mappping' do
