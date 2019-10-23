@@ -1,6 +1,8 @@
 ActiveRecord::Schema.define do
   self.verbose = false
 
+  create_table :schema_migrations, force: true
+
   create_table :topics, force: true do |t|
     t.string :title
     t.string :description

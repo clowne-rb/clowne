@@ -1,6 +1,7 @@
 [![Gem Version](https://badge.fury.io/rb/clowne.svg)](https://badge.fury.io/rb/clowne)
-[![Build Status](https://travis-ci.org/palkan/clowne.svg?branch=master)](https://travis-ci.org/palkan/clowne)
-[![Test Coverage](https://codeclimate.com/github/palkan/clowne/badges/coverage.svg)](https://codeclimate.com/github/palkan/clowne/coverage)
+[![Build Status](https://travis-ci.org/clowne-rb/clowne.svg?branch=master)](https://travis-ci.org/clowne-rb/clowne)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/9143c4f91e9d1d2a4bd1/test_coverage)](https://codeclimate.com/github/clowne-rb/clowne/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/9143c4f91e9d1d2a4bd1/maintainability)](https://codeclimate.com/github/clowne-rb/clowne/maintainability)
 [![Docs](https://img.shields.io/badge/docs-link-brightgreen.svg)](https://clowne.evilmartians.io)
 
 # Clowne
