@@ -7,7 +7,6 @@ module Clowne
     class Sequel # :nodoc: all
       class Operation < Clowne::Utils::Operation
         include Clowne::Ext::RecordKey
-
         def initialize(mapper)
           super
           @records = {}
@@ -23,6 +22,7 @@ module Clowne
 
         def to_record
           return @_record if defined?(@_record)
+          record_wrapper(@clone)
 
           @_record = @records[key(@clone)].to_model.tap do
             run_after_clone

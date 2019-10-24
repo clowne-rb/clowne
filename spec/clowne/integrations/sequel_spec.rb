@@ -1,6 +1,10 @@
 describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
   before(:all) do
     module Sequel
+      class UserCloner < Clowne::Cloner
+        finalize { |_, record| record.email = 'test@test.com' }
+      end
+
       class ImgCloner < Clowne::Cloner
         exclude_association :preview_image
 
@@ -54,6 +58,7 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
 
   let!(:post) { create('sequel:post', title: 'TeamCity') }
   let!(:image) { create('sequel:image', title: 'Manager', post: post) }
+  let!(:user) { create('sequel:user', email: 'user@email.com') }
   let!(:preview_image) do
     create('sequel:preview_image', some_stuff: 'This is preview_image about my life', image: image)
   end
@@ -145,5 +150,12 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
     # tags
     tags_clone = a_post.tags
     expect(tags_clone.map(&:value)).to match_array(%w[CI CD JVM ROM])
+  end
+
+  it 'works with no association model' do
+    expect(Sequel::User.count).to eq(2)
+    cloned_wrapper = Sequel::UserCloner.call(user)
+    cloned = cloned_wrapper.persist
+    expect(Sequel::User.count).to eq(3)
   end
 end
