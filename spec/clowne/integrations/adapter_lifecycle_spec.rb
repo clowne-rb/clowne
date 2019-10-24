@@ -26,14 +26,14 @@ describe 'Adapter Lifecycle', :cleanup, adapter: :base, transactional: :active_r
   end
 
   shared_examples 'pass adapter' do
-    # rubocop:disable MultilineMethodCallIndentation
+    # rubocop:disable Layout/MultilineMethodCallIndentation
     it 'clones topic' do
       expect do
         operation.persist
       end.to change(AR::Topic, :count).by(+1)
         .and change(AR::Post, :count).by(+3)
     end
-    # rubocop:enable MultilineMethodCallIndentation
+    # rubocop:enable Layout/MultilineMethodCallIndentation
 
     it 'uses DummyAdapter in all levels' do
       operation.persist

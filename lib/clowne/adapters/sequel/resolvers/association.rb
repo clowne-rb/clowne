@@ -36,7 +36,7 @@ module Clowne
 
             def clonable_assoc?(source, declaration)
               source.class.plugins.include?(::Sequel::Plugins::NestedAttributes) &&
-                source.respond_to?(:"#{declaration.name.to_s}_attributes=")
+                source.respond_to?(:"#{declaration.name}_attributes=")
             end
           end
         end

@@ -1,3 +1,7 @@
+SEQUEL_DB.create_table :schema_migrations do
+  primary_key :id
+end
+
 SEQUEL_DB.create_table :topics do
   primary_key :id
   String :title

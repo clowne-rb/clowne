@@ -7,15 +7,13 @@ AllCops:
     - 'docs/web/**/*'
     - 'vendor/**/*'
     - 'gemfiles/vendor/**/*'
+    - 'clowne.gemspec'
   DisplayCopNames: true
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.3
 
 Markdown:
   WarnInvalid: true
-
-Rails:
-  Enabled: false
 
 Naming/AccessorMethodName:
   Enabled: false
