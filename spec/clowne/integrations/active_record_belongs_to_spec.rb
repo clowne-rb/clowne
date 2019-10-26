@@ -30,6 +30,8 @@ describe 'AR belongs to loop', :cleanup, adapter: :active_record, transactional:
     expect(AR::Post.count).to eq(1)
     expect(AR::Image.count).to eq(1)
 
-    expect { AR::PostCloner.call(post).to_record }.to raise_error(SystemStackError)
+    expect { AR::PostCloner.call(post).to_record }.to(raise_error do |error|
+      expect(%w[SystemStackError Java::JavaLang::StackOverflowError]).to include(error.class.name)
+    end)
   end
 end
