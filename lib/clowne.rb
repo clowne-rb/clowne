@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require 'clowne/version'
-require 'clowne/declarations'
-require 'clowne/cloner'
+require "clowne/version"
+require "clowne/declarations"
+require "clowne/cloner"
 
-require 'clowne/adapters/base'
+require "clowne/adapters/base"
 
 # Declarative models cloning
 module Clowne
   # List of built-in adapters
   # rubocop:disable Layout/AlignHash
   ADAPTERS = {
-    base:          'Base',
-    active_record: 'ActiveRecord',
-    sequel:        'Sequel'
+    base:          "Base",
+    active_record: "ActiveRecord",
+    sequel:        "Sequel",
   }.freeze
   # rubocop:enable Layout/AlignHash
 
@@ -40,5 +40,5 @@ module Clowne
   end
 end
 
-require 'clowne/adapters/active_record' if defined?(::ActiveRecord)
-require 'clowne/adapters/sequel' if defined?(::Sequel)
+require "clowne/adapters/active_record" if defined?(::ActiveRecord)
+require "clowne/adapters/sequel" if defined?(::Sequel)

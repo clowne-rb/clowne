@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'clowne/ext/yield_self_then'
+require "clowne/ext/yield_self_then"
 
 using Clowne::Ext::YieldSelfThen
 

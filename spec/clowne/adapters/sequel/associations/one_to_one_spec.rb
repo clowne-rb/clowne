@@ -1,7 +1,7 @@
 describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :sequel do
   let(:adapter) { Clowne::Adapters::Sequel.new }
-  let(:post) { create('sequel:post') }
-  let!(:image) { create('sequel:image', :with_preview_image, post: post) }
+  let(:post) { create("sequel:post") }
+  let!(:image) { create("sequel:image", :with_preview_image, post: post) }
   let(:source) { post }
   let(:declaration_params) { {} }
   let(:record) { Sequel::Post.new }
@@ -27,7 +27,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
 
         trait :mark_as_clone do
           finalize do |source, record|
-            record.title = source.title + ' (Cloned)'
+            record.title = source.title + " (Cloned)"
           end
         end
       end
@@ -41,7 +41,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
 
         trait :mark_as_clone do
           finalize do |source, record|
-            record.title = source.title + ' (Cloned)'
+            record.title = source.title + " (Cloned)"
           end
         end
       end
@@ -49,14 +49,14 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
   end
 
   after(:all) do
-    Sequel.send(:remove_const, 'ImageCloner')
-    Sequel.send(:remove_const, 'PreviewImageCloner')
+    Sequel.send(:remove_const, "ImageCloner")
+    Sequel.send(:remove_const, "PreviewImageCloner")
   end
 
-  describe '.call' do
+  describe ".call" do
     subject { Clowne::Adapters::Sequel::Operation.wrap { resolver.call(record) }.to_record }
 
-    it 'infers default cloner from model name' do
+    it "infers default cloner from model name" do
       expect(subject.image).to be_new
       expect(subject.image).to be_a(Sequel::Image)
       expect(subject.image.to_hash).to eq(
@@ -74,11 +74,11 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
       )
     end
 
-    context 'with params' do
-      let(:declaration_params) { { params: true } }
-      let(:params) { { include_timestamps: true } }
+    context "with params" do
+      let(:declaration_params) { {params: true} }
+      let(:params) { {include_timestamps: true} }
 
-      it 'pass params to child cloner' do
+      it "pass params to child cloner" do
         expect(subject.image).to be_new
         expect(subject.image).to have_attributes(
           post_id: nil,
@@ -94,10 +94,10 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
       end
     end
 
-    context 'with traits' do
-      let(:declaration_params) { { traits: [:mark_as_clone] } }
+    context "with traits" do
+      let(:declaration_params) { {traits: [:mark_as_clone]} }
 
-      it 'includes traits for self' do
+      it "includes traits for self" do
         expect(subject.image).to be_new
         expect(subject.image).to have_attributes(
           post_id: nil,
@@ -111,7 +111,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
       end
     end
 
-    context 'with custom cloner' do
+    context "with custom cloner" do
       let(:image_cloner) do
         Class.new(Clowne::Cloner) do
           finalize do |source, record, _params|
@@ -120,9 +120,9 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
         end
       end
 
-      let(:declaration_params) { { clone_with: image_cloner } }
+      let(:declaration_params) { {clone_with: image_cloner} }
 
-      it 'applies custom cloner' do
+      it "applies custom cloner" do
         expect(subject.image).to be_new
         expect(subject.image).to have_attributes(
           post_id: nil,

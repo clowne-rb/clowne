@@ -1,5 +1,5 @@
 describe Clowne::Adapters::Sequel do
-  let(:record) { create('sequel:post') }
+  let(:record) { create("sequel:post") }
 
   subject { described_class.dup_record(record) }
 

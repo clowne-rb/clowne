@@ -23,7 +23,7 @@ module Clowne
         # rubocop: disable Metrics/AbcSize
         def match(expected, _actual)
           @actual = plan.declarations
-                        .find { |key, decl| key == :association && decl.name == expected }
+            .find { |key, decl| key == :association && decl.name == expected }
 
           return false if @actual.nil?
 
@@ -60,10 +60,10 @@ module Clowne
             expected_params[param] = options.fetch(param, UNDEFINED)
           end
 
-          raise ArgumentError, 'Lambda scope is not supported' if
+          raise ArgumentError, "Lambda scope is not supported" if
             expected_params[:scope].is_a?(Proc)
 
-          raise ArgumentError, 'Lambda params is not supported' if
+          raise ArgumentError, "Lambda params is not supported" if
             expected_params[:params].is_a?(Proc)
         end
 

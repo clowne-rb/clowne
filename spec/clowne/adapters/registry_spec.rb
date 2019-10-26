@@ -1,7 +1,7 @@
 describe Clowne::Adapters::Registry do
   subject { described_class.new }
 
-  it 'works' do
+  it "works" do
     subject.append :a
     subject.unshift :b
     expect(subject.actions).to eq([:b, :a])
@@ -19,7 +19,7 @@ describe Clowne::Adapters::Registry do
     expect(subject.actions).to eq([:d, :e, :b, :c, :a, :f])
   end
 
-  it 'override if not unique' do
+  it "override if not unique" do
     subject.append :a
     subject.append :b
     subject.append :c
@@ -34,7 +34,7 @@ describe Clowne::Adapters::Registry do
     expect(subject.actions).to eq([:b, :c, :a])
   end
 
-  it 'raises if insert position is undefined' do
+  it "raises if insert position is undefined" do
     expect { subject.insert_before :a, :b }.to raise_error(/not found/)
 
     expect { subject.insert_after :a, :b }.to raise_error(/not found/)

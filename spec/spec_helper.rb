@@ -1,17 +1,17 @@
-if ENV['CC_REPORT']
-  require 'simplecov'
+if ENV["CC_REPORT"]
+  require "simplecov"
   SimpleCov.start do
-    add_filter '/spec/'
+    add_filter "/spec/"
   end
 end
 
-require 'active_record'
-require 'sequel'
-require 'clowne'
-require 'factory_bot'
+require "active_record"
+require "sequel"
+require "clowne"
+require "factory_bot"
 
 begin
-  require 'pry-byebug'
+  require "pry-byebug"
 rescue LoadError # rubocop:disable Lint/HandleExceptions
 end
 
@@ -24,7 +24,7 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 Clowne.default_adapter = :base
 
 RSpec.configure do |config|
-  config.example_status_persistence_file_path = '.rspec_status'
+  config.example_status_persistence_file_path = ".rspec_status"
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
 
@@ -35,8 +35,8 @@ RSpec.configure do |config|
   end
 
   config.include FactoryBot::Syntax::Methods
-  config.include_context 'adapter:active_record', adapter: :active_record
-  config.include_context 'adapter:sequel', adapter: :sequel
+  config.include_context "adapter:active_record", adapter: :active_record
+  config.include_context "adapter:sequel", adapter: :sequel
 
   config.before(:each) do
     Clowne::Utils::Operation.clear!

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'clowne/ext/orm_ext'
+require "clowne/ext/orm_ext"
 
 module Clowne
   module Adapters
@@ -21,9 +21,9 @@ end
 
 ::Sequel::Model.extend Clowne::Ext::ORMExt
 
-require 'clowne/adapters/sequel/operation'
-require 'clowne/adapters/sequel/associations'
-require 'clowne/adapters/sequel/copier'
-require 'clowne/adapters/sequel/record_wrapper'
-require 'clowne/adapters/sequel/resolvers/association'
-require 'clowne/adapters/sequel/resolvers/after_persist'
+require "clowne/adapters/sequel/operation"
+require "clowne/adapters/sequel/associations"
+require "clowne/adapters/sequel/copier"
+require "clowne/adapters/sequel/record_wrapper"
+require "clowne/adapters/sequel/resolvers/association"
+require "clowne/adapters/sequel/resolvers/after_persist"

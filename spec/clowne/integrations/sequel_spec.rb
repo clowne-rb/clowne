@@ -1,8 +1,8 @@
-describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
+describe "Sequel adapter", :cleanup, adapter: :sequel, transactional: :sequel do
   before(:all) do
     module Sequel
       class UserCloner < Clowne::Cloner
-        finalize { |_, record| record.email = 'test@test.com' }
+        finalize { |_, record| record.email = "test@test.com" }
       end
 
       class ImgCloner < Clowne::Cloner
@@ -24,13 +24,13 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
       end
 
       class PostCloner < BasePostCloner
-        include_association :image, clone_with: 'Sequel::ImgCloner',
+        include_association :image, clone_with: "Sequel::ImgCloner",
                                     traits: %i[with_preview_image nullify_title]
         include_association :tags, ->(params) { where(value: params[:tags]) if params[:tags] }
 
         trait :mark_as_clone do
           finalize do |source, record|
-            record.title = source.title + ' Super!'
+            record.title = source.title + " Super!"
           end
         end
 
@@ -44,7 +44,7 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
 
       class PreviewImageCloner < Clowne::Cloner
         finalize do |_source, record|
-          record.some_stuff = record.some_stuff + ' - 2'
+          record.some_stuff = record.some_stuff + " - 2"
         end
       end
     end
@@ -56,21 +56,21 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
     end
   end
 
-  let!(:post) { create('sequel:post', title: 'TeamCity') }
-  let!(:image) { create('sequel:image', title: 'Manager', post: post) }
-  let!(:user) { create('sequel:user', email: 'user@email.com') }
+  let!(:post) { create("sequel:post", title: "TeamCity") }
+  let!(:image) { create("sequel:image", title: "Manager", post: post) }
+  let!(:user) { create("sequel:user", email: "user@email.com") }
   let!(:preview_image) do
-    create('sequel:preview_image', some_stuff: 'This is preview_image about my life', image: image)
+    create("sequel:preview_image", some_stuff: "This is preview_image about my life", image: image)
   end
   let(:topic) { post.topic }
 
   let!(:tags) do
-    %w[CI CD JVM].map { |value| create('sequel:tag', value: value) }.tap do |items|
+    %w[CI CD JVM].map { |value| create("sequel:tag", value: value) }.tap do |items|
       items.each { |tag| post.add_tag(tag) }
     end
   end
 
-  it 'clone all stuff' do
+  it "clone all stuff" do
     expect(Sequel::Topic.count).to eq(1)
     expect(Sequel::Post.count).to eq(1)
     expect(Sequel::Tag.count).to eq(3)
@@ -81,7 +81,7 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
       post,
       traits: :mark_as_clone,
       tags: %w[CI CD],
-      post_contents: 'THIS IS CLONE! (☉_☉)'
+      post_contents: "THIS IS CLONE! (☉_☉)"
     )
     cloned = cloned_wrapper.persist
 
@@ -93,8 +93,8 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
 
     # post
     expect(cloned).to be_a(Sequel::Post)
-    expect(cloned.title).to eq('TeamCity Super!')
-    expect(cloned.contents).to eq('THIS IS CLONE! (☉_☉)')
+    expect(cloned.title).to eq("TeamCity Super!")
+    expect(cloned.contents).to eq("THIS IS CLONE! (☉_☉)")
 
     # image
     image_clone = cloned.image
@@ -104,16 +104,16 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
 
     # preview_image
     preview_image_clone = image_clone.preview_image
-    expect(preview_image_clone.some_stuff).to eq('This is preview_image about my life - 2')
+    expect(preview_image_clone.some_stuff).to eq("This is preview_image about my life - 2")
 
     # tags
     tags_clone = cloned.tags
     expect(tags_clone.map(&:value)).to match_array(%w[CI CD])
   end
 
-  it 'works with existing post', :aggregate_failures do
-    a_post = create('sequel:post', title: 'Thing').tap do |p|
-      p.add_tag create('sequel:tag', value: 'ROM')
+  it "works with existing post", :aggregate_failures do
+    a_post = create("sequel:post", title: "Thing").tap do |p|
+      p.add_tag create("sequel:tag", value: "ROM")
     end
 
     expect(Sequel::Topic.count).to eq(2)
@@ -140,19 +140,19 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
 
     # post
     expect(a_post).to be_a(Sequel::Post)
-    expect(a_post.title).to eq('Thing')
+    expect(a_post.title).to eq("Thing")
     expect(a_post.contents).to eq(post.contents)
 
     # preview_image
     preview_image_clone = a_post.image.preview_image
-    expect(preview_image_clone.some_stuff).to eq('This is preview_image about my life - 2')
+    expect(preview_image_clone.some_stuff).to eq("This is preview_image about my life - 2")
 
     # tags
     tags_clone = a_post.tags
     expect(tags_clone.map(&:value)).to match_array(%w[CI CD JVM ROM])
   end
 
-  it 'works with no association model' do
+  it "works with no association model" do
     expect(Sequel::User.count).to eq(2)
     Sequel::UserCloner.call(user).persist
     expect(Sequel::User.count).to eq(3)

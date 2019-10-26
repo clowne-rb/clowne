@@ -6,7 +6,7 @@ module Clowne
       module Specifications # :nodoc: all
         class AfterPersistDoesNotSupportException < StandardError
           def message
-            'Sequel adapter does not support after_persist callback'
+            "Sequel adapter does not support after_persist callback"
           end
         end
       end

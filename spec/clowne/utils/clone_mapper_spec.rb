@@ -7,7 +7,7 @@ describe Clowne::Utils::CloneMapper do
   let(:clone) { AR::Post.new }
   let(:clone2) { AR::Post.new }
 
-  specify 'mapper flow' do
+  specify "mapper flow" do
     mapper.add(origin, clone)
     mapper.add(origin2, clone2)
 

@@ -1,9 +1,9 @@
 describe Clowne::Adapters::ActiveRecord::Associations::BelongsTo,
-         :cleanup, adapter: :active_record do
+  :cleanup, adapter: :active_record do
   let(:adapter) { Clowne::Adapters::ActiveRecord.new }
   let(:topic) { create(:topic) }
   let(:source) { create(:post, topic: topic) }
-  let(:reflection) { AR::Post.reflections['topic'] }
+  let(:reflection) { AR::Post.reflections["topic"] }
   let(:record) { AR::Post.new }
   let(:scope) { {} }
   let(:declaration_params) { {} }
@@ -14,10 +14,10 @@ describe Clowne::Adapters::ActiveRecord::Associations::BelongsTo,
 
   subject(:resolver) { described_class.new(reflection, source, declaration, adapter, params) }
 
-  describe '.call' do
+  describe ".call" do
     subject { Clowne::Utils::Operation.wrap { resolver.call(record) }.to_record }
 
-    it 'clones the topic without cloner' do
+    it "clones the topic without cloner" do
       expect(subject.topic).to be_new_record
       expect(subject.topic).to have_attributes(
         title: topic.title,
@@ -25,25 +25,25 @@ describe Clowne::Adapters::ActiveRecord::Associations::BelongsTo,
       )
     end
 
-    context 'with custom cloner' do
+    context "with custom cloner" do
       let(:topic_cloner) do
         Class.new(Clowne::Cloner) do
           finalize do |_source, record, params|
-            record.title += params.fetch(:suffix, '-2')
-            record.description += ' (Cloned)'
+            record.title += params.fetch(:suffix, "-2")
+            record.description += " (Cloned)"
           end
 
           trait :mark_as_clone do
             finalize do |_source, record|
-              record.title += ' (Cloned)'
+              record.title += " (Cloned)"
             end
           end
         end
       end
 
-      let(:declaration_params) { { clone_with: topic_cloner } }
+      let(:declaration_params) { {clone_with: topic_cloner} }
 
-      it 'applies custom cloner' do
+      it "applies custom cloner" do
         expect(subject.topic).to be_new_record
         expect(subject.topic).to have_attributes(
           title: "#{topic.title}-2",
@@ -51,11 +51,11 @@ describe Clowne::Adapters::ActiveRecord::Associations::BelongsTo,
         )
       end
 
-      context 'with params' do
-        let(:declaration_params) { { clone_with: topic_cloner, params: true } }
-        let(:params) { { suffix: '-new' } }
+      context "with params" do
+        let(:declaration_params) { {clone_with: topic_cloner, params: true} }
+        let(:params) { {suffix: "-new"} }
 
-        it 'pass params to child cloner' do
+        it "pass params to child cloner" do
           expect(subject.topic).to be_new_record
           expect(subject.topic).to have_attributes(
             title: "#{topic.title}-new",
@@ -64,10 +64,10 @@ describe Clowne::Adapters::ActiveRecord::Associations::BelongsTo,
         end
       end
 
-      context 'with traits' do
-        let(:declaration_params) { { clone_with: topic_cloner, traits: :mark_as_clone } }
+      context "with traits" do
+        let(:declaration_params) { {clone_with: topic_cloner, traits: :mark_as_clone} }
 
-        it 'pass traits to child cloner' do
+        it "pass traits to child cloner" do
           expect(subject.topic).to be_new_record
           expect(subject.topic).to have_attributes(
             title: "#{topic.title}-2 (Cloned)",

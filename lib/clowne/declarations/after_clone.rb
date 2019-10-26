@@ -6,7 +6,7 @@ module Clowne
       attr_reader :block
 
       def initialize
-        raise ArgumentError, 'Block is required for after_clone' unless block_given?
+        raise ArgumentError, "Block is required for after_clone" unless block_given?
 
         @block = Proc.new
       end

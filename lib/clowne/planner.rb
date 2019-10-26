@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'clowne/utils/plan'
+require "clowne/utils/plan"
 
 module Clowne
   class Planner # :nodoc: all

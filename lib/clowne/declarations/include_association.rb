@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'clowne/ext/string_constantize'
+require "clowne/ext/string_constantize"
 
 module Clowne
   module Declarations

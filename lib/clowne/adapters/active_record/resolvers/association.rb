@@ -14,7 +14,7 @@ module Clowne
 
               if reflection.nil?
                 raise UnknownAssociation,
-                      "Association #{declaration.name} couldn't be found for #{source.class}"
+                  "Association #{declaration.name} couldn't be found for #{source.class}"
               end
 
               cloner_class = Associations.cloner_for(reflection)

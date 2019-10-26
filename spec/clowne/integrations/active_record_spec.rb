@@ -1,4 +1,4 @@
-describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active_record do
+describe "AR adapter", :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
       class ImgCloner < Clowne::Cloner
@@ -18,14 +18,14 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       end
 
       class PostCloner < BasePostCloner
-        include_association :image, clone_with: 'AR::ImgCloner',
+        include_association :image, clone_with: "AR::ImgCloner",
                                     traits: %i[with_preview_image nullify_title],
                                     params: true
         include_association :tags, ->(params) { where(value: params[:tags]) if params[:tags] }
 
         trait :mark_as_clone do
           finalize do |source, record|
-            record.title = source.title + ' Super!'
+            record.title = source.title + " Super!"
           end
         end
 
@@ -51,11 +51,11 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     end
   end
 
-  let!(:image) { create(:image, title: 'Manager') }
+  let!(:image) { create(:image, title: "Manager") }
   let!(:preview_image) do
-    create(:preview_image, some_stuff: 'This is preview about my life', image: image)
+    create(:preview_image, some_stuff: "This is preview about my life", image: image)
   end
-  let!(:post) { create(:post, title: 'TeamCity', image: image) }
+  let!(:post) { create(:post, title: "TeamCity", image: image) }
   let(:topic) { post.topic }
 
   let!(:tags) do
@@ -64,7 +64,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     end
   end
 
-  it 'clone all stuff' do
+  it "clone all stuff" do
     expect(AR::Topic.count).to eq(1)
     expect(AR::Post.count).to eq(1)
     expect(AR::Tag.count).to eq(3)
@@ -75,8 +75,8 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       post,
       traits: :mark_as_clone,
       tags: %w[CI CD],
-      post_contents: 'THIS IS CLONE! (☉_☉)',
-      preview_image: { suffix: ' - 2' }
+      post_contents: "THIS IS CLONE! (☉_☉)",
+      preview_image: {suffix: " - 2"}
     ).to_record
 
     cloned.save!
@@ -89,8 +89,8 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
 
     # post
     expect(cloned).to be_a(AR::Post)
-    expect(cloned.title).to eq('TeamCity Super!')
-    expect(cloned.contents).to eq('THIS IS CLONE! (☉_☉)')
+    expect(cloned.title).to eq("TeamCity Super!")
+    expect(cloned.contents).to eq("THIS IS CLONE! (☉_☉)")
 
     # image
     image_clone = cloned.image
@@ -100,16 +100,16 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
 
     # preview_image
     preview_image_clone = image_clone.preview_image
-    expect(preview_image_clone.some_stuff).to eq('This is preview about my life - 2')
+    expect(preview_image_clone.some_stuff).to eq("This is preview about my life - 2")
 
     # tags
     tags_clone = cloned.tags
     expect(tags_clone.map(&:value)).to match_array(%w[CI CD])
   end
 
-  it 'works with existing post' do
-    a_post = create(:post, title: 'Thing').tap do |p|
-      p.tags << create(:tag, value: 'RUM')
+  it "works with existing post" do
+    a_post = create(:post, title: "Thing").tap do |p|
+      p.tags << create(:tag, value: "RUM")
     end
 
     expect(AR::Topic.count).to eq(2)
@@ -122,7 +122,7 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
       post,
       traits: :copy,
       target: a_post,
-      preview_image: { suffix: ' - 3' }
+      preview_image: {suffix: " - 3"}
     ).to_record
     cloned.save!
 
@@ -135,21 +135,21 @@ describe 'AR adapter', :cleanup, adapter: :active_record, transactional: :active
     expect(AR::PreviewImage.count).to eq(2)
 
     # post
-    expect(a_post.title).to eq('Thing')
+    expect(a_post.title).to eq("Thing")
     expect(a_post.contents).to eq(post.contents)
 
     # preview_image
     preview_image_clone = a_post.image.preview_image
-    expect(preview_image_clone.some_stuff).to eq('This is preview about my life - 3')
+    expect(preview_image_clone.some_stuff).to eq("This is preview about my life - 3")
 
     # tags
     tags_clone = a_post.tags
     expect(tags_clone.map(&:value)).to match_array(%w[CI CD JVM RUM])
   end
 
-  it 'works with partial clone' do
+  it "works with partial clone" do
     cloned = AR::PostCloner.partial_apply(
-      { association: :tags },
+      {association: :tags},
       post,
       traits: :mark_as_clone,
       tags: %w[CI CD]

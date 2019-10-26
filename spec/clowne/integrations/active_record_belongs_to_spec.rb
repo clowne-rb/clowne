@@ -1,4 +1,4 @@
-describe 'AR belongs to loop', :cleanup, adapter: :active_record, transactional: :active_record do
+describe "AR belongs to loop", :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
       class PostCloner < Clowne::Cloner
@@ -21,11 +21,11 @@ describe 'AR belongs to loop', :cleanup, adapter: :active_record, transactional:
     end
   end
 
-  let!(:post) { create(:post, title: 'TeamCity', topic: topic, image: image) }
-  let(:image) { create(:image, title: 'Manager') }
+  let!(:post) { create(:post, title: "TeamCity", topic: topic, image: image) }
+  let(:image) { create(:image, title: "Manager") }
   let(:topic) { create(:topic, image: image) }
 
-  it 'clone loop' do
+  it "clone loop" do
     expect(AR::Topic.count).to eq(1)
     expect(AR::Post.count).to eq(1)
     expect(AR::Image.count).to eq(1)

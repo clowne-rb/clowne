@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-shared_context 'transactional:active_record', transactional: :active_record do
+shared_context "transactional:active_record", transactional: :active_record do
   prepend_before(:each) do
     ActiveRecord::Base.connection.begin_transaction(joinable: false)
   end
@@ -10,7 +10,7 @@ shared_context 'transactional:active_record', transactional: :active_record do
   end
 end
 
-shared_context 'transactional:sequel', transactional: :sequel do
+shared_context "transactional:sequel", transactional: :sequel do
   prepend_before(:each) do
     @conn = SEQUEL_DB.pool.send :acquire, Thread.current
     SEQUEL_DB.send(:add_transaction, @conn, {})

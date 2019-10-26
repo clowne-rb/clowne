@@ -9,7 +9,7 @@ module Clowne
             child = association
             return record unless child
 
-            warn '[Clowne] Has one association does not support scope' unless declaration.scope.nil?
+            warn "[Clowne] Has one association does not support scope" unless declaration.scope.nil?
 
             child_clone = clone_one(child)
             child_clone[:"#{reflection[:key]}"] = nil

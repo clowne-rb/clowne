@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'clowne/utils/clone_mapper'
+require "clowne/utils/clone_mapper"
 
 module Clowne
   module Utils
@@ -74,12 +74,12 @@ module Clowne
       end
 
       def save
-        warn '[DEPRECATION] `save` is deprecated.  Please use `persist` instead.'
+        warn "[DEPRECATION] `save` is deprecated.  Please use `persist` instead."
         @clone.save
       end
 
       def save!
-        warn '[DEPRECATION] `save!` is deprecated.  Please use `persist!` instead.'
+        warn "[DEPRECATION] `save!` is deprecated.  Please use `persist!` instead."
         @clone.save!
       end
 

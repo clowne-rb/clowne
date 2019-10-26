@@ -1,4 +1,4 @@
-describe 'Adapter Lifecycle', :cleanup, adapter: :base, transactional: :active_record do
+describe "Adapter Lifecycle", :cleanup, adapter: :base, transactional: :active_record do
   class DummyAdapter < Clowne::Adapters::ActiveRecord
     class << self
       def dup_record(record)
@@ -25,9 +25,9 @@ describe 'Adapter Lifecycle', :cleanup, adapter: :base, transactional: :active_r
     end
   end
 
-  shared_examples 'pass adapter' do
+  shared_examples "pass adapter" do
     # rubocop:disable Layout/MultilineMethodCallIndentation
-    it 'clones topic' do
+    it "clones topic" do
       expect do
         operation.persist
       end.to change(AR::Topic, :count).by(+1)
@@ -35,7 +35,7 @@ describe 'Adapter Lifecycle', :cleanup, adapter: :base, transactional: :active_r
     end
     # rubocop:enable Layout/MultilineMethodCallIndentation
 
-    it 'uses DummyAdapter in all levels' do
+    it "uses DummyAdapter in all levels" do
       operation.persist
       clone = operation.to_record
       expect(clone.title).to eq("I'm a clone of AR::Topic-#{topic.id}")
@@ -46,8 +46,8 @@ describe 'Adapter Lifecycle', :cleanup, adapter: :base, transactional: :active_r
   let!(:topic) { create(:topic) }
   let!(:posts) { create_list(:post, 3, topic: topic) }
 
-  describe 'Pass root adapter over cloners' do
-    it_behaves_like 'pass adapter' do
+  describe "Pass root adapter over cloners" do
+    it_behaves_like "pass adapter" do
       subject(:operation) { AR::TopicCloner.call(topic) }
 
       before do
@@ -58,8 +58,8 @@ describe 'Adapter Lifecycle', :cleanup, adapter: :base, transactional: :active_r
     end
   end
 
-  describe 'Pass adapter over cloners as option' do
-    it_behaves_like 'pass adapter' do
+  describe "Pass adapter over cloners as option" do
+    it_behaves_like "pass adapter" do
       subject(:operation) { AR::TopicCloner.call(topic, adapter: DummyAdapter.new) }
     end
   end
