@@ -154,8 +154,7 @@ describe 'Sequel adapter', :cleanup, adapter: :sequel, transactional: :sequel do
 
   it 'works with no association model' do
     expect(Sequel::User.count).to eq(2)
-    cloned_wrapper = Sequel::UserCloner.call(user)
-    cloned = cloned_wrapper.persist
+    Sequel::UserCloner.call(user).persist
     expect(Sequel::User.count).to eq(3)
   end
 end

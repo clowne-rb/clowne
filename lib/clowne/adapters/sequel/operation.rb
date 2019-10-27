@@ -22,6 +22,7 @@ module Clowne
 
         def to_record
           return @_record if defined?(@_record)
+
           record_wrapper(@clone)
 
           @_record = @records[key(@clone)].to_model.tap do
