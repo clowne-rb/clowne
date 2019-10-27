@@ -1,7 +1,4 @@
----
-id: active_record
-title: Active Record
----
+# Active Record
 
 Clowne provides an optional ActiveRecord integration which allows you to configure cloners in your models and adds a shortcut to invoke cloners (`#clowne` method).
 

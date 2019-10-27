@@ -1,7 +1,4 @@
----
-id: customization
-title: Customization
----
+# Customization
 
 Clowne is built with extensibility in mind. You can create your own DSL commands and resolvers.
 

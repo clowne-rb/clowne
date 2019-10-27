@@ -1,7 +1,4 @@
----
-id: traits
-title: Traits
----
+# Traits
 
 Traits allow you to group cloner declarations together and then apply them (like in [`factory_bot`](https://github.com/thoughtbot/factory_bot)):
 

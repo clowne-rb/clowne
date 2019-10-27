@@ -1,7 +1,4 @@
----
-id: operation
-title: Operation
----
+# Operation
 
 Since version 1.0 Clowne has been returning specific result object instead of a raw cloned object. It has allowed unifying interface between adapters and has opened an opportunity to implement new features. We call this object `Operation`.
 

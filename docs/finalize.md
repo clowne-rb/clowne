@@ -1,8 +1,4 @@
----
-id: finalize
-title: Finalization
-sidebar_label: Finalize
----
+# Finalization
 
 To apply custom transformations to the cloned record, you can use the `finalize` declaration:
 
@@ -32,4 +28,4 @@ cloned2.email
 # => 'clone@example.com'
 ```
 
-Finalization blocks are called at the end of the [cloning process](execution_order.md).
+Finalization blocks are called at the end of the [cloning process](getting_started?id=execution-order).

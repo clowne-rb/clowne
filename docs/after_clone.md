@@ -1,9 +1,6 @@
----
-id: after_clone
-title: After Clone
----
+# After Clone
 
-The `after_clone` callbacks can help you to make additional operations on cloned record, like checking it with some business logic or actualizing cloned record attributes, before it will be saved to the database. Also it can help to avoid unneeded usage of [`after_persist`](after_persist.md) callbacks, and additional queries to database.
+The `after_clone` callbacks can help you to make additional operations on cloned record, like checking it with some business logic or actualizing cloned record attributes, before it will be saved to the database. Also it can help to avoid unneeded usage of [`after_persist`](after_persist) callbacks, and additional queries to database.
 
 Examples:
 
@@ -37,7 +34,7 @@ class UserCloner < Clowne::Cloner
 end
 ```
 
-`after_clone` runs when you call `Operation#to_record` or [`Operation#persist`]('operation.md) (or `Operation#persist!`)
+`after_clone` runs when you call `Operation#to_record` or [`Operation#persist`](operation) (or `Operation#persist!`)
 
 ```ruby
 # prepare data

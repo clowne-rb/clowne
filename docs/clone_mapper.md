@@ -1,9 +1,6 @@
----
-id: clone_mapper
-title: Clone mapper
----
+# Clone mapper
 
-_Notice: `after_persist` supported only with [`active_record`](active_record.md) adapter._
+*Notice: `after_persist` supported only with [`active_record`](active_record.md) adapter.*
 
 In [`after_persist`](after_persist.md) documenation you can find interisting code:
 

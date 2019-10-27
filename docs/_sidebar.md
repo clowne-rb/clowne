@@ -1,0 +1,25 @@
+* [Getting Started](getting_started.md)
+* DSL
+  * [Operation](operation.md)
+  * [Include Association](include_association.md)
+  * [Exclude Association](exclude_association.md)
+  * [Nullify Attributes](nullify.md)
+  * [Finalization](finalize.md)
+  * [After Clone](after_clone.md)
+  * [After Persist](after_persist.md)
+  * [Initialize Cloning Target](init_as.md)
+  * [Traits](traits.md)
+  * [Parameters](parameters.md)
+* Adapters
+  * [Supported Adapters](supported_adapters.md)
+  * [ActiveRecord](active_record.md)
+  * [Sequel](sequel.md)
+* Advanced Options
+  * [Implicit Cloner](implicit_cloner.md)
+  * [Inline Configuration](inline_configuration.md)
+  * [Clone mapper](clone_mapper.md)
+  * [Architecture](architecture.md)
+  * [Testing](testing.md)
+  * [Customization](customization.md)
+* Upgrade Notes
+  * [From v0.2.x to v1.0.0](from_v02_to_v1.md)

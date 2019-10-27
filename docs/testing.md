@@ -1,7 +1,4 @@
----
-id: testing
-title: Testing
----
+# Testing
 
 Clowne provides specific tools to help you test your cloners.
 

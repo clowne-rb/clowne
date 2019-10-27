@@ -1,7 +1,4 @@
----
-id: sequel
-title: Sequel
----
+# Sequel
 
 Under the hood, Clowne uses Sequel [`NestedAttributes` plugin](http://sequel.jeremyevans.net/rdoc-plugins/classes/Sequel/Plugins/NestedAttributes.html) for cloning source's associations, and you need to configure it.
 

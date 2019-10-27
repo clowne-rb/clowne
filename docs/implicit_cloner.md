@@ -1,7 +1,4 @@
----
-id: implicit_cloner
-title: Implicit Cloner
----
+# Implicit Cloner
 
 When [cloning associations](include_association.md) Clowne tries to infer an appropriate cloner class for the records (unless `clone_with` specified).
 

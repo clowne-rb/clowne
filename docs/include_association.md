@@ -1,7 +1,4 @@
----
-id: include_association
-title: Include Association
----
+# Include Association
 
 Use this declaration to clone model's associations:
 
@@ -27,8 +24,8 @@ include_association name, scope, options
 
 Adapter                                   |1:1         |*:1         | 1:M         | M:M                     |
 ------------------------------------------|------------|------------|-------------|-------------------------|
-[Active Record](https://clowne.evilmartians.io/clowne/docs/active_record.html)  | has_one    | belongs_to | has_many    | has_and_belongs_to|
-[Sequel](https://clowne.evilmartians.io/clowne/docs/sequel.html)                | one_to_one | -          | one_to_many | many_to_many     |
+[Active Record](active_record)  | has_one    | belongs_to | has_many    | has_and_belongs_to|
+[Sequel](sequel)                | one_to_one | -          | one_to_many | many_to_many     |
 
 ## Scope
 

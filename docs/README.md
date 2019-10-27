@@ -27,7 +27,7 @@ gem install clowne
 Or add this line to your application's Gemfile:
 
 ```ruby
-gem 'clowne'
+gem "clowne"
 ```
 
 ## Quick Start
@@ -87,7 +87,7 @@ Now you can use `UserCloner` to clone existing records:
 user = User.last
 # => <#User id: 1, login: 'clown', email: 'clown@circus.example.com'>
 
-operation = UserCloner.call(user, email: 'fake@example.com')
+operation = UserCloner.call(user, email: "fake@example.com")
 # => <#Clowne::Utils::Operation...>
 
 operation.to_record
@@ -117,8 +117,8 @@ Take a look at our [documentation](https://clowne.evilmartians.io) for more info
 
 Adapter                                   |1:1         |*:1         | 1:M         | M:M                     |
 ------------------------------------------|------------|------------|-------------|-------------------------|
-[Active Record](https://clowne.evilmartians.io/#/active_record)  | has_one    | belongs_to | has_many    | has_and_belongs_to|
-[Sequel](https://clowne.evilmartians.io/#/sequel)                | one_to_one | -          | one_to_many | many_to_many     |
+[Active Record](active_record)  | has_one    | belongs_to | has_many    | has_and_belongs_to|
+[Sequel](sequel)                | one_to_one | -          | one_to_many | many_to_many     |
 
 ## Maintainers
 

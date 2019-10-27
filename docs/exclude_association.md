@@ -1,7 +1,4 @@
----
-id: exclude_association
-title: Exclude Association
----
+# Exclude Association
 
 Clowne doesn't include any association by default and doesn't provide _magic_ `include_all` declaration (although you can [add one by yourself](customization.md)).
 
