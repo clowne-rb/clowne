@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'clowne/adapters/registry'
+require "clowne/adapters/registry"
 
-require 'clowne/resolvers/init_as'
-require 'clowne/resolvers/nullify'
-require 'clowne/resolvers/finalize'
-require 'clowne/resolvers/after_persist'
-require 'clowne/resolvers/after_clone'
+require "clowne/resolvers/init_as"
+require "clowne/resolvers/nullify"
+require "clowne/resolvers/finalize"
+require "clowne/resolvers/after_persist"
+require "clowne/resolvers/after_clone"
 
 module Clowne
   module Adapters

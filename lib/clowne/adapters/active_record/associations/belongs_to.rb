@@ -12,7 +12,7 @@ module Clowne
 
             unless declaration.scope.nil?
               warn(
-                '[Clowne] Belongs to association does not support scopes ' \
+                "[Clowne] Belongs to association does not support scopes " \
                 "(#{@association_name} for #{@source.class})"
               )
             end

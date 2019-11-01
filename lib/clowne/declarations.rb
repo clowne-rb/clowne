@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'clowne/dsl'
-require 'clowne/utils/plan'
+require "clowne/dsl"
+require "clowne/utils/plan"
 
 module Clowne
   module Declarations # :nodoc:
@@ -23,12 +23,12 @@ module Clowne
   end
 end
 
-require 'clowne/declarations/base'
-require 'clowne/declarations/init_as'
-require 'clowne/declarations/exclude_association'
-require 'clowne/declarations/finalize'
-require 'clowne/declarations/include_association'
-require 'clowne/declarations/nullify'
-require 'clowne/declarations/trait'
-require 'clowne/declarations/after_persist'
-require 'clowne/declarations/after_clone'
+require "clowne/declarations/base"
+require "clowne/declarations/init_as"
+require "clowne/declarations/exclude_association"
+require "clowne/declarations/finalize"
+require "clowne/declarations/include_association"
+require "clowne/declarations/nullify"
+require "clowne/declarations/trait"
+require "clowne/declarations/after_persist"
+require "clowne/declarations/after_clone"

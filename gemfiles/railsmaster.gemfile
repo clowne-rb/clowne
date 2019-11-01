@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'arel', github: 'rails/arel'
-gem 'rails', github: 'rails/rails'
-gem 'sequel', github: 'jeremyevans/sequel'
-gem 'sqlite3'
+gem "arel", github: "rails/arel"
+gem "rails", github: "rails/rails"
+gem "sequel", github: "jeremyevans/sequel"
+gem "sqlite3"
 
-gemspec path: '..'
+gemspec path: ".."

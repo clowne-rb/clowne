@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'clowne/ext/lambda_as_proc'
+require "clowne/ext/lambda_as_proc"
 
 module Clowne
   module Utils

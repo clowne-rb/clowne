@@ -1,4 +1,4 @@
-describe 'Sequel Post Processing', :cleanup, adapter: :sequel, transactional: :sequel do
+describe "Sequel Post Processing", :cleanup, adapter: :sequel, transactional: :sequel do
   before(:all) do
     module Sequel
       class TopicCloner < Clowne::Cloner
@@ -6,7 +6,7 @@ describe 'Sequel Post Processing', :cleanup, adapter: :sequel, transactional: :s
       end
 
       class PostCloner < Clowne::Cloner
-        include_association :image, clone_with: 'Sequel::ImgCloner'
+        include_association :image, clone_with: "Sequel::ImgCloner"
       end
 
       class ImgCloner < Clowne::Cloner
@@ -23,14 +23,14 @@ describe 'Sequel Post Processing', :cleanup, adapter: :sequel, transactional: :s
     end
   end
 
-  let!(:topic) { create('sequel:topic') }
-  let!(:post) { create('sequel:post', topic: topic) }
-  let!(:image) { create('sequel:image', post: post) }
+  let!(:topic) { create("sequel:topic") }
+  let!(:post) { create("sequel:post", topic: topic) }
+  let!(:image) { create("sequel:image", post: post) }
 
-  describe 'after_persist does not support for default mapper' do
+  describe "after_persist does not support for default mapper" do
     subject(:operation) { Sequel::TopicCloner.call(topic) }
 
-    it 'clone and use after_persis' do
+    it "clone and use after_persis" do
       expect { operation }.to raise_exception(
         Clowne::Adapters::Sequel::Specifications::AfterPersistDoesNotSupportException
       )

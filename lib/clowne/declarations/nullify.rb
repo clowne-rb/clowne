@@ -6,7 +6,7 @@ module Clowne
       attr_reader :attributes
 
       def initialize(*attributes)
-        raise ArgumentError, 'At least one attribute required' if attributes.empty?
+        raise ArgumentError, "At least one attribute required" if attributes.empty?
 
         @attributes = attributes
       end

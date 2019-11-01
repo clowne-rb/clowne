@@ -6,7 +6,7 @@ module Clowne
     module StringConstantize
       refine String do
         def constantize
-          names = split('::')
+          names = split("::")
 
           return nil if names.empty?
 

@@ -27,7 +27,7 @@ module Clowne
       end
 
       def non_cloner_message
-        'expected a cloner to be passed to `expect(...)`, ' \
+        "expected a cloner to be passed to `expect(...)`, " \
         "but got #{actual_formatted}"
       end
     end

@@ -1,5 +1,11 @@
 require:
-- 'rubocop-md'
+  # add after moving docs to another tool
+  # - standard/cop/semantic_blocks
+  - 'rubocop-md'
+
+inherit_gem:
+  standard: config/base.yml
+
 AllCops:
   Exclude:
     - 'bin/**/*'
@@ -9,57 +15,10 @@ AllCops:
     - 'gemfiles/vendor/**/*'
     - 'clowne.gemspec'
   DisplayCopNames: true
-  StyleGuideCopsOnly: false
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.5
 
 Markdown:
   WarnInvalid: true
-
-Naming/AccessorMethodName:
-  Enabled: false
-
-Naming/ClassAndModuleCamelCase:
-  Exclude:
-    - 'spec/**/*.rb'
-
-Naming/UncommunicativeMethodParamName:
-  Enabled: false
-
-Naming/MemoizedInstanceVariableName:
-  Enabled: false
-
-Style/TrivialAccessors:
-  Enabled: false
-
-Metrics/LineLength:
-  Max: 100
-
-Style/Documentation:
-  Exclude:
-    - 'spec/**/*.rb'
-    - 'README.md'
-
-Style/SymbolArray:
-  Enabled: false
-
-Style/FrozenStringLiteralComment:
-  Exclude:
-    - 'spec/**/*.rb'
-    - 'Gemfile'
-    - 'Rakefile'
-    - '*.gemspec'
-    - 'CHANGELOG.md'
-    - 'README.md'
-
-Metrics/BlockLength:
-  Exclude:
-    - 'spec/**/*.rb'
-
-Bundler/OrderedGems:
-  Enabled: false
-
-Gemspec/OrderedDependencies:
-  Enabled: false
 
 Lint/Void:
   Exclude:

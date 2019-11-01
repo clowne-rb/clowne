@@ -1,6 +1,6 @@
 describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :sequel do
   let(:adapter) { Clowne::Adapters::Sequel.new }
-  let(:source) { create('sequel:user', :with_posts, posts_num: 2) }
+  let(:source) { create("sequel:user", :with_posts, posts_num: 2) }
   let(:record) { Sequel::User.new }
   let(:reflection) { Sequel::User.association_reflections[:posts] }
   let(:scope) { {} }
@@ -25,19 +25,19 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
         trait :mark_as_clone do
           finalize do |source, record|
-            record.title = source.title + ' (Cloned)'
+            record.title = source.title + " (Cloned)"
           end
         end
       end
     end
   end
 
-  after(:all) { Sequel.send(:remove_const, 'PostCloner') }
+  after(:all) { Sequel.send(:remove_const, "PostCloner") }
 
-  describe '.call' do
+  describe ".call" do
     subject { Clowne::Adapters::Sequel::Operation.wrap { resolver.call(record) }.to_record }
 
-    it 'infers default cloner from model name' do
+    it "infers default cloner from model name" do
       expect(subject.posts.size).to eq 2
       expect(subject.posts.first).to be_a(Sequel::Post)
       expect(subject.posts.first.image).to be_nil
@@ -55,12 +55,12 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
       )
     end
 
-    context 'when post has image' do
+    context "when post has image" do
       let!(:images) do
-        source.posts.map { |post| create('sequel:image', post: post) }
+        source.posts.map { |post| create("sequel:image", post: post) }
       end
 
-      it 'infers nested image cloner' do
+      it "infers nested image cloner" do
         expect(subject.posts.first.image).to be_a(Sequel::Image)
         expect(subject.posts.first.image).to have_attributes(
           title: images.first.title
@@ -68,14 +68,14 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
       end
     end
 
-    context 'when post has tags' do
+    context "when post has tags" do
       let!(:tags) do
         source.posts.map do |post|
-          create('sequel:tag').tap { |tag| tag.add_post(post) }
+          create("sequel:tag").tap { |tag| tag.add_post(post) }
         end
       end
 
-      it 'infers nested image cloner' do
+      it "infers nested image cloner" do
         post = subject.posts.first
         expect(post.tags.first).to be_a(Sequel::Tag)
         expect(post.tags.first).to have_attributes(
@@ -84,11 +84,11 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
       end
     end
 
-    context 'with params' do
-      let(:declaration_params) { { params: true } }
-      let(:params) { { topic_id: 123 } }
+    context "with params" do
+      let(:declaration_params) { {params: true} }
+      let(:params) { {topic_id: 123} }
 
-      it 'pass params to child cloner' do
+      it "pass params to child cloner" do
         expect(subject.posts.size).to eq 2
         expect(subject.posts.first).to have_attributes(
           owner_id: nil,
@@ -101,12 +101,12 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
       end
     end
 
-    context 'with scope' do
-      context 'block scope' do
+    context "with scope" do
+      context "block scope" do
         let(:scope) { ->(params) { where(title: params[:title]) if params[:title] } }
-        let(:params) { { title: source.posts.first.title } }
+        let(:params) { {title: source.posts.first.title} }
 
-        it 'clones scoped children' do
+        it "clones scoped children" do
           expect(subject.posts.size).to eq 1
           expect(subject.posts.first).to have_attributes(
             owner_id: nil,
@@ -114,40 +114,40 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
           )
         end
 
-        context 'when block is no-op' do
+        context "when block is no-op" do
           let(:params) { {} }
 
-          it 'clones all children' do
+          it "clones all children" do
             expect(subject.posts.size).to eq 2
           end
         end
       end
 
-      context 'symbol scope' do
+      context "symbol scope" do
         let(:scope) { :alpha_first }
 
         let(:post1) { source.posts.first }
         let(:post2) { source.posts.second }
 
         before do
-          post1.update title: 'Zadyza'
-          post2.update title: 'Ta-dam'
+          post1.update title: "Zadyza"
+          post2.update title: "Ta-dam"
         end
 
-        it 'clones scoped children' do
+        it "clones scoped children" do
           expect(subject.posts.size).to eq 1
           expect(subject.posts.first).to have_attributes(
             owner_id: nil,
-            title: 'Ta-dam'
+            title: "Ta-dam"
           )
         end
       end
     end
 
-    context 'with traits' do
-      let(:declaration_params) { { traits: :mark_as_clone } }
+    context "with traits" do
+      let(:declaration_params) { {traits: :mark_as_clone} }
 
-      it 'pass traits to child cloner' do
+      it "pass traits to child cloner" do
         expect(subject.posts.size).to eq 2
         expect(subject.posts.first).to have_attributes(
           owner_id: nil,
@@ -162,10 +162,10 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
       end
     end
 
-    context 'with custom cloner' do
+    context "with custom cloner" do
       let(:source) do
-        create('sequel:user').tap do |user|
-          create('sequel:post', title: 'Some post', owner: user)
+        create("sequel:user").tap do |user|
+          create("sequel:post", title: "Some post", owner: user)
         end
       end
 
@@ -177,14 +177,14 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
         end
       end
 
-      let(:declaration_params) { { clone_with: post_cloner } }
+      let(:declaration_params) { {clone_with: post_cloner} }
 
-      it 'applies custom cloner' do
+      it "applies custom cloner" do
         expect(subject.posts.size).to eq 1
         expect(subject.posts.first).to have_attributes(
           owner_id: nil,
           topic_id: source.posts.first.topic_id,
-          title: 'Copy of Some post'
+          title: "Copy of Some post"
         )
       end
     end

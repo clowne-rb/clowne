@@ -1,4 +1,4 @@
-describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :active_record do
+describe "Post Processing", :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
       class TopicCloner < Clowne::Cloner
@@ -11,7 +11,7 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
       end
 
       class PostCloner < Clowne::Cloner
-        include_association :image, clone_with: 'AR::ImgCloner',
+        include_association :image, clone_with: "AR::ImgCloner",
                                     traits: %i[with_preview_image]
       end
 
@@ -21,7 +21,7 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
 
           after_persist do |origin, _clone, mapper:|
             cloned_preview_image = mapper.clone_of(origin.preview_image)
-            raise 'Leaf record does not have mapped source' if cloned_preview_image.nil?
+            raise "Leaf record does not have mapped source" if cloned_preview_image.nil?
           end
         end
       end
@@ -51,7 +51,7 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
     subject(:operation) { AR::TopicCloner.call(topic) }
 
     # rubocop:disable Layout/MultilineMethodCallIndentation
-    it 'clone and use cloned image' do
+    it "clone and use cloned image" do
       expect do
         operation.persist
       end.to change(AR::Topic, :count).by(+1)
@@ -66,7 +66,7 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
     # rubocop:enable Layout/MultilineMethodCallIndentation
   end
 
-  describe 'pass mappping' do
+  describe "pass mappping" do
     let(:another_image) { create(:image) }
     let(:mapper) do
       Class.new(Clowne::Utils::CloneMapper).new.tap do |stub_mapper|
@@ -76,7 +76,7 @@ describe 'Post Processing', :cleanup, adapter: :active_record, transactional: :a
 
     subject(:operation) { AR::TopicCloner.call(topic, mapper: mapper) }
 
-    it 'uses another_image' do
+    it "uses another_image" do
       cloned = operation.to_record
       cloned.save!
       expect { operation.run_after_persist }.to change {

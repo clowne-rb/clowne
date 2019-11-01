@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'clowne/ext/record_key'
+require "clowne/ext/record_key"
 
 module Clowne
   module Utils

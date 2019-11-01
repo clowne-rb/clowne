@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'clowne/adapters/base/association'
+require "clowne/adapters/base/association"
 
 module Clowne
   module Adapters # :nodoc: all

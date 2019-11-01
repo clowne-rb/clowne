@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'clowne/adapters/base/association'
+require "clowne/adapters/base/association"
 
 module Clowne
   module Adapters # :nodoc: all
@@ -10,7 +10,7 @@ module Clowne
           private
 
           def init_scope
-            @_init_scope ||= source.__send__([association_name, 'dataset'].join('_'))
+            @_init_scope ||= source.__send__([association_name, "dataset"].join("_"))
           end
 
           def record_wrapper(record)

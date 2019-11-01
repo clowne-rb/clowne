@@ -5,7 +5,7 @@ describe Clowne::Adapters::ActiveRecord do
     Clowne::Utils::Operation.wrap { described_class.dup_record(record) }
   end
 
-  describe 'duplicate' do
+  describe "duplicate" do
     subject(:clone) { operation.to_record }
 
     it "get record's dup" do
@@ -16,10 +16,10 @@ describe Clowne::Adapters::ActiveRecord do
       expect(subject.updated_at).to be_nil
     end
 
-    describe 'mapper' do
+    describe "mapper" do
       subject(:mapper) { operation.mapper }
 
-      it 'saves mapping' do
+      it "saves mapping" do
         expect(mapper.clone_of(record)).to eq(clone)
       end
     end

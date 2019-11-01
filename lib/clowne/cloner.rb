@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'clowne/planner'
-require 'clowne/dsl'
-require 'clowne/utils/options'
-require 'clowne/utils/params'
-require 'clowne/utils/operation'
+require "clowne/planner"
+require "clowne/dsl"
+require "clowne/utils/options"
+require "clowne/utils/params"
+require "clowne/utils/operation"
 
 module Clowne # :nodoc: all
   class UnprocessableSourceError < StandardError; end
@@ -45,12 +45,12 @@ module Clowne # :nodoc: all
 
       # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
       def call(object, **options)
-        raise(UnprocessableSourceError, 'Nil is not cloneable object') if object.nil?
+        raise(UnprocessableSourceError, "Nil is not cloneable object") if object.nil?
 
         options = Clowne::Utils::Options.new(options)
         current_adapter = current_adapter(options.adapter)
 
-        raise(ConfigurationError, 'Adapter is not defined') if current_adapter.nil?
+        raise(ConfigurationError, "Adapter is not defined") if current_adapter.nil?
 
         plan =
           if options.traits.empty?
@@ -79,7 +79,7 @@ module Clowne # :nodoc: all
 
       def plan_with_traits(ids, current_adapter: adapter)
         # Cache plans for combinations of traits
-        traits_id = ids.map(&:to_s).join(':')
+        traits_id = ids.map(&:to_s).join(":")
         return traits_plans[traits_id] if traits_plans.key?(traits_id)
 
         traits_plans[traits_id] = Clowne::Planner.compile(

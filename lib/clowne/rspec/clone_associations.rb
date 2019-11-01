@@ -9,8 +9,8 @@ module Clowne
 
         def convert_actual_to_an_array
           @actual = plan.declarations
-                        .select { |key, _| key == :association }
-                        .map { |_, decl| decl.name }
+            .select { |key, _| key == :association }
+            .map { |_, decl| decl.name }
         end
       end
     end

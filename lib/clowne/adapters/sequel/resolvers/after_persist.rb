@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'clowne/adapters/sequel/specifications/after_persist_does_not_support'
+require "clowne/adapters/sequel/specifications/after_persist_does_not_support"
 
 module Clowne
   module Adapters # :nodoc: all

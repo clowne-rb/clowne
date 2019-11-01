@@ -1,6 +1,6 @@
 describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: :sequel do
   let(:adapter) { Clowne::Adapters::Sequel.new }
-  let(:source) { create('sequel:post', :with_tags, tags_num: 2) }
+  let(:source) { create("sequel:post", :with_tags, tags_num: 2) }
   let(:record) { Sequel::Post.new }
   let(:reflection) { Sequel::Post.association_reflections[:tags] }
   let(:scope) { {} }
@@ -12,10 +12,10 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
 
   subject(:resolver) { described_class.new(reflection, source, declaration, adapter, params) }
 
-  describe '.call' do
+  describe ".call" do
     subject { Clowne::Adapters::Sequel::Operation.wrap { resolver.call(record) }.to_record }
 
-    it 'clones all the tags withtout cloner' do
+    it "clones all the tags withtout cloner" do
       expect(subject.tags.size).to eq 2
       expect(subject.tags.first).to be_a(Sequel::Tag)
       expect(subject.tags.first.to_hash).to eq(
@@ -26,11 +26,11 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
       )
     end
 
-    context 'with scope' do
+    context "with scope" do
       let(:scope) { ->(params) { where(value: params[:with_tag]) if params[:with_tag] } }
-      let(:params) { { with_tag: source.tags.second.value } }
+      let(:params) { {with_tag: source.tags.second.value} }
 
-      it 'clones scoped children' do
+      it "clones scoped children" do
         expect(subject.tags.size).to eq 1
         expect(subject.tags.first).to have_attributes(
           value: source.tags.second.value
@@ -38,35 +38,35 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
       end
     end
 
-    context 'with custom cloner' do
+    context "with custom cloner" do
       let(:tag_cloner) do
         Class.new(Clowne::Cloner) do
           finalize do |_source, record, params|
-            record.value += params.fetch(:suffix, '-2')
+            record.value += params.fetch(:suffix, "-2")
           end
 
           trait :mark_as_clone do
             finalize do |_source, record|
-              record.value += ' (Cloned)'
+              record.value += " (Cloned)"
             end
           end
         end
       end
 
-      let(:declaration_params) { { clone_with: tag_cloner } }
+      let(:declaration_params) { {clone_with: tag_cloner} }
 
-      it 'applies custom cloner' do
+      it "applies custom cloner" do
         expect(subject.tags.size).to eq 2
         expect(subject.tags.first).to have_attributes(
           value: "#{source.tags.first.value}-2"
         )
       end
 
-      context 'with params' do
-        let(:declaration_params) { { clone_with: tag_cloner, params: true } }
-        let(:params) { { suffix: '-new' } }
+      context "with params" do
+        let(:declaration_params) { {clone_with: tag_cloner, params: true} }
+        let(:params) { {suffix: "-new"} }
 
-        it 'pass params to child cloner' do
+        it "pass params to child cloner" do
           expect(subject.tags.size).to eq 2
           expect(subject.tags.first).to have_attributes(
             value: "#{source.tags.first.value}-new"
@@ -74,10 +74,10 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
         end
       end
 
-      context 'with traits' do
-        let(:declaration_params) { { clone_with: tag_cloner, traits: :mark_as_clone } }
+      context "with traits" do
+        let(:declaration_params) { {clone_with: tag_cloner, traits: :mark_as_clone} }
 
-        it 'pass traits to child cloner' do
+        it "pass traits to child cloner" do
           expect(subject.tags.size).to eq 2
           expect(subject.tags.first).to have_attributes(
             value: "#{source.tags.first.value}-2 (Cloned)"
