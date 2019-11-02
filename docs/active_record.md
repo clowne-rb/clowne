@@ -6,7 +6,7 @@ To enable this integration, you must require `"clowne/adapters/active_record/dsl
 
 ```ruby
 # config/initializers/clowne.rb
-require 'clowne/adapters/active_record/dsl'
+require "clowne/adapters/active_record/dsl"
 Clowne.default_adapter = :active_record
 ```
 

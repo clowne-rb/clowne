@@ -23,12 +23,12 @@ class UserCloner < Clowne::Cloner
   end
 end
 
-jack = User.find_by(email: 'jack@evl.ms')
+jack = User.find_by(email: "jack@evl.ms")
 # => <#User id: 1, ...>
-jack.create_profile(name: 'Jack')
+jack.create_profile(name: "Jack")
 # => <#Profile id: 1, name: 'Jack', ...>
 
-john = User.find_by(email: 'john@evl.ms')
+john = User.find_by(email: "john@evl.ms")
 # => <#User id: 2, ...>
 
 # we want to clone Jack's profile to John's user,

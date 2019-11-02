@@ -5,7 +5,7 @@ To apply custom transformations to the cloned record, you can use the `finalize`
 ```ruby
 class UserCloner < Clowne::Cloner
   finalize do |_source, record, _params|
-    record.name = 'This is copy!'
+    record.name = "This is copy!"
   end
 
   trait :change_email do
@@ -18,7 +18,7 @@ end
 cloned = UserCloner.call(user).to_record
 cloned.name
 # => 'This is copy!'
-cloned.email == 'clone@example.com'
+cloned.email == "clone@example.com"
 # => false
 
 cloned2 = UserCloner.call(user, traits: :change_email).to_record

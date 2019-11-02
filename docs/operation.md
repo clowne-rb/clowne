@@ -15,7 +15,7 @@ class UserCloner < Clowne::Cloner
   end
 end
 
-user = User.create(email: 'evl.ms')
+user = User.create(email: "evl.ms")
 # => <#User id: 1, email: 'evl.ms', ...>
 
 operation = UserCloner.call(user)
@@ -34,7 +34,7 @@ operation.to_record
 # Call only after_persist callbacks:
 user2 = operation.to_record
 # => <#User id: 2, email: 'evl-2.ms', ...>
-user2.update_attributes(email: 'admin@example.com')
+user2.update_attributes(email: "admin@example.com")
 # => <#User id: 2, email: 'admin@example.com' ...>
 operation.run_after_persist
 # => <#User id: 2, email: 'evl-2.ms', ...>

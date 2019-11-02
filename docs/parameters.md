@@ -13,7 +13,7 @@ class UserCloner < Clowne::Cloner
   end
 end
 
-operation = UserCloner.call(user, state: :draft, email: 'cloned@example.com')
+operation = UserCloner.call(user, state: :draft, email: "cloned@example.com")
 cloned = operation.to_record
 cloned.email
 # => 'cloned@example.com'
@@ -75,7 +75,7 @@ class UserCloner < Clowne::Cloner
     include_association :profile, params: Proc.new do |params, user|
       {
         name: params[:profile][:name],
-        email: user.email
+        email: user.email,
       }
     end
   end
@@ -90,7 +90,7 @@ end
 # Execute:
 
 def get_profile_jsonb(user, trait)
-  params = { profile: { name: 'John', surname: 'Cena' } }
+  params = {profile: {name: "John", surname: "Cena"}}
   cloned = UserCloner.call(user, traits: trait, **params).to_record
   cloned.profile.jsonb_field
 end

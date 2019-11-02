@@ -11,7 +11,7 @@ gem install clowne
 Or add this line to your application's Gemfile:
 
 ```ruby
-gem 'clowne'
+gem "clowne"
 ```
 
 ## Configuration
@@ -99,7 +99,7 @@ Now you can use `UserCloner` to clone existing records:
 user = User.last
 # => <#User id: 1, login: 'clown', email: 'clown@circus.example.com'>
 
-operation = UserCloner.call(user, email: 'fake@example.com')
+operation = UserCloner.call(user, email: "fake@example.com")
 # => <#Clowne::Utils::Operation...>
 
 operation.to_record
