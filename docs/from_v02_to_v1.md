@@ -1,7 +1,4 @@
----
-id: from_v02_to_v10
-title: From v0.2.x to v1.0.0
----
+# From v0.2.x to v1.0.0
 
 The breaking change of v1.0 is the return of a unified [`result object`](operation.md) for all adapters.
 
@@ -37,7 +34,7 @@ clone.persisted?
 
 ### Move post-processing cloning logic into [`after_persist`](after_persist.md) callback (if you have it)
 
-_Notice: `after_persist` supported only with [`active_record`](active_record.md) adapter._
+*Notice: `after_persist` supported only with [`active_record`](active_record.md) adapter.*
 
 ```ruby
 # Before

@@ -1,8 +1,4 @@
----
-id: init_as
-title: Initialize Cloning Target
-sidebar_label: Init As
----
+# Initialize Cloning Target
 
 You can override the default Clowne method which generates a _plain_ copy of a source object.
 By default, Clowne initiates the cloned record using a `#dup` method.

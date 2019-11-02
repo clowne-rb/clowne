@@ -1,7 +1,4 @@
----
-id: parameters
-title: Parameters
----
+# Parameters
 
 Clowne provides parameters for make your cloning logic more flexible. You can see their using in [`include_association`](include_association.md#scope) and [`finalize`](finalize.md) documentation pages.
 
@@ -42,7 +39,7 @@ end
 
 ## Nested Parameters
 
-Also we implemented control over the parameters for cloning associations (you can read more [here](https://github.com/palkan/clowne/issues/15)).
+Also we implemented control over the parameters for cloning associations (you can read more [here](https://github.com/clowne-rb/clowne/issues/15)).
 
 Let's explain what the difference:
 

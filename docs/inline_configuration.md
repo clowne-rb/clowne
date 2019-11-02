@@ -1,7 +1,4 @@
----
-id: inline_configuration
-title: Inline Configuration
----
+# Inline Configuration
 
 You can also enhance the cloner configuration inline (i.e., add declarations dynamically):
 

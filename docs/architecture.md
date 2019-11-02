@@ -1,7 +1,4 @@
----
-id: architecture
-title: Architecture
----
+# Architecture
 
 This post aims to help developers and contributors to understand how Clowne works under the hood.
 
@@ -107,7 +104,7 @@ Thus, the resulting plan is just a key-value storage.
 
 The final step in the cloning process is to apply the compiled plan to a record.
 
-Every adapter registers its own resolvers for each plan _key_ (or _action_). The [order of execution](execution_order.md) is also specified by the adapter.
+Every adapter registers its own resolvers for each plan _key_ (or _action_). The [order of execution](getting_started?id=execution-order) is also specified by the adapter.
 
 For example, you can override `:nullify` resolver to handle associations:
 

@@ -1,8 +1,4 @@
----
-id: nullify
-title: Nullify Attributes
-sidebar_label: Nullify
----
+# Nullify Attributes
 
 To set a bunch of attributes to `nil` you can use the `nullify` declaration:
 

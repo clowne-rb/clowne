@@ -1,11 +1,8 @@
----
-id: after_persist
-title: After Persist
----
+# After Persist
 
-_Notice: `after_persist` supported only with [`active_record`](active_record.md) adapter._
+*Notice: `after_persist` supported only with [`active_record`](active_record.md) adapter.*
 
-The special mechanism for transformation of cloned record. In contradistinction to [`finalize`](finalize.md) executes with a saved record. This type of callbacks provides a default `mapper:` parameter which contains a relation between origin and cloned objects.
+The special mechanism for transformation of cloned record. In contradistinction to [`finalize`](finalize) executes with a saved record. This type of callbacks provides a default `mapper:` parameter which contains a relation between origin and cloned objects.
 
 `after_persist` helps to restore broken _relationships_ while cloning associations and implement some logic with already persisted clone record. (_Inspired by [issues#19](https://github.com/palkan/clowne/issues/19)_)
 
@@ -44,9 +41,9 @@ class PostCloner < Clowne::Cloner
 end
 ```
 
-_Notice: See more about `mapper:` [`here`](clone_mapper.md)._
+*Notice: See more about `mapper:` [`here`](clone_mapper.md).*
 
-`after_persist` runs when you call [`Operation#persist`]('operation.md) (or `Operation#persist!`)
+`after_persist` runs when you call [`Operation#persist`](operation) (or `Operation#persist!`)
 
 ```ruby
 # prepare data
@@ -77,4 +74,4 @@ clone.posts.pluck(:id).include?(clone.bio_id)
 # => true
 ```
 
-_Notice: be careful while using after_persist feature! If you clone a fat record (with a lot of associations) and will implement complex logic inside `after_persist` callback, it may affect your system._
+*Notice: be careful while using after_persist feature! If you clone a fat record (with a lot of associations) and will implement complex logic inside `after_persist` callback, it may affect your system.*
