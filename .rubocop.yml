@@ -10,7 +10,6 @@ AllCops:
   Exclude:
     - 'bin/**/*'
     - 'tmp/**/*'
-    - 'docs/web/**/*'
     - 'vendor/**/*'
     - 'gemfiles/vendor/**/*'
     - 'clowne.gemspec'

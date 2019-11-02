@@ -1,6 +1,9 @@
 Metrics/LineLength:
   Max: 100
 
+inherit_gem:
+  standard: config/base.yml
+
 Lint/Void:
   Exclude:
     - '*.md'

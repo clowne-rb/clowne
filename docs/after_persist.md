@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   # end
 
   has_many :posts # all user's posts including BIO
-  belongs_to :bio, class_name: 'Post'
+  belongs_to :bio, class_name: "Post"
 end
 
 class Post < ActiveRecord::Base
