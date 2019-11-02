@@ -16,7 +16,6 @@ before_script:
 script:
   - bundle exec rake
   - if [ "$CC_REPORT" == "true" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
-  - if [ "$DEPLOY_ME" == "true" ]; then (cd ./docs/web && yarn && yarn run build); fi
 
 matrix:
   fast_finish: true
@@ -27,23 +26,12 @@ matrix:
       gemfile: gemfiles/jruby.gemfile
     - rvm: 2.6.5
       gemfile: Gemfile
-      env:
-        - CC_REPORT=true
-        - DEPLOY_ME=true
     - rvm: 2.5.7
+      gemfile: Gemfile
+    - rvm: 2.4.9
       gemfile: gemfiles/activerecord42.gemfile
-    - rvm: 2.3.0
-      gemfile: gemfiles/activerecord41.gemfile
   allow_failures:
     - rvm: ruby-head
       gemfile: gemfiles/railsmaster.gemfile
     - rvm: jruby-9.2.8.0
       gemfile: gemfiles/jruby.gemfile
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  local_dir: "./docs/web/build/clowne"
-  on:
-    branch: master
-    condition: $DEPLOY_ME = true
