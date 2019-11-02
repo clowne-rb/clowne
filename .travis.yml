@@ -25,13 +25,15 @@ matrix:
       gemfile: gemfiles/railsmaster.gemfile
     - rvm: jruby-9.2.8.0
       gemfile: gemfiles/jruby.gemfile
-    - rvm: 2.5.7
+    - rvm: 2.6.5
       gemfile: Gemfile
       env:
         - CC_REPORT=true
         - DEPLOY_ME=true
-    - rvm: 2.4.9
+    - rvm: 2.5.7
       gemfile: gemfiles/activerecord42.gemfile
+    - rvm: 2.3.0
+      gemfile: gemfiles/activerecord41.gemfile
   allow_failures:
     - rvm: ruby-head
       gemfile: gemfiles/railsmaster.gemfile
