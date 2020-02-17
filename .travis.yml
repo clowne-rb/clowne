@@ -30,8 +30,12 @@ matrix:
       gemfile: Gemfile
     - rvm: 2.4.9
       gemfile: gemfiles/activerecord42.gemfile
+    - rvm: truffleruby
+      gemfile: Gemfile
   allow_failures:
     - rvm: ruby-head
       gemfile: gemfiles/railsmaster.gemfile
     - rvm: jruby-9.2.8.0
       gemfile: gemfiles/jruby.gemfile
+    - rvm: truffleruby
+      gemfile: Gemfile
