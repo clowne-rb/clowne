@@ -1,7 +1,8 @@
 require "clowne/ext/string_constantize"
-using Clowne::Ext::StringConstantize
 
 describe Clowne::Ext::StringConstantize do
+  using Clowne::Ext::StringConstantize
+
   it "works", :aggregate_failures do
     expect("::Clowne".constantize).to eq Clowne
     expect("Clowne".constantize).to eq Clowne
