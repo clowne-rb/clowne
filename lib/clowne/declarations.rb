@@ -7,12 +7,12 @@ module Clowne
   module Declarations # :nodoc:
     module_function
 
-    def add(id, declaration = nil)
-      declaration = Proc.new if block_given?
+    def add(id, declaration = nil, &block)
+      declaration = block if block_given?
 
       if declaration.is_a?(Class)
-        DSL.send(:define_method, id) do |*args, &block|
-          declarations.push declaration.new(*args, &block)
+        DSL.send(:define_method, id) do |*args, &inner_block|
+          declarations.push declaration.new(*args, &inner_block)
         end
       elsif declaration.is_a?(Proc)
         DSL.send(:define_method, id, &declaration)
