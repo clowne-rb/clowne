@@ -1,6 +1,3 @@
-Metrics/LineLength:
-  Max: 100
-
 inherit_gem:
   standard: config/base.yml
 
@@ -11,5 +8,11 @@ Lint/Void:
 Metrics/AbcSize:
   Enabled: false
 
+Standard/SemanticBlocks:
+  Enabled: false
+
 Metrics/BlockLength:
+  Enabled: false
+
+Metrics/LineLength:
   Enabled: false

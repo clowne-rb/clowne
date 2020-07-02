@@ -24,14 +24,20 @@ matrix:
       gemfile: gemfiles/railsmaster.gemfile
     - rvm: jruby-9.2.8.0
       gemfile: gemfiles/jruby.gemfile
+    - rvm: 2.7
+      gemfile: Gemfile
     - rvm: 2.6.5
       gemfile: Gemfile
     - rvm: 2.5.7
       gemfile: Gemfile
     - rvm: 2.4.9
       gemfile: gemfiles/activerecord42.gemfile
+    - rvm: truffleruby-head
+      gemfile: Gemfile
   allow_failures:
     - rvm: ruby-head
       gemfile: gemfiles/railsmaster.gemfile
     - rvm: jruby-9.2.8.0
       gemfile: gemfiles/jruby.gemfile
+    - rvm: truffleruby-head
+      gemfile: Gemfile
