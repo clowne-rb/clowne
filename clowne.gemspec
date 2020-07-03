@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Vladimir Dementyev', 'Sverchkov Nikolay']
   spec.email         = ['palkan@evilmartians.com', 'ssnikolay@gmail.com']
 
-  spec.summary       = 'A flexible gem for cloning your models.'
+  spec.summary       = 'A flexible gem for cloning your models'
   spec.description   = 'A flexible gem for cloning your models.'
   spec.homepage      = 'https://github.com/clowne-rb/clowne'
   spec.license       = 'MIT'
@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '~> 2.0'
-  spec.add_development_dependency 'rake', '>= 12.3.3'
+  spec.add_development_dependency 'rake', '~> 12.3', '>= 12.3.3'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'factory_bot', '~> 4.8'
   spec.add_development_dependency 'rubocop', '~> 0.75.0'
