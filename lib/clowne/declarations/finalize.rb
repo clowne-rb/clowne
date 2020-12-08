@@ -5,10 +5,10 @@ module Clowne
     class Finalize < Base # :nodoc: all
       attr_reader :block
 
-      def initialize
-        raise ArgumentError, "Block is required for finalize" unless block_given?
+      def initialize(&block)
+        raise ArgumentError, "Block is required for finalize" unless block
 
-        @block = Proc.new
+        @block = block
       end
 
       def compile(plan)

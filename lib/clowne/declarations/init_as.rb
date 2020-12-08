@@ -5,10 +5,10 @@ module Clowne
     class InitAs < Base # :nodoc: all
       attr_reader :block
 
-      def initialize
-        raise ArgumentError, "Block is required for init_as" unless block_given?
+      def initialize(&block)
+        raise ArgumentError, "Block is required for init_as" unless block
 
-        @block = Proc.new
+        @block = block
       end
 
       def compile(plan)
