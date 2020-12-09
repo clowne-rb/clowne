@@ -44,7 +44,7 @@ module Clowne # :nodoc: all
       end
 
       # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
-      def call(object, **options)
+      def call(object, **options, &block)
         raise(UnprocessableSourceError, "Nil is not cloneable object") if object.nil?
 
         options = Clowne::Utils::Options.new(options)
@@ -59,7 +59,7 @@ module Clowne # :nodoc: all
             plan_with_traits(options.traits, current_adapter: current_adapter)
           end
 
-        plan = Clowne::Planner.enhance(plan, Proc.new) if block_given?
+        plan = Clowne::Planner.enhance(plan, block) if block
 
         plan = Clowne::Planner.filter_declarations(plan, options.only)
 

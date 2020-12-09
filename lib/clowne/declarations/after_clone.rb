@@ -5,10 +5,10 @@ module Clowne
     class AfterClone < Base # :nodoc: all
       attr_reader :block
 
-      def initialize
-        raise ArgumentError, "Block is required for after_clone" unless block_given?
+      def initialize(&block)
+        raise ArgumentError, "Block is required for after_clone" unless block
 
-        @block = Proc.new
+        @block = block
       end
 
       def compile(plan)
