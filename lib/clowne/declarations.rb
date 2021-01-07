@@ -11,8 +11,8 @@ module Clowne
       declaration = block if block_given?
 
       if declaration.is_a?(Class)
-        DSL.send(:define_method, id) do |*args, &inner_block|
-          declarations.push declaration.new(*args, &inner_block)
+        DSL.send(:define_method, id) do |*args, **hargs, &inner_block|
+          declarations.push declaration.new(*args, **hargs, &inner_block)
         end
       elsif declaration.is_a?(Proc)
         DSL.send(:define_method, id, &declaration)

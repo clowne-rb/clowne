@@ -9,7 +9,7 @@ class UserCloner < Clowne::Cloner
   # ...
   after_persist do |origin, clone, mapper:, **|
     cloned_bio = mapper.clone_of(origin.bio)
-    clone.update_attributes(bio_id: cloned_bio.id)
+    clone.update(bio_id: cloned_bio.id)
   end
 end
 ```

@@ -11,7 +11,7 @@ class UserCloner < Clowne::Cloner
   nullify :email
 
   after_persist do |_origin, cloned, **|
-    cloned.update_attributes(email: "evl-#{cloned.id}.ms")
+    cloned.update(email: "evl-#{cloned.id}.ms")
   end
 end
 
@@ -34,7 +34,7 @@ operation.to_record
 # Call only after_persist callbacks:
 user2 = operation.to_record
 # => <#User id: 2, email: 'evl-2.ms', ...>
-user2.update_attributes(email: "admin@example.com")
+user2.update(email: "admin@example.com")
 # => <#User id: 2, email: 'admin@example.com' ...>
 operation.run_after_persist
 # => <#User id: 2, email: 'evl-2.ms', ...>

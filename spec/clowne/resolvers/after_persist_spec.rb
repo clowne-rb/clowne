@@ -6,7 +6,7 @@ describe Clowne::Resolvers::AfterPersist do
     let(:params) { {} }
     let(:block) do
       proc do |source, record, mapper:|
-        record.update_attributes(email: "admin#{record.id}@#{mapper.clone_of(source)}")
+        record.update(email: "admin#{record.id}@#{mapper.clone_of(source)}")
       end
     end
 

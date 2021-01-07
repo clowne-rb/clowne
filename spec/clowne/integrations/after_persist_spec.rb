@@ -6,7 +6,7 @@ describe "Post Processing", :cleanup, adapter: :active_record, transactional: :a
 
         after_persist do |origin, clone, mapper:|
           cloned_image = mapper.clone_of(origin.image)
-          clone.update_attributes(image_id: cloned_image.id)
+          clone.update(image_id: cloned_image.id)
         end
       end
 
@@ -41,7 +41,7 @@ describe "Post Processing", :cleanup, adapter: :active_record, transactional: :a
 
   before do
     images.each { |image| create(:preview_image, image: image) }
-    topic.update_attributes(image_id: topic_image.id)
+    topic.update(image_id: topic_image.id)
   end
 
   describe 'The main idea of "after persist" feature is a possibility
