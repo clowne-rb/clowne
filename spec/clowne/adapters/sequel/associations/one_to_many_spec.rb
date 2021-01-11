@@ -17,7 +17,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
       class PostCloner < Clowne::Cloner
         include_associations :image, :tags
 
-        finalize do |_source, record, params|
+        finalize do |_source, record, **params|
           record.topic_id = params[:topic_id] if params[:topic_id]
         end
 
@@ -171,7 +171,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :
 
       let(:post_cloner) do
         Class.new(Clowne::Cloner) do
-          finalize do |source, record, _params|
+          finalize do |source, record, **_params|
             record.title = "Copy of #{source.title}"
           end
         end

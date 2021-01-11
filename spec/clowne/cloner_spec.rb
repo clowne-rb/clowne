@@ -12,7 +12,7 @@ describe Clowne::Cloner do
 
       nullify :title, :description
 
-      finalize do |_source, _record, _params|
+      finalize do |_source, _record, **_params|
         1 + 1
       end
 
