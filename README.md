@@ -69,7 +69,7 @@ class UserCloner < Clowne::Cloner
   nullify :login
 
   # params here is an arbitrary Hash passed into cloner
-  finalize do |_source, record, params|
+  finalize do |_source, record, **params|
     record.email = params[:email]
   end
 end
