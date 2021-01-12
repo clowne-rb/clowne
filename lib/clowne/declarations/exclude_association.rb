@@ -5,7 +5,7 @@ module Clowne
     class ExcludeAssociation < Base # :nodoc: all
       attr_accessor :name
 
-      def initialize(name)
+      def initialize(name, **)
         @name = name.to_sym
       end
 
