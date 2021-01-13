@@ -41,7 +41,7 @@ describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: 
     context "with custom cloner" do
       let(:tag_cloner) do
         Class.new(Clowne::Cloner) do
-          finalize do |_source, record, params|
+          finalize do |_source, record, **params|
             record.value += params.fetch(:suffix, "-2")
           end
 

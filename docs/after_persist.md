@@ -30,7 +30,7 @@ class UserCloner < Clowne::Cloner
 
   after_persist do |origin, clone, mapper:, **|
     cloned_bio = mapper.clone_of(origin.bio)
-    clone.update_attributes(bio_id: cloned_bio.id)
+    clone.update(bio_id: cloned_bio.id)
   end
 end
 
@@ -50,7 +50,7 @@ end
 user = User.create
 posts = Array.new(3) { Post.create(user: user) }
 bio = posts.sample
-user.update_attributes(bio_id: bio.id)
+user.update(bio_id: bio.id)
 
 operation = UserCloner.call(user, run_job: true)
 # => <#Clowne::Utils::Operation ...>

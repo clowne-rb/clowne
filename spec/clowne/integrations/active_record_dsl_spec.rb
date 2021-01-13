@@ -26,7 +26,7 @@ describe "AR DSl", :cleandb do
         clowne_config do
           include_association :image
 
-          finalize do |source, record, params|
+          finalize do |source, record, **params|
             record.title = params[:title] || "Clone of #{source.title}"
           end
         end

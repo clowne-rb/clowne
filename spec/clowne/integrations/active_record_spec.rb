@@ -12,7 +12,7 @@ describe "AR adapter", :cleanup, adapter: :active_record, transactional: :active
       end
 
       class BasePostCloner < Clowne::Cloner
-        finalize do |_source, record, params|
+        finalize do |_source, record, **params|
           record.contents = params[:post_contents] if params[:post_contents].present?
         end
       end

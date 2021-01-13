@@ -8,7 +8,7 @@ Example:
 class UserCloner < Clowne::Cloner
   include_association :posts, ->(params) { where(state: params[:state]) }
 
-  finalize do |_source, record, params|
+  finalize do |_source, record, **params|
     record.email = params[:email]
   end
 end
@@ -27,7 +27,7 @@ As result we strongly recommend to use ruby keyword arguments instead of params 
 
 ```ruby
 # Bad
-finalize do |_source, record, params|
+finalize do |_source, record, **params|
   record.email = params[:email]
 end
 
@@ -82,7 +82,7 @@ class UserCloner < Clowne::Cloner
 end
 
 class ProfileCloner < Clowne::Cloner
-  finalize do |_source, record, params|
+  finalize do |_source, record, **params|
     record.jsonb_field = params
   end
 end

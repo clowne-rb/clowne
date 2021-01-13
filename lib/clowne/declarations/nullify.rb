@@ -5,7 +5,7 @@ module Clowne
     class Nullify < Base # :nodoc: all
       attr_reader :attributes
 
-      def initialize(*attributes)
+      def initialize(*attributes, **)
         raise ArgumentError, "At least one attribute required" if attributes.empty?
 
         @attributes = attributes

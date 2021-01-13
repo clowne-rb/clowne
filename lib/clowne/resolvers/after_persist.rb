@@ -8,7 +8,7 @@ module Clowne
         params ||= {}
         operation.add_after_persist(
           proc do
-            declaration.block.call(source, record, params.merge(mapper: operation.mapper))
+            declaration.block.call(source, record, **params.merge(mapper: operation.mapper))
           end
         )
         record

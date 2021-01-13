@@ -17,7 +17,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
   before(:all) do
     module Sequel
       class ImageCloner < Clowne::Cloner
-        finalize do |source, record, params|
+        finalize do |source, record, **params|
           record.created_at = source.created_at if params[:include_timestamps]
         end
 
@@ -33,7 +33,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
       end
 
       class PreviewImageCloner < Clowne::Cloner
-        finalize do |source, record, params|
+        finalize do |source, record, **params|
           record.created_at = source.created_at if params[:include_timestamps]
         end
 
@@ -114,7 +114,7 @@ describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :s
     context "with custom cloner" do
       let(:image_cloner) do
         Class.new(Clowne::Cloner) do
-          finalize do |source, record, _params|
+          finalize do |source, record, **_params|
             record.title = "Copy of #{source.title}"
           end
         end

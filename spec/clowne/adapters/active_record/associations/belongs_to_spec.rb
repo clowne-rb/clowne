@@ -28,7 +28,7 @@ describe Clowne::Adapters::ActiveRecord::Associations::BelongsTo,
     context "with custom cloner" do
       let(:topic_cloner) do
         Class.new(Clowne::Cloner) do
-          finalize do |_source, record, params|
+          finalize do |_source, record, **params|
             record.title += params.fetch(:suffix, "-2")
             record.description += " (Cloned)"
           end

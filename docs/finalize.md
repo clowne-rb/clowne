@@ -4,12 +4,12 @@ To apply custom transformations to the cloned record, you can use the `finalize`
 
 ```ruby
 class UserCloner < Clowne::Cloner
-  finalize do |_source, record, _params|
+  finalize do |_source, record, **_params|
     record.name = "This is copy!"
   end
 
   trait :change_email do
-    finalize do |_source, record, params|
+    finalize do |_source, record, **params|
       record.email = params[:email]
     end
   end

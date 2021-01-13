@@ -30,7 +30,7 @@ module Clowne
 
         def clone_one(child)
           cloner = cloner_for(child)
-          cloner ? cloner.call(child, cloner_options) : dup_record(child)
+          cloner ? cloner.call(child, **cloner_options) : dup_record(child)
         end
 
         def with_scope

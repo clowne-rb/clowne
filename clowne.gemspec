@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'rake', '~> 12.3', '>= 12.3.3'
   spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'factory_bot', '~> 4.8'
+  spec.add_development_dependency 'factory_bot', '~> 5'
   spec.add_development_dependency 'rubocop', '~> 0.75.0'
   spec.add_development_dependency 'rubocop-md', '~> 0.3.0'
   spec.add_development_dependency 'rubocop-rspec', '~> 1.36.0'

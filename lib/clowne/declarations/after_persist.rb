@@ -5,7 +5,7 @@ module Clowne
     class AfterPersist < Base # :nodoc: all
       attr_reader :block
 
-      def initialize(&block)
+      def initialize(*, &block)
         raise ArgumentError, "Block is required for after_persist" unless block
 
         @block = block
