@@ -2,7 +2,7 @@ describe Clowne::Declarations::InitAs do
   describe ".new" do
     context "with block" do
       it "works" do
-        declaration = described_class.new { 'some block' }
+        declaration = described_class.new { "some block" }
         expect(declaration.block).to be_instance_of(Proc)
       end
     end
