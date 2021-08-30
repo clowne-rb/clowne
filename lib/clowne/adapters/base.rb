@@ -17,7 +17,7 @@ module Clowne
 
       class << self
         # Duplicate record and remember record <-> clone relationship in operation
-        # Cab be overrided in special adapter
+        # Can be overrided in special adapter
         # +record+:: Instance of record (ActiveRecord or Sequel)
         def dup_record(record)
           record.dup.tap do |clone|
@@ -27,7 +27,7 @@ module Clowne
         end
 
         # Operation class which  using for cloning
-        # Cab be overrided in special adapter
+        # Can be overrided in special adapter
         def operation_class
           Clowne::Utils::Operation
         end
