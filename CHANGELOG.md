@@ -1,7 +1,19 @@
 # Change log
 
-## 1.1.0 (2019-03-20)
+## 1.3.0 (2021-05-11)
 
+- Added Ruby 3.0 support ([@pomartel][])
+- Fixed Ruby 2.7 warnings ([@mpestov][])
+
+## 1.2.0 (2020-07-03)
+
+- Added TruffleRuby support ([@ssnickolay][])
+- Added Ruby 2.7 support ([@Sub-Xaero][])
+- Fixed JRuby support
+- Fixed all dependencies vulnerabilities
+- Documents moved to Docsify engine ([@ssnickolay][])
+
+## 1.1.0 (2019-03-20)
 
 - Add `after_clone` declaration. ([@elardo][])
 - Add opporotunity to include belongs_to association for active_record adapter. ([@madding][])
@@ -44,3 +56,6 @@ See [migration guide](https://clowne.evilmartians.io/docs/from_v02_to_v10.html)
 [@ssnickolay]: https://github.com/ssnickolay
 [@elardo]: https://github.com/elardo
 [@madding]: https://github.com/madding
+[@pomartel]: https://github.com/pomartel
+[@mpestov]: https://github.com/mpestov
+[@Sub-Xaero]: https://github.com/Sub-Xaero
