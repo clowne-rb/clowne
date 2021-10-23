@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - feat/github-ci
   pull_request:
 
 jobs:
