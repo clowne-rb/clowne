@@ -1,4 +1,4 @@
-name: JRuby Build
+name: TruffleRuby Build
 
 on:
   push:
@@ -18,16 +18,18 @@ jobs:
     - uses: actions/cache@v1
       with:
         path:  /home/runner/bundle
-        key: bundle-${{ hashFiles('**/gemfiles/jruby.gemfile') }}-${{ hashFiles('**/*.gemspec') }}
+        key: bundle-${{ hashFiles('**/Gemfile') }}-${{ hashFiles('**/*.gemspec') }}
         restore-keys: |
           bundle-
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: jruby-9.2.9.0
+        ruby-version: truffleruby-head
+        bundler: 2.2.15
+        bundler-cache: true
+
     - name: Bundle install
       run: |
         bundle config path /home/runner/bundle
-        bundle config --global gemfile gemfiles/jruby.gemfile
         bundle install
     - name: Run RSpec
       run: |
