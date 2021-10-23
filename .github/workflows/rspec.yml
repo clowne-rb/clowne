@@ -3,8 +3,8 @@ name: Build
 on:
   push:
     branches:
-    - master
-    - feat/github-ci
+      - master
+      - feat/github-ci
   pull_request:
 
 jobs:
