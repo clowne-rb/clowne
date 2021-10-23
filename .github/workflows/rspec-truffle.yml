@@ -1,0 +1,35 @@
+name: TruffleRuby Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  rspec-truffle:
+    runs-on: ubuntu-latest
+    env:
+      BUNDLE_JOBS: 4
+      BUNDLE_RETRY: 3
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path:  /home/runner/bundle
+        key: bundle-${{ hashFiles('**/Gemfile') }}-${{ hashFiles('**/*.gemspec') }}
+        restore-keys: |
+          bundle-
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: truffleruby-head
+        bundler: 2.2.15
+        bundler-cache: true
+
+    - name: Bundle install
+      run: |
+        bundle config path /home/runner/bundle
+        bundle install
+    - name: Run RSpec
+      run: |
+        bundle exec rspec --force-color
