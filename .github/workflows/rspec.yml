@@ -18,6 +18,8 @@ jobs:
         ruby: [2.7]
         gemfile: ["gemfiles/railsmaster.gemfile"]
         include:
+        - ruby: ruby-head
+          gemfile: "gemfiles/railsmaster.gemfile"
         - ruby: 3.0
           gemfile: "Gemfile"
         - ruby: 2.7
