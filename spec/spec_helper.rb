@@ -12,14 +12,14 @@ require "factory_bot"
 
 begin
   require "pry-byebug"
-rescue LoadError # rubocop:disable Lint/HandleExceptions
+rescue LoadError
 end
 
 %w[active_record sequel].each do |orm|
   require_relative "./support/#{orm}/initializer.rb"
 end
 
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].sort.each { |f| require f }
 
 Clowne.default_adapter = :base
 

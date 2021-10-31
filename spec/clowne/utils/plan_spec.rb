@@ -23,7 +23,7 @@ describe Clowne::Utils::Plan do
           [:a, "value_2"],
           [:b, "item_1"],
           [:b, "item_2"],
-          [:c, "scalar_1"],
+          [:c, "scalar_1"]
         ]
       )
 
@@ -37,7 +37,7 @@ describe Clowne::Utils::Plan do
           [:a, "value_2"],
           [:b, "item_1"],
           [:b, "item_2"],
-          [:c, "scalar_1"],
+          [:c, "scalar_1"]
         ]
       )
 
@@ -45,7 +45,7 @@ describe Clowne::Utils::Plan do
         [
           [:a, "value_2"],
           [:b, "item_1"],
-          [:b, "item_2"],
+          [:b, "item_2"]
         ]
       )
 
@@ -55,7 +55,7 @@ describe Clowne::Utils::Plan do
         [
           [:a, "value_2"],
           [:b, "item_1"],
-          [:b, "item_2"],
+          [:b, "item_2"]
         ]
       )
     end

@@ -3,7 +3,7 @@ describe Clowne::Utils::Params do
     let(:params) do
       {
         profile: {data: {name: "Robin"}},
-        rating: 10,
+        rating: 10
       }
     end
     let(:permitted_params) { subject.permit(params: params) }

@@ -9,11 +9,10 @@ require "clowne/adapters/base"
 # Declarative models cloning
 module Clowne
   # List of built-in adapters
-  # rubocop:disable Layout/AlignHash
   ADAPTERS = {
-    base:          "Base",
+    base: "Base",
     active_record: "ActiveRecord",
-    sequel:        "Sequel",
+    sequel: "Sequel"
   }.freeze
   # rubocop:enable Layout/AlignHash
 

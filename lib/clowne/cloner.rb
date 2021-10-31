@@ -8,6 +8,7 @@ require "clowne/utils/operation"
 
 module Clowne # :nodoc: all
   class UnprocessableSourceError < StandardError; end
+
   class ConfigurationError < StandardError; end
 
   class Cloner
@@ -43,7 +44,6 @@ module Clowne # :nodoc: all
         @traits[name].extend_with(block)
       end
 
-      # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
       def call(object, **options, &block)
         raise(UnprocessableSourceError, "Nil is not cloneable object") if object.nil?
 

@@ -8,7 +8,7 @@ module Clowne
     module_function
 
     def add(id, declaration = nil, &block)
-      declaration = block if block_given?
+      declaration = block if block
 
       if declaration.is_a?(Class)
         DSL.send(:define_method, id) do |*args, **hargs, &inner_block|

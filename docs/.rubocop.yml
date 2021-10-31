@@ -8,11 +8,8 @@ Lint/Void:
 Metrics/AbcSize:
   Enabled: false
 
-Standard/SemanticBlocks:
-  Enabled: false
-
 Metrics/BlockLength:
   Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false

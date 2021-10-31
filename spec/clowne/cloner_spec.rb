@@ -33,21 +33,21 @@ describe Clowne::Cloner do
   let(:expected_plan) do
     [
       [:association, Clowne::Declarations::IncludeAssociation, {
-        name: :comments, scope: nil, options: {},
-      },],
+        name: :comments, scope: nil, options: {}
+      }],
       [:association, Clowne::Declarations::IncludeAssociation, {
         name: :posts,
         scope: :some_scope,
-        options: {clone_with: "AnotherClonerClass"},
-      },],
+        options: {clone_with: "AnotherClonerClass"}
+      }],
       [:association, Clowne::Declarations::IncludeAssociation, {
         name: :tags,
         scope: nil,
-        options: {clone_with: "AnotherCloner2Class"},
-      },],
+        options: {clone_with: "AnotherCloner2Class"}
+      }],
       [:nullify, Clowne::Declarations::Nullify, {attributes: %i[title description]}],
       [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 1 }}],
-      [:after_persist, Clowne::Declarations::AfterPersist, {block: proc { 2 + 2 }}],
+      [:after_persist, Clowne::Declarations::AfterPersist, {block: proc { 2 + 2 }}]
     ]
   end
 
@@ -67,19 +67,19 @@ describe Clowne::Cloner do
         [:association, Clowne::Declarations::IncludeAssociation, {
           name: :posts,
           scope: :some_scope,
-          options: {clone_with: "AnotherClonerClass"},
-        },],
+          options: {clone_with: "AnotherClonerClass"}
+        }],
         [:association, Clowne::Declarations::IncludeAssociation, {
           name: :tags,
           scope: nil,
-          options: {clone_with: "AnotherCloner2Class"},
-        },],
+          options: {clone_with: "AnotherCloner2Class"}
+        }],
         [:association, Clowne::Declarations::IncludeAssociation, {
-          name: :brands, scope: nil, options: {},
-        },],
+          name: :brands, scope: nil, options: {}
+        }],
         [:nullify, Clowne::Declarations::Nullify, {attributes: %i[title description]}],
         [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 1 }}],
-        [:after_persist, Clowne::Declarations::AfterPersist, {block: proc { 2 + 2 }}],
+        [:after_persist, Clowne::Declarations::AfterPersist, {block: proc { 2 + 2 }}]
       ]
     end
 

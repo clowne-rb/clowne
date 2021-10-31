@@ -32,7 +32,7 @@ describe Clowne::Planner, adapter: :active_record do
         is_expected.to match_declarations(
           [
             [:nullify, Clowne::Declarations::Nullify, {attributes: %i[foo bar]}],
-            [:nullify, Clowne::Declarations::Nullify, {attributes: %i[baz]}],
+            [:nullify, Clowne::Declarations::Nullify, {attributes: %i[baz]}]
           ]
         )
       end
@@ -54,7 +54,7 @@ describe Clowne::Planner, adapter: :active_record do
           is_expected.to match_declarations(
             [
               [:nullify, Clowne::Declarations::Nullify, {attributes: %i[foo]}],
-              [:nullify, Clowne::Declarations::Nullify, {attributes: %i[bar]}],
+              [:nullify, Clowne::Declarations::Nullify, {attributes: %i[bar]}]
             ]
           )
         end
@@ -73,7 +73,7 @@ describe Clowne::Planner, adapter: :active_record do
         is_expected.to match_declarations(
           [
             [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 1 }}],
-            [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 2 }}],
+            [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 2 }}]
           ]
         )
       end
@@ -105,7 +105,7 @@ describe Clowne::Planner, adapter: :active_record do
             [
               [:association, Clowne::Declarations::IncludeAssociation, {name: :users}],
               [:association, Clowne::Declarations::IncludeAssociation, {name: :posts}],
-              [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 1 }}],
+              [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 1 }}]
             ]
           )
         end
@@ -120,7 +120,7 @@ describe Clowne::Planner, adapter: :active_record do
               [:association, Clowne::Declarations::IncludeAssociation, {name: :users}],
               [:association, Clowne::Declarations::IncludeAssociation, {name: :brands}],
               [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 1 }}],
-              [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 2 }}],
+              [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 2 }}]
             ]
           )
         end
@@ -136,7 +136,7 @@ describe Clowne::Planner, adapter: :active_record do
               [:association, Clowne::Declarations::IncludeAssociation, {name: :brands}],
               [:nullify, Clowne::Declarations::Nullify, {attributes: %i[extra data meta]}],
               [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 1 }}],
-              [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 2 }}],
+              [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 2 }}]
             ]
           )
         end
@@ -166,7 +166,7 @@ describe Clowne::Planner, adapter: :active_record do
               [:nullify, Clowne::Declarations::Nullify, {attributes: %i[extra data meta]}],
               [:nullify, Clowne::Declarations::Nullify, {attributes: %i[files_cache]}],
               [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 1 }}],
-              [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 2 }}],
+              [:finalize, Clowne::Declarations::Finalize, {block: proc { 1 + 2 }}]
             ]
           )
         end
