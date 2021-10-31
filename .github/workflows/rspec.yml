@@ -27,8 +27,6 @@ jobs:
         - ruby: 2.6.5
           gemfile: "Gemfile"
         - ruby: 2.5.7
-          gemfile: "Gemfile"
-        - ruby: 2.4.9
           gemfile: "gemfiles/activerecord42.gemfile"
     steps:
     - uses: actions/checkout@v2
