@@ -14,7 +14,7 @@ AllCops:
     - 'gemfiles/vendor/**/*'
     - 'clowne.gemspec'
   DisplayCopNames: true
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.7
 
 Markdown:
   WarnInvalid: true
