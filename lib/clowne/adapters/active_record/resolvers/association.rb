@@ -8,7 +8,6 @@ module Clowne
 
         class Association
           class << self
-            # rubocop: disable Metrics/ParameterLists
             def call(source, record, declaration, adapter:, params:, **_options)
               reflection = source.class.reflections[declaration.name.to_s]
 

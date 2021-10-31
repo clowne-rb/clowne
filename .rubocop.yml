@@ -1,6 +1,6 @@
 require:
   # add after moving docs to another tool
-  - 'standard/cop/semantic_blocks'
+  - 'standard/cop/block_single_line_braces'
   - 'rubocop-md'
 
 inherit_gem:
@@ -19,10 +19,11 @@ AllCops:
 Markdown:
   WarnInvalid: true
 
-Standard/SemanticBlocks:
-  Enabled: false
-
 Lint/Void:
   Exclude:
     - 'docs/README.md'
     - 'README.md'
+
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - 'spec/**/*'

@@ -75,7 +75,7 @@ class UserCloner < Clowne::Cloner
     include_association :profile, params: Proc.new do |params, user|
       {
         name: params[:profile][:name],
-        email: user.email,
+        email: user.email
       }
     end
   end

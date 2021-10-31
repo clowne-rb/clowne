@@ -8,5 +8,5 @@ db =
 
 SEQUEL_DB = Sequel.connect(db)
 
-require_relative "./schema.rb"
-require_relative "./models.rb"
+require_relative "./schema"
+require_relative "./models"

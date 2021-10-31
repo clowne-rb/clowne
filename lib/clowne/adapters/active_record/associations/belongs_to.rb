@@ -5,7 +5,6 @@ module Clowne
     class ActiveRecord
       module Associations
         class BelongsTo < Base
-          # rubocop: disable Metrics/MethodLength
           def call(record)
             child = association
             return record unless child

@@ -50,7 +50,6 @@ describe "Post Processing", :cleanup, adapter: :active_record, transactional: :a
       and we need to update the cloned topic with the cloned image' do
     subject(:operation) { AR::TopicCloner.call(topic) }
 
-    # rubocop:disable Layout/MultilineMethodCallIndentation
     it "clone and use cloned image" do
       expect do
         operation.persist

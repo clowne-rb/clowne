@@ -71,7 +71,7 @@ describe Clowne::Adapters::Base::Association do
       context "with record" do
         let(:custom_declaration_params) do
           {
-            params: ->(params, parent) { params.merge(some_stuff: "ಠᴗಠ", parent: parent) },
+            params: ->(params, parent) { params.merge(some_stuff: "ಠᴗಠ", parent: parent) }
           }
         end
 

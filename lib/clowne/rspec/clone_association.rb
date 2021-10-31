@@ -20,7 +20,6 @@ module Clowne
           extract_options! options
         end
 
-        # rubocop: disable Metrics/AbcSize
         def match(expected, _actual)
           @actual = plan.declarations
             .find { |key, decl| key == :association && decl.name == expected }

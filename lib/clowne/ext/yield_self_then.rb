@@ -11,7 +11,7 @@ module Clowne
           end
         end
 
-        alias then yield_self
+        alias_method :then, :yield_self
       end
 
       # See https://github.com/jruby/jruby/issues/5220

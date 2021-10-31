@@ -15,7 +15,7 @@ module Clowne
           belongs_to: BelongsTo,
           has_one: HasOne,
           has_many: HasMany,
-          has_and_belongs_to_many: HABTM,
+          has_and_belongs_to_many: HABTM
         }.freeze
 
         # Returns an association cloner class for reflection

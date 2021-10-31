@@ -17,7 +17,7 @@ module Clowne
         @compiled = compile
       end
 
-      alias declarations compiled
+      alias_method :declarations, :compiled
 
       def dup
         self.class.new.tap do |duped|

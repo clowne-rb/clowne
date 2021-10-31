@@ -26,7 +26,6 @@ describe "Adapter Lifecycle", :cleanup, adapter: :base, transactional: :active_r
   end
 
   shared_examples "pass adapter" do
-    # rubocop:disable Layout/MultilineMethodCallIndentation
     it "clones topic" do
       expect do
         operation.persist
