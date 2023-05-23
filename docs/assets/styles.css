@@ -17,12 +17,12 @@
 }
 
 :root {
-  --theme-color: #9FA628;
-  --theme-color-light: rgb(238, 240, 226);
-  --theme-color-dark: rgba(159, 166, 40, .8);
-  --theme-color-secondary: #c5c224;
-  --theme-color-secondary-dark: #719805;
-  --theme-color-secondary-light: #cff642;
+  --theme-color: #3d1da0;
+  --theme-color-light: rgb(85, 84, 156);
+  --theme-color-dark: rgba(64, 23, 116), .8);
+  --theme-color-secondary: #3d1da0;
+  --theme-color-secondary-dark: #3d1da0;
+  --theme-color-secondary-light: white;
 
   --text-color-base: #363636;
   --text-color-secondary: #646473;
