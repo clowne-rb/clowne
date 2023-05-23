@@ -18,7 +18,7 @@
 
 :root {
   --theme-color: #3d1da0;
-  --theme-color-light: rgb(85, 84, 156);
+  --theme-color-light: white;
   --theme-color-dark: rgba(64, 23, 116), .8);
   --theme-color-secondary: #3d1da0;
   --theme-color-secondary-dark: #3d1da0;
