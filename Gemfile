@@ -6,7 +6,7 @@ gemspec
 gem "pry-byebug", platform: :mri
 
 gem "sqlite3", "~> 1.4.2", platform: :ruby
-gem "activerecord-jdbcsqlite3-adapter", "~> 50.0", platform: :jruby
+gem "activerecord-jdbcsqlite3-adapter", ">= 50.0", "< 70.0", platform: :jruby
 gem "jdbc-sqlite3", platform: :jruby
 
 gem "activerecord", ">= 6.0", "< 6.2.0"
