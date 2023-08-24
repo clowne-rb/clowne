@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require "clowne/ext/yield_self_then"
-
-using Clowne::Ext::YieldSelfThen
-
 module Clowne
   module Adapters # :nodoc: all
     class Sequel
