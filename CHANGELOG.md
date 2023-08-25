@@ -1,5 +1,10 @@
 # Change log
 
+## 1.5.0 (2023-08-25)
+
+- Ruby 3.2 compatibility. ([@sgerrand][])
+- **Ruby 2.7 is required.**
+
 ## 1.3.0 (2021-05-11)
 
 - Added Ruby 3.0 support ([@pomartel][])
@@ -59,3 +64,4 @@ See [migration guide](https://clowne.evilmartians.io/docs/from_v02_to_v10.html)
 [@pomartel]: https://github.com/pomartel
 [@mpestov]: https://github.com/mpestov
 [@Sub-Xaero]: https://github.com/Sub-Xaero
+[@sgerrand]: https://github.com/sgerrand
