@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe "Sequel adapter", :cleanup, adapter: :sequel, transactional: :sequel do
   before(:all) do
     module Sequel
@@ -25,7 +27,7 @@ describe "Sequel adapter", :cleanup, adapter: :sequel, transactional: :sequel do
 
       class PostCloner < BasePostCloner
         include_association :image, clone_with: "Sequel::ImgCloner",
-                                    traits: %i[with_preview_image nullify_title]
+          traits: %i[with_preview_image nullify_title]
         include_association :tags, ->(params) { where(value: params[:tags]) if params[:tags] }
 
         trait :mark_as_clone do

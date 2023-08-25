@@ -18,8 +18,8 @@ describe "RSpec matchers and helpers", adapter: :active_record do
 
       class PostCloner < Clowne::Cloner
         include_association :image, clone_with: "RSpecTest::ImageCloner",
-                                    traits: %i[with_preview_image nullify_title],
-                                    params: true
+          traits: %i[with_preview_image nullify_title],
+          params: true
 
         include_association :tags, ->(params) { where(value: params[:tags]) if params[:tags] }
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe "AR belongs to loop", :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
@@ -25,7 +27,8 @@ describe "AR belongs to loop", :cleanup, adapter: :active_record, transactional:
   let(:image) { create(:image, title: "Manager") }
   let(:topic) { create(:topic, image: image) }
 
-  it "clone loop" do
+  # TruffleRuby results in a warning an a stack overflow exceptions out of the interpreter
+  it "clone loop", skip: defined?(TruffleRuby) do
     expect(AR::Topic.count).to eq(1)
     expect(AR::Post.count).to eq(1)
     expect(AR::Image.count).to eq(1)

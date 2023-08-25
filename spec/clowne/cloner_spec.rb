@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Cloner do
   let(:cloner) do
     Class.new(described_class) do

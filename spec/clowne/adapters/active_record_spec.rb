@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Adapters::ActiveRecord do
   let(:record) { create(:post) }
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe "Pre processing", :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 %i[active_record sequel].each do |adapter|
   shared_context "adapter:#{adapter}" do
     before(:all) do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Adapters::Base::Association do
   describe ".clone_one" do
     let(:adapter) { double }

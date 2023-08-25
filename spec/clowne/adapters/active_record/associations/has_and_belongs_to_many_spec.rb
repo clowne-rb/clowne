@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Adapters::ActiveRecord::Associations::HABTM, :cleanup, adapter: :active_record do
   let(:adapter) { Clowne::Adapters::ActiveRecord.new }
   let(:source) { create(:post, :with_tags, tags_num: 2) }

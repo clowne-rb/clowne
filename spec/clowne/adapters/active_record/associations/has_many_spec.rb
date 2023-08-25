@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Adapters::ActiveRecord::Associations::HasMany, :cleanup, adapter: :active_record do
   let(:adapter) { Clowne::Adapters::ActiveRecord.new }
   let(:source) { create(:user, :with_posts, posts_num: 2) }

@@ -12,24 +12,13 @@ jobs:
     env:
       BUNDLE_JOBS: 4
       BUNDLE_RETRY: 3
+      CI: true
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v1
-      with:
-        path:  /home/runner/bundle
-        key: bundle-${{ hashFiles('**/Gemfile') }}-${{ hashFiles('**/*.gemspec') }}
-        restore-keys: |
-          bundle-
+    - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: truffleruby-head
-        bundler: 2.2.15
+        ruby-version: truffleruby
         bundler-cache: true
-
-    - name: Bundle install
-      run: |
-        bundle config path /home/runner/bundle
-        bundle install
     - name: Run RSpec
       run: |
         bundle exec rspec --force-color

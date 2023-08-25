@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module AR
   class Topic < ActiveRecord::Base
     has_many :posts, class_name: "AR::Post"

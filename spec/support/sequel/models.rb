@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Sequel::Model.plugin :timestamps, force: true, update_on_create: true
 Sequel::Model.plugin :nested_attributes
 

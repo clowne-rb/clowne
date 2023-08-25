@@ -1,6 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/clowne.svg)](https://badge.fury.io/rb/clowne)
 [![Build Status](https://github.com/clowne-rb/clowne/actions/workflows/rspec.yml/badge.svg?branch=master)](https://github.com/clowne-rb/clowne/actions?query=branch%3Amaster+)
-[![Maintainability](https://api.codeclimate.com/v1/badges/9143c4f91e9d1d2a4bd1/maintainability)](https://codeclimate.com/github/clowne-rb/clowne/maintainability)
 [![Docs](https://img.shields.io/badge/docs-link-brightgreen.svg)](https://clowne.evilmartians.io)
 
 # Clowne
@@ -13,7 +12,6 @@ A flexible gem for cloning your models. Clowne focuses on ease of use and provid
 
 <a href="https://evilmartians.com/">
 <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54"></a>
-
 
 ## Installation
 

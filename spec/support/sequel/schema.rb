@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 SEQUEL_DB.create_table :schema_migrations do
   primary_key :id
 end

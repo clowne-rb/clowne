@@ -1,7 +1,0 @@
-version: "2"
-checks:
-  method-complexity:
-    enabled: false
-exclude_patterns:
-- "docs/"
-- "spec/"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Declarations::Finalize do
   describe ".new" do
     context "with block" do

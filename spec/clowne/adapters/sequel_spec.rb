@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Adapters::Sequel do
   let(:record) { create("sequel:post") }
 

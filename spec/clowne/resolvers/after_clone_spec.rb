@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Resolvers::AfterClone do
   let(:declaration) { Clowne::Declarations::AfterClone.new(&block) }
 

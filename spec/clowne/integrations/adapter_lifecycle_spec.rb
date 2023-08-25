@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe "Adapter Lifecycle", :cleanup, adapter: :base, transactional: :active_record do
   class DummyAdapter < Clowne::Adapters::ActiveRecord
     class << self

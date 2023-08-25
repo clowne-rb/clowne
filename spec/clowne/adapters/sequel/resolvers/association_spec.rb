@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Adapters::Sequel::Resolvers::Association do
   let(:adapter) { Clowne::Adapters::Sequel.new }
   let(:params) { double }

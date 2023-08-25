@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if ENV["CC_REPORT"]
   require "simplecov"
   SimpleCov.start do

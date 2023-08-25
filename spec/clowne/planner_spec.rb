@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Planner, adapter: :active_record do
   let(:adapter) { Clowne::Adapters::ActiveRecord }
 

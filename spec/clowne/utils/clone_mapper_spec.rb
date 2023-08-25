@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Utils::CloneMapper do
   subject(:mapper) { described_class.new }
 

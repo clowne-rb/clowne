@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Utils::Params do
   describe "build proxy" do
     let(:params) do

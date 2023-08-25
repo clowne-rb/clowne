@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Resolvers::Nullify do
   let(:declaration) { Clowne::Declarations::Nullify.new(*args) }
 

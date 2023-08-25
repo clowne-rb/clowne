@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Utils::Plan do
   describe "#declarations" do
     let(:registry) do

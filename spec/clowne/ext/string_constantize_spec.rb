@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "clowne/ext/string_constantize"
 
 describe Clowne::Ext::StringConstantize do

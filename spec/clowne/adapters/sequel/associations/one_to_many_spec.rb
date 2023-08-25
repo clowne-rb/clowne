@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Adapters::Sequel::Associations::OneToMany, :cleanup, adapter: :sequel do
   let(:adapter) { Clowne::Adapters::Sequel.new }
   let(:source) { create("sequel:user", :with_posts, posts_num: 2) }

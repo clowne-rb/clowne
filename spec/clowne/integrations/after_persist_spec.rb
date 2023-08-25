@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe "Post Processing", :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
@@ -12,7 +14,7 @@ describe "Post Processing", :cleanup, adapter: :active_record, transactional: :a
 
       class PostCloner < Clowne::Cloner
         include_association :image, clone_with: "AR::ImgCloner",
-                                    traits: %i[with_preview_image]
+          traits: %i[with_preview_image]
       end
 
       class ImgCloner < Clowne::Cloner

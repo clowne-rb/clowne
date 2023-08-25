@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Adapters::Sequel::Associations::ManyToMany, :cleanup, adapter: :sequel do
   let(:adapter) { Clowne::Adapters::Sequel.new }
   let(:source) { create("sequel:post", :with_tags, tags_num: 2) }

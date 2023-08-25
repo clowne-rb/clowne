@@ -1,28 +1,17 @@
 require:
-  # add after moving docs to another tool
-  - 'standard/cop/block_single_line_braces'
-  - 'rubocop-md'
+  - standard
 
 inherit_gem:
   standard: config/base.yml
 
 AllCops:
-  Exclude:
-    - 'bin/**/*'
-    - 'tmp/**/*'
-    - 'vendor/**/*'
-    - 'gemfiles/vendor/**/*'
-    - 'clowne.gemspec'
   DisplayCopNames: true
+  SuggestExtensions: false
+  NewCops: disable
   TargetRubyVersion: 2.7
 
-Markdown:
-  WarnInvalid: true
-
-Lint/Void:
-  Exclude:
-    - 'docs/README.md'
-    - 'README.md'
+Style/FrozenStringLiteralComment:
+  Enabled: true
 
 Lint/ConstantDefinitionInBlock:
   Exclude:

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Resolvers::Finalize do
   let(:declaration) { Clowne::Declarations::Finalize.new(&block) }
 

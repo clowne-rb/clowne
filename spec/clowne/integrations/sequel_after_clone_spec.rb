@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe "Sequel Post Processing", :cleanup, adapter: :sequel, transactional: :sequel do
   before(:all) do
     module Sequel

@@ -57,7 +57,7 @@ module Clowne
         def cloner_for(child)
           return declaration.clone_with if declaration.clone_with
 
-          return child.class.cloner_class if child.class.respond_to?(:cloner_class)
+          child.class.cloner_class if child.class.respond_to?(:cloner_class)
         end
 
         def cloner_options

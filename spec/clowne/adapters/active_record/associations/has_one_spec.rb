@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Adapters::ActiveRecord::Associations::HasOne, :cleanup, adapter: :active_record do
   let(:adapter) { Clowne::Adapters::ActiveRecord.new }
   let(:image) { create(:image, :with_preview_image) }

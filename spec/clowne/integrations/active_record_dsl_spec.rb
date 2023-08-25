@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "clowne/adapters/active_record/dsl"
 
 describe "AR DSl", :cleandb do

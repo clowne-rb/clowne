@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Adapters::Sequel::Associations::OneToOne, :cleanup, adapter: :sequel do
   let(:adapter) { Clowne::Adapters::Sequel.new }
   let(:post) { create("sequel:post") }

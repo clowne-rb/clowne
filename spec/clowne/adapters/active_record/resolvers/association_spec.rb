@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Clowne::Adapters::ActiveRecord::Resolvers::Association do
   let(:params) { double }
   let(:record) { double }

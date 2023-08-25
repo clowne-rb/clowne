@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe "AR adapter", :cleanup, adapter: :active_record, transactional: :active_record do
   before(:all) do
     module AR
@@ -19,8 +21,8 @@ describe "AR adapter", :cleanup, adapter: :active_record, transactional: :active
 
       class PostCloner < BasePostCloner
         include_association :image, clone_with: "AR::ImgCloner",
-                                    traits: %i[with_preview_image nullify_title],
-                                    params: true
+          traits: %i[with_preview_image nullify_title],
+          params: true
         include_association :tags, ->(params) { where(value: params[:tags]) if params[:tags] }
 
         trait :mark_as_clone do

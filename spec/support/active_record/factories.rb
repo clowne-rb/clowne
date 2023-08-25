@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :user, class: "AR::User" do
     sequence(:name) { |n| "John #{n}" }

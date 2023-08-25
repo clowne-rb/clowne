@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "sequel"
 db =
   if RUBY_PLATFORM.match?(/java/)
@@ -8,5 +10,5 @@ db =
 
 SEQUEL_DB = Sequel.connect(db)
 
-require_relative "./schema"
-require_relative "./models"
+require_relative "schema"
+require_relative "models"
