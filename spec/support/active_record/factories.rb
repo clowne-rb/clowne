@@ -77,4 +77,19 @@ FactoryBot.define do
       end
     end
   end
+
+  factory :table, class: "AR::Table" do
+    sequence(:title) { |n| "T#{n}" }
+  end
+
+  factory :row, class: "AR::Row" do
+    sequence(:title) { |n| "R#{n}" }
+  end
+
+  factory :column, class: "AR::Column" do
+    sequence(:title) { |n| "C#{n}" }
+  end
+
+  factory :cell, class: "AR::Cell" do
+  end
 end
