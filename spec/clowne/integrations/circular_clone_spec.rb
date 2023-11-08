@@ -70,7 +70,11 @@ describe "Circular clone (https://github.com/clowne-rb/clowne/issues/69)", :clea
 
       mapper = operation.mapper
 
-      # replace with your cells selection logic
+      # replace with your cells selection logic:
+      #    cells = Cell.all or
+      #    cells = table.rows.flat_map(&:cells) or
+      #    cells = table.columns.flat_map(&:cells) or
+      #    cells = Cell.where(row_id: table.rows.pluck(:id)) etc.
       cells.each do |cell|
         AR::CellCloner.call(cell, mapper: mapper).to_record.save!
       end
