@@ -47,4 +47,29 @@ ActiveRecord::Schema.define do
     t.string :some_stuff
     t.timestamps null: true
   end
+
+  create_table :ttable, force: true do |t|
+    t.string :title
+    t.timestamps null: true
+  end
+
+  create_table :rows, force: true do |t|
+    t.integer :table_id
+    t.string :title
+
+    t.timestamps null: true
+  end
+
+  create_table :columns, force: true do |t|
+    t.integer :table_id
+    t.string :title
+
+    t.timestamps null: true
+  end
+
+  create_table :cells, force: true do |t|
+    t.integer :row_id
+    t.integer :column_id
+    t.timestamps null: true
+  end
 end
