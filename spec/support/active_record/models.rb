@@ -36,4 +36,26 @@ module AR
   class Tag < ActiveRecord::Base
     has_and_belongs_to_many :posts, class_name: "AR::Post"
   end
+
+  class Table < ActiveRecord::Base
+    self.table_name = "ttable"
+
+    has_many :rows, class_name: "AR::Row"
+    has_many :columns, class_name: "AR::Column"
+  end
+
+  class Row < ActiveRecord::Base
+    belongs_to :table, class_name: "AR::Table"
+    has_many :cells, class_name: "AR::Cell"
+  end
+
+  class Column < ActiveRecord::Base
+    belongs_to :table, class_name: "AR::Table"
+    has_many :cells, class_name: "AR::Cell"
+  end
+
+  class Cell < ActiveRecord::Base
+    belongs_to :row, class_name: "AR::Row"
+    belongs_to :column, class_name: "AR::Column"
+  end
 end
