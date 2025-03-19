@@ -9,7 +9,7 @@ module Clowne
 
         def convert_actual_to_an_array
           @actual = plan.declarations
-            .select { |key, _| key == :association }
+            .select { |key, _| key == :association } # rubocop:disable Style/HashSlice
             .map { |_, decl| decl.name }
         end
       end

@@ -7,11 +7,11 @@ gemspec
 
 gem "debug", platform: :mri
 
-gem "sqlite3", "~> 1.4.2", platform: :ruby
-gem "activerecord-jdbcsqlite3-adapter", ">= 50.0", "< 70.0", platform: :jruby
+gem "sqlite3", "~> 2.0", platform: :ruby
+gem "activerecord-jdbcsqlite3-adapter", platform: :jruby
 gem "jdbc-sqlite3", platform: :jruby
 
-gem "activerecord", ">= 6.0"
+gem "activerecord", ">= 7.0"
 gem "sequel", ">= 5.0"
 gem "simplecov"
 
