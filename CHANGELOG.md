@@ -1,5 +1,7 @@
 # Change log
 
+## master
+
 ## 1.5.0 (2023-08-25)
 
 - Ruby 3.2 compatibility. ([@sgerrand][])

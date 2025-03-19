@@ -14,6 +14,7 @@ jobs:
       BUNDLE_RETRY: 3
       BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
       CI: true
+      RUBYOPT: "-W2"
     strategy:
       fail-fast: false
       matrix:
@@ -21,15 +22,13 @@ jobs:
         gemfile: ["gemfiles/railsmaster.gemfile"]
         include:
         - ruby: 3.3
-          gemfile: "Gemfile"
-        - ruby: 3.1
-          gemfile: "Gemfile"
+          gemfile: "gemfiles/rails8.gemfile"
         - ruby: 3.0
-          gemfile: "Gemfile"
+          gemfile: "gemfiles/rails7.gemfile"
         - ruby: 2.7
-          gemfile: "Gemfile"
+          gemfile: "gemfiles/rails70.gemfile"
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}

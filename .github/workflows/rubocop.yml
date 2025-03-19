@@ -14,7 +14,7 @@ jobs:
       BUNDLE_RETRY: 3
       BUNDLE_GEMFILE: "gemfiles/rubocop.gemfile"
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 3.3
