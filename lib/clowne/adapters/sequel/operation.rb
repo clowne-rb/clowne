@@ -7,6 +7,7 @@ module Clowne
     class Sequel # :nodoc: all
       class Operation < Clowne::Utils::Operation
         include Clowne::Ext::RecordKey
+
         def initialize(mapper)
           super
           @records = {}

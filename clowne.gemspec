@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.homepage = "https://github.com/clowne-rb/clowne"
   spec.license = "MIT"
 
-  spec.required_ruby_version = ">= 2.7.0"
+  spec.required_ruby_version = ">= 3.1.0"
 
   spec.files = Dir.glob("lib/**/*") + %w[README.md LICENSE.txt CHANGELOG.md]
 
@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 2.0"
+  spec.add_development_dependency "bundler", ">= 2.0"
   spec.add_development_dependency "rake", ">= 12.3"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "factory_bot", ">= 5"

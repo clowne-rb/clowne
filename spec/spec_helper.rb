@@ -40,7 +40,7 @@ RSpec.configure do |config|
   config.include_context "adapter:active_record", adapter: :active_record
   config.include_context "adapter:sequel", adapter: :sequel
 
-  config.before(:each) do
+  config.before do
     Clowne::Utils::Operation.clear!
   end
 
