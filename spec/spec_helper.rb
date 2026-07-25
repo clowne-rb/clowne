@@ -18,7 +18,7 @@ rescue LoadError
 end
 
 %w[active_record sequel].each do |orm|
-  require_relative "./support/#{orm}/initializer.rb"
+  require_relative "support/#{orm}/initializer.rb"
 end
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].sort.each { |f| require f }
